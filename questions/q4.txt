@@ -1,0 +1,819 @@
+I would hire this person as a manager, not a SWE nor a TLM sort of person.  I think she understands technical things and can make calls in that direction, however I wouldn't hire as a SWE or TL.
+Interview questions asked
+
+http://ideas/InterviewQuestions/view?idea=1034&start=20
+Given any string find the number of 'chucks' necessary to create a palindrome
+Interview notes
+
+* Onsite: HIRE
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+
+* Leadership (People, program, project, technical)
+
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+Coding ability was okay.  However she was able to communicate clearly and understood the emerging complexity of the problem.  
+
+Given any string find the number of 'chucks' necessary to create a palindrome.
+
+So RETER would be 5 chunks (R)(E)(T)(E)(R)
+And  RETRE would be 3 chunks (RE)(T)(RE)
+and ABCDE would be 1 chunk (ABCDE)
+
+She desired to use strstr a lot.  She never quite described what that did.  However she thought that would help her solve this problem.
+
+She went down a terrible path for a while with an algorithm that wouldn't have worked. She wanted to treat it like an array and she would linearly work through.  
+
+She figured out on her own that she needed to treat it more like a palindrome problem.  So she started keeping 2 pointers (start and end pointers) and doing string comparison.
+
+Her debugging skills and communication skills were apparent.  
+
+She then asks about something like "RENTRE" I told her this would be 3 chunks (RE)(NT)(RE).  
+
+She never quite got that this could have simply been a recursive algorithm by trimming the string at each iteration.  
+
+Her code never really worked, it looked very rusty.  If this was a SWE it'd be an obvious NO HIRE.  However this isn't a SWE interview.
+
+Here was her code:
+int length;
+int chunkcount;
+char str[N];
+char* ptr1;
+char* ptr2 = str[len-1];
+
+while (ptr1 < ptr2) {
+  if(str1 == str2) { // lots of hand waving here as to how we got str, this was mostly psuedocode.
+    ptr1++
+    ptr2++
+  } else {
+    chunkcount +=2
+    str1.len++
+    str2.len++
+  }
+}
+
+As I said, her code wasn't all that close.  She constantly got chunk count and chunk size transposed in her mind.  
+
+* Analytical/Cognitive Ability:
+
+Good, she understood that she initially misinterpretted the problem and misjudged the complexity of the problem.
+
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+
+
+* Communication Skills:
+Excellent.  She's a talker in a good way.  I didn't feel like I got run over, but she certain had plenty to say.  It was a healthy conversation.
+
+
+* Google Culture Fit:
+Good
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+
+Good.  I wouldn't want her on my team coding, but facilitating and leading a team (not necessarily a TL, but a pure manager) I'd be fine to work for.
+
+>>>>
+
+
+Hire. Bhavna is a seasoned technical contributor and leader. She has had a consistent upward trajectory at Qualcomm for the past 17 years, from individual contributor to Senior Director. She has developed skills we look for in Directors such as broad and impactful management responsibility, cross-organizational influencing skills, and leadership development, to name a few.
+Interview questions asked
+
+- Provide an example of when and how you used motivational leadership.
+- Describe a difficult situation when you influenced senior management to your way of thinking.
+- How do you spend your time? Are you coding now, and if not, how long has it been?
+Interview notes
+
+Hire.
+
+- Provide an example of when and how you used motivational leadership skills.
+When Bhavna accepted responsibility for the build, automation, and release team, the team morale was very low and many were ready to quit. As she got to know the people and the situation better, she observed that the team was under appreciated and they didn't have career paths they were working toward. She started having conversations, which is now known as "Bhavna's hopes and dreams conversation". She was able to show them a path and advocate on their behalf. She recognizes that different things motivate each person; it could be title, a new project, taking on a leadership role, etc. She was able to restructure the team to allow people to cycle through roles in operations as well as new development, which addressed the desire for more innovation. Bhavna also described how she builds cohesive teams, by having sub-teams go out together on different events to get to know each other better. She also took action on 2 low performers. All of these steps improved morale and overall motivation of the team. 
+
+- Describe a difficult situation when you influenced senior management to your way of thinking.
+The example Bhavna gave also illustrates a lesson learned. On the BrewMP platform project there was an opportunity to take on new work. There was a team in Hyderabad that was working on adjacent projects that was also interested in taking on this new work. It became a competitive situation. The HYD leader travelled to the company headquarters to convince the leadership that their team would be the best choice to take on the new project. When Bhavna learned about this, she also travelled to join the meeting prepared to present her case for the project. The meeting did not go well. It became tense and the meeting ended without a conclusion. Bhavna decided that a better approach would be to meet 1:1 with the HYD lead and figure out how they could work together. They were able to come to a mutual understanding and decided a joint collaboration was possible. Bhavna conceded some of the work to the other team to reach a good outcome for both teams. From this experience, Bhavna realized that this approach would have been more productive as an earlier step.
+
+- How do you spend your time? Are you coding now, and if not, how long has it been?
+Bhavna is the Technical Lead for the QuIC team which is ~85 engineers. For this organization, she is responsible for the technical contributions and overall impact of the team. She has 9 sub-teams across 3 sites and meets with those team leads weekly. She mediates and advises on technical matters as well as being their manager. She reviews the infrastructure systems supporting 24/7 operations, weekly. In an matrixed org, she is also the manager to 7 Directors, each of which have 5-7 managers reporting to them and an overall organization of ~120. In this role, she is not as involved in the technical direction of the projects, but still sits in on design reviews and conducts skip-level meetings with the broader org. Given the scope of her role, Bhavna hasn't coded since she became a Sr. Director (about 4 years). With her previous experience and history with the company, she has deep technical knowledge that is helpful in making technical decisions, and during technical debates. Bhavna described an example where two leads were struggling with making some technical design decisions. One of the engineers was thinking long-term and was trying to incorporate all possible and speculative future requirements into the design potentially leading to over-engineering the solution. The other was being more pragmatic and realistic about short-to-mid-term requirements. She worked with them to come to an agreement or to suggest how to resolve some of their differences. Given her experience, both engineers respected her opinion and she could influence them in setting a good direction. 
+
+* OVERALL CONCLUSIONS
+Hire. Bhavna is a seasoned technical contributor and leader. She has developed skills we look for in Directors such as broad and impactful engineering management responsibility, cross-organizational influencing skills, and leadership development, to name a few. I think she would be a good fit with the Google culture given her experience and accomplishments. While she could be very effective as a TLM, I believe she meets the bar for Director and I scored her according to that role.
+
+>>>>
+
+
+Not completely awful, but I would want others to be super-enthusiastic to want to hire Aliaksei. Was pleasant culturally, but I'm pretty sure he's not a rock-star computer scientist.
+Interview questions asked
+
+Keep track of one trillion URLs
+Rated for: Tech-Software Engineer-General, Level 5-5, for people manager
+On role-related knowledge
+
+
+Data Structures and Algorithms
+BORDERLINE
+
+Design
+BORDERLINE
+
+Distributed Systems Design
+BORDERLINE
+It didn't help that he started down the tree route and didn't self-correct, but this was a pretty terrible solution.
+Interview notes
+
+(My apologies – this feedback isn't great – I lost my handwritten notes)
+
+I asked Aliaksei to design a system to keep track of a trillion URLs. I emphasized that we wanted these in memory, and would thus need to distribute the system. He initially came up with using a tree, then a trie, and never considered a hash table. He talked about a more space-efficient version of Patricia trie, which was actually a DAG (he didn't use this nomenclature, but that's what I think he described). I asked him if he meant a suffix tree, but he said no. He couldn't remember what is was called. I asked him to figure out how many machines this would take. His back of the envelope math wasn't great – it was slow, not very analytical (didn't use scientific notation) and dropped zeroes in several places. We eventually got to an answer, but it wasn't a great process.
+
+I asked him how he'd distribute the data structure. Since he was tree-focused, he assigned a URL prefix to each machine. If a machine got full, he'd split on the next character across two machines (e.g. A-L on one machine, M-Z on the other, roughly). I asked him how he'd do this efficiently, and he didn't have a great answer.
+
+Finally, I asked him to think about how he'd reduce memory usage. He talked about path compression of the URLs, since all the URLs on a machine share a common prefix. This doesn't seem super-effective to me, since the bulk of the URL is in the suffix. Also, we didn't get to talk about a probabilistic scheme, since trees don't lend themselves to that.
+
+>>>>>>
+
+
+I would recommend hire.  The candidate demonstrates solid management skills, particularly in managing performance.  But he does not strike as a strong leader/influencer.  It seems that he is good at hand holding individual person or team and help them with their particular problems, but a bit lacking at building a culture, or inspiring an entire team to take on new challenges.
+Interview questions asked
+
+1. What's the largest team you've managed?
+2. Define a high performing team
+3. In your experience what's the best way to achieve that
+4. How do you build such a team?
+5. Can you provide examples of managing performance
+6. When is the last time you have done coding, % of time on technical work?
+7. Describe the last system you worked on
+Rated for: Tech-Software Engineer-General, Level 5-5, for people manager
+On role-related knowledge
+
+
+Comprehension & Communication
+SOLID
+He showed clear understanding of the challenges of migrating from legacy architectures to new architecture, was able to communicate effectively both the challenges and solutions.
+On leadership (optional)
+
+
+Coaches Team
+SOLID
+
+Helps with Career Development
+SOLID
+The candidate shared experiences on coaching and helping an under-performing team, and moving the project forward.  He also shared examples of how he was able to develop a team member by giving him more challenging work.
+Interview notes
+
+1. What's the largest team you've managed?
+Answer: Used to manage two distributed teams in Belarus and India, each about 8 people.  Current team used to be 15 people now down to 8/9. 
+So he has some experience managing medium sized teams.
+
+2. Define a high performing team
+
+Answer: The team delivers what's asked to be delivered.  The team should work well together, and it's fun to work with the team.  
+
+The answer was OK, but I was expecting some mentioning of culture, innovation, challenging problems, etc.
+
+3. In your experience what's the best way to achieve that?
+Answer: Need to have right people in the team, and have good spirit / culture in the team.  People should be ready to help each other in the team.
+
+He then gave some examples of having people filling in skill gaps of the team, and having senior engineers on the team who can anticipate problems and proactively solve them without manager's involvement.  He seems to be fixated on employees that are willing to give their 120%, but did not go into details on how he can build a culture that attracts such people.
+
+He also spent a lot of time explaining that there needs to be a feedback loop between the end users and the eng team otherwise the team might be building something useless.  It felt a bit repetitive at the end.
+
+4. How do you build such a team?
+Answer: Work with a team, go through a couple of releases. Challenge people, get them out of comfort zone, and create new opportunities for them.
+
+I like his open mind set about people's potentials.  Would be nice to see more discussion on team culture.
+
+5. Can you provide examples of managing performance?
+He gave several examples:
+One example involves an Indian team.  The main product is about network management with configs stored in server.  The team in india is in charge of a related automation project.  There were many signs of a dysfunctional team, prototype not starting, team not performing.  He spent 50% of time explaining what's expected, and 50% actually coding with them.  So essentially he took over as the TL of the team.
+In another example, an employee was not growing much.  He gave him more responsibilities and more challenging tasks that deal with high throughput and low latency.  Mistakes can be costly as those tasks are mission critical.  To mitigate the risk he placed a senior person as the shadow.  So in this case he paved a path for the employee to grow without risking too much of the team's reputation.
+In yet another example, personality gets in the way.  The employee needed help from other team members, but was not able to communicate the need due to personality clashes.  There was not enough transparency (can't tell busy or stuck).  There was an HR meeting to explain what his responsibilities are.  But the person did not learn from mistakes, and in the end was let go.
+
+I thought these are strong evidence that the candidate has experiences managing performance.  On the downside I felt his managing style is a bit towards micro management, and it would've been nice to see cases where he was able to mentor and grow a person from IC to a leader.
+
+
+6. When is the last time you have done coding, % of time on technical work?
+Answer: 2 weeks ago, 70% of technical work past 3 months
+
+7. Describe the last system you worked on
+
+He showed the system diagram of two legacy systems that need to converge to a new system which is based on FIX (financial information exchange) protocol and event bus.  I then asked him what are the challenges.   He said too many moving parts, too many teams (4 teams) working on the project.  His solution was to take incremental steps, first standardizing on the interfaces which then allows implementations to be replaced incrementally.
+
+The answers show good signs of experience in architecting systems.
+
+>>>>>
+
+
+NO HIRE. Overwhelmed by the question, did not identify scaling issues until prompted, and designed a data structure that made no sense.
+Interview questions asked
+
+Systems Design - Design Google Suggest
+https://ideas.corp.google.com/InterviewQuestions/view?idea=346 
+Rated for: Tech-Software Engineer-General, Level 5-5, for people manager
+On role-related knowledge
+
+
+Data Structures and Algorithms
+POOR
+
+Design
+POOR
+
+Distributed Systems Design
+POOR
+
+Comprehension & Communication
+BORDERLINE
+
+Efficacy
+POOR
+The candidate's data structure made no sense and he was unable to identify many of the scaling issues of his solution until prompted.
+Interview notes
+
+Me: Design Google Suggest
+Candidate: Write crawlers to crawl the web and pull out keywords. Store the data in a big database. Precalculate an index and store data is memory so it will be faster (no details). Gather stats on what people often type. Might need separate ranking functions that rank results based on the users locale and mix the results with global results.
+
+Thoughts: Don't know why he needed the crawlers (since he really only needs the query logs). Was very light on what he meant by database and index. Liked that he recognized that everyone's results might not be the same.
+
+Me: I clarified the problem saying it quickly returns 5 query suggestions not 5 results. I also said, given a log of all of the queries that had ever been typed, how would you build the system.
+
+Candidate: He would want the logs to have timestamps and would want to know if the queries came from a desktop or mobile context.
+
+Me: Why would you need that information and how would you use it?
+Candidate: You might surface different results based on whether they were querying from mobile or desktop.
+
+Me: What other types of information might you log to improve the results.
+Candidate didn't really think of anything else, other than certain queries might go stale over time, like if there was a sporting event that was a popular query for a period of time.
+
+Me: Ok, back to the logs. How would you build the system given that set of logs.
+Candidate: Dump all of the data into a table then write a select query to find common completion terms. [Long pause]. That might not be the fastest approach.
+
+Me: What could be faster.
+Candidate: Maybe we could use Tris, or Suffix Trees, or Rosemary Tris that are collapsible. We could then assign weights to the nodes and traverse the tree.
+Me: [Not sure what he meant] Can you draw what you are talking about on the board?
+The candidate then drew a tree where the nodes had no values and the edges had strings. The first edge was labeled "D" and he drew three more edges that were "og", "enmark", and "oll" representing "Dog, Denmark, and Doll" He said he would store weights at the nodes then traverse the tree to find the result with the biggest top five weights.
+
+Thoughts: His solution makes no sense, doesn't scale at all, and is crazy inefficient. 
+
+Me: What one of the top results for "d" should be "What do I do?"
+The candidate drew another edge off of the tree and said he would need a special marker to indicate that the edge was "special". He also suggested storing the strings in a table so they could be re-used in other trees.
+
+Me: So how many different edges would come from the root node.
+Candidate: If the language was english, you would have 26 edges.
+Me: So how big does the tree get?
+Candidate: It would be massive.
+Me: Would that cause a problem?
+Candidate: Well we shouldn't store it on one machine.
+Me: Where would you store it then?
+The candidate then started talking about having clusters for each regular expression and that the system could be reconfigured, possibly automatically, to help with load balancing.
+
+We ran out of time.
+
+Thoughts: This was pretty rough. He didn't identify any scaling issues with his solution until prompted. His data structure made no sense. He seemed pretty overwhelmed by the question even though I did a lot to help him along.
+
+>>>>>>>>
+
+
+No hire.
+I would simply expect deeper knowledge and technical ability from a Google TLM.
+Interview questions asked
+
+1. Describe the inside of a computer. [Warm-up question]
+2. Random number generator with a target distribution [Coding & Algorithms]
+Rated for: Tech-Software Engineer-General, Level 5-5, for people manager
+On role-related knowledge
+
+
+Coding
+POOR
+
+Tests Code
+POOR
+
+Data Structures and Algorithms
+POOR
+
+Design
+BORDERLINE
+
+Comprehension & Communication
+POOR
+
+Efficacy
+POOR
+Coding: Incomplete code, and what was there was very basic and with some inconsistencies. I get the sense the candidate does not write code on a regular basis.
+
+Tests: Candidate stopped with an incorrect solution without verifying a single case, going on some amount of intuition. I had to ask to work through one test case manually.
+
+Data Struct & Algorithms: Candidate came up with the obvious/basic solutions, but discussion revealed only very basic understanding of algorithms. Analysis was okay, but on obvious problems.
+
+Design: No mention was made of reusing the outcome of a preparation step in order to generate multiple random numbers and amortize the cost. No mention of data vs. execution complexity.
+
+Communication: The problem was misunderstood, then rectified, and when understood, our communication was poor, and the details vague and fuzzy. The candidate had some difficulty explaining well what we was thinking. (Note: Language was not the barrier here.)
+
+Efficacy: We did not get nearly as far as we should have in solving this problem. New grads do as much in 10 minutes.
+Interview notes
+
+1. Describe the inside of a computer. [Warm-up question]
+
+The candidate asked whether I wanted a physical or logical overview. I said "why not logical." He began with a motherboard box, connected NorthBridge and SouthBridge chipsets to it and mentioned one of them was used for memory and bus and the other to access and control external devices, and a box for CPU and one for RAM. He mentioned different levels of memory, 3 levels of cache, L1, L2 and L3. Mentioned we had power-dependent and power-independent memory. I asked to describe relative times between these memories, he mentioned L3 cache might be 60ns (did not recall precisely). Mentioned there were separate L1 caches for instructions and data [correct]. Mentioned cache lines were 128 bytes and alluded to the cache contention problem that slows down processing (I asked if he was involved in HFT and he does).
+
+I thought these responses were satisfactory. [Accessory note: I'm finding this warm-up question provides great of signal on very few candidates, but no signal at all on most. This is probably the last time I'm using it.]
+
+
+2. Random number generator with a target distribution [Coding & Algorithms]
+
+I presented the problem with a detailed example on a whiteboard, told the candidate he could ask questions and mentioned he could draw upon the existence of a function that would draw uniformly distributed numbers from [0, 1[. He began with this solution:
+
+  int prodDistribution(int[] dist)
+  {
+    sumIntervals = 0;
+    for (int i = 0; i < dist.length; i++) {
+      sumIntervals += dist[i];
+    }
+
+with
+
+    int element = rnd() * dist.length;
+    return rnd() * dist[element];
+
+The candidate thought he was done at that point. This solution is incorrect, so I asked him to work through an example "Can you trace an execution of that?"
+
+Then he realized he had misunderstood the problem, and over about 10 minutes managed to provide a poor description of the solution that involves explicitly creating an array with all the possible numbers. He removed the two lines above and added this:
+
+    int[] predefDist = new Int[sumIntervals];
+
+His description of the naive solution works. So I proposed I send an array of [0, 1, 1billion, 1, 0], and asked what the problem would be, also provided other similar examples. He went into a discussion about "outliers", how we could "trim the tails" (not sure I understood what he meant precisely, or at least how it would help), or how we could use bell-shaped distributions to represent it. Then talked about how it could be approximated using gaussians.
+
+I stopped him, asked what the complexity was of his solution. O(N) [correct]. I specifically asked what the problem was with the previous solution, and when I used 1B in my example, the candidate identified large use of memory as problematic [correct]. I asked if we could do better.
+
+I asked if the problem could be solved precisely, in better than O(N). He eventually came up with the search solution, though provided a poor description of it, explaining how instead of representing each outcome explicitly, we could express it as a list of "rules" and linearly iterate until we found the matching "bucket."
+
+So this was still O(N). I asked if we could do better, with this solution. I asked what general type of problem this iteration step was doing. After much probing, I finally heard "this is a search problem" and then I heard O(log(N)). I asked how we'd do that, and the candidate went on to describe something that sounds more like quicksort with a pivot, whereby we would cut the intervals in half on each side. (No mention of a binary search tree was made.) 
+
+I was left rather disappointed with the outcome of solving this problem. I was left feeling that this candidate has done some comp sci at some point in the past but was probably never very strong at it.
+
+
+3. Epilogue.
+
+We had a short chat at the end whereby I left some space for the candidate to ask me some questions. He asked the usual questions (what I do, what languages we use). Aliaksei was a very nice person to chat with, very friendly, and seemed to have a good optimist character.
+
+>>>>>
+
+
+Clearly can code well enough to function around other Senior SWEs who expect their TLMs to know what they're doing coding-wise.  I was slightly disappointed with candidate's failure to come up with a linear algorithm, but honestly he was being so methodical and formal that I can't say for sure he wouldn't have come up with one with more time.  I also have minor culture concerns in that a fair amount of the interview felt like attending a lecture and it was hard for me to get a word in --- and those who know me know that I rarely have trouble getting a word in.  In some spots, he seemed to talk over or ignore my prompts.  I am not dinging him too much for this, but quieter Googlers might find him hard to work with.  And indeed if he's managing, he is going to have to do a lot more listening than he showed me.  If others see this, be cautious about a hire.
+
+So: Hire, 3.0.
+Interview questions asked
+
+1) Warmup.  Two minute summary of your current work.
+
+2) Coding.  Write a function that, given an array of ints and a delta, returns true if *no* pair of ints in the array are within the delta of each other.
+Interview notes
+
+1) Warmup.  Two minute summary of your current work.
+
+2) Coding.  Write a function that, given an array of ints and a delta, returns true if *no* pair of ints in the array are within the delta of each other.
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+
+Can clearly code, and does so better than the majority of the TLM candidates that we interview.  He still codes a lot everyday and it shows.  Appears to know java quite well.
+
+Candidate wrote out the question to make sure he understood.  Asked a bunch of clarifying questions.  Decided that first thing would be to look at special cases.  For empty arrays, he decided the right thing to do was return true.  I agreed.  He then figured that returning true for a single-element  array was also good.  Yep.  We then talked about the null array.  He talked about three choices, any of which could make sense in a given application:
+1) throw an IllegalArgumentException
+2) ignore it and let the jvm throw a NullPointerException
+3) define the result explicitly as either true or false
+
+Good.  He decided he liked IllegalArgumentException best.  Candidate then wrote out some other examples, and decided whether they should be true or false.  Good so far.  He then wrote his class and function declarations.  Fine.  Then started working on the algorithm.
+
+Candidate first fully and correctly outlined a quadratic solution: for each element in the array, loop over each other element and check each pair to see if it's within delta.  If it is, stop and return false.  Great.  He then started to work on a better solution.
+
+He realized pretty quickly that if he sorted the array, good things happened.  Specifically, if the array is sorted, and you check an adjacent pair and it's not within the delta, then every other pair involving the bigger element of the original pair is going to have an even larger delta.  So he would not have to check them.  That meant that if you sort the array in n log n time, you then only have to compare O(n) pairs, making the algorithm n log n.  He initially wanted to look at the first and last elements of the array first, but I stopped him from going down that path since it looked like premature optimization to me.  
+
+I briefly talked sorts with him.  He said that java uses quicksort for basic types and a quicksort variant called timsort for objects.  Also talked at length about how various implementations of quicksort use very different methods to get their pivots, explaining that all of 1) pick first element, 2) make pivot some function of the first and last elements, 3) randomly rearrange the array and pick the first element, are in use.
+
+Anyway here's the code.
+
+public class Util {
+  private Util() {};                                                                    // Note 1
+  public boolean noneWithinDelta(int delta, int[] a) {             // Note 2
+    if (a == null) {
+      throw new IllegalArgumentException();
+    }
+    if (a.length < 1) return true;
+    Arrays.sort(a);                                                                   // Note 3
+    Arrays.reverse(a);                                                             // Note 4
+    for (int i = 1; i < a.length; i++)  {                                        // Note 5
+      final int diff = a[i - 1] - a[i];
+      boolean withinDelta = diff <= delta;                                // Note 6
+      if (withinDelta) return false;
+    }
+    return true;
+  }
+}
+
+
+
+Notes:
+1) Here he explained at length that in java you do this to prevent a class being instantiated.  And continued to explain after I said I understood.
+2) A little surprised he didn't ask if he could use, e.g. ArrayList or something here.
+3) Two side tracks here.  One, decided he was going to be fancy and try to pass a special comparator so he could sort in reverse order, then abandoned this claiming it only works for Comparables.  Two, decided he was going to be fancy and try to define a generic type-agnostic interface for the interview question.  Abandoned that too.
+4) After giving up on passing a comparator to sort(), I suggested that he just assume the presence of a reverse function.  He noted that of course there is one!  Good to know :)
+5) Lengthy discourse here about how java arrays know their length and how postincrement is idiomatic java, which might make c++ people nervous because of the return value in c++.
+6) Here he had initially done something like "if (a[i - 1] - a[i] <= delta) return false;" but decided that was too hard to read and added the extra variables for readability / maintainability.  I think this is generally an admirable sentiment.  In this case, maybe overkill.  
+
+* Analytical/Cognitive Ability:
+
+Okay.  I'm disappointed that he didn't get a linear (in the number of array elements) algorithm for the question, but he did at least recognize that his quadratic algorithm could be improved upon and came up with a reasonable n log n algorithm.  His reasoning is extremely methodical, which is fine, but it did limit the amount if not the quality of the signal I received. 
+
+We then moved on to test cases, but he was so verbose that in 8 minutes we only really got to talk about the null and empty array cases.  See below for more on how that discussion went.
+
+Anyway...
+
+This is not the most difficult code in the world, and it took candidate a *long* time to write it.  However, the coding was slow not because candidate had a lack of facility with coding.  Far from it; everything he wrote was more or less automatic with no thought-to-code impedance at all.  Rather, it was slow because of extreme methodicalness, extensive discussion of every alternative possible, and frequent discursive lectures on various java trivia.  So the signal I got was that coding is pretty much second nature to candidate, which is what we were looking for.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+
+See resume.
+
+* Communication Skills:
+
+Very clear about what he's thinking and doing.  Makes sure he understands the problem.  Makes sure he clearly communicates his understanding.  Less good at listening.  Tended to hog the channel, and sometimes outright ignored a prompt or instruction I gave him.  Great whiteboard presence which unfortunately lapses into lecture at times.  I wanted to ask a followup question on something he mentioned in his self-intro talk about his current work, but I decided not to because it probably would have taken 10 minutes.  Talks a really good game.
+
+* Google Culture Fit:
+
+Mixed bag.  On the plus side, knowledgeable and enthusiastic, and seemed to be having a good time.
+
+On the minus side, quite lecturey.  Which is maybe not a surprise since he has taught CS to grad students.  A number of times ignored suggestions that he do away with minor details in order to make progress.  Best example was near the end of the interview when he was writing test cases.  I realized he was writing out full junit specs for test cases where all I wanted was good examples of test input.  After he wrote the first one, I asked him to skip all that and just give me the test arrays.  He ignored that and continued to write out full junit, and as a result only had time to give me the most trivial test cases and nothing really interesting.  This kind of thing can be frustrating to work with.
+
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+
+Clearly can code well enough to function around other Senior SWEs who expect their TLMs to know what they're doing coding-wise.  I was slightly disappointed with candidate's failure to come up with a linear algorithm, but honestly he was being so methodical and formal that I can't say for sure he wouldn't have come up with one with more time.  I also have minor culture concerns in that a fair amount of the interview felt like attending a lecture and it was hard for me to get a word in --- and those who know me know that I rarely have trouble getting a word in.  In some spots, he seemed to talk over or ignore my prompts.  I am not dinging him too much for this, but quieter Googlers might find him hard to work with.  And indeed if he's managing, he is going to have to do a lot more listening than he showed me.  If others see this too, be very cautious about a hire.
+
+So: Hire, 3.0.
+
+>>>>> Algo >>>>
+
+I only assessed algorithms (with some indirect coding signal from pseudocode written along the way).  I got a strong sense that this candidate is pretty rusty, with a long history of experience but struggling a bit to apply in the moment.  This interview would be below-the-bar in terms of algorithms for a SWE interview.  If leadership and other factors are very strong in the packet, then this might be a good TLM hire, since I think what I saw was rustiness.  But based on what I saw I'm leaning toward no.
+Interview questions asked
+
+Algorithms: Tiled Rectangles (Discuss algorithms for determining whether or not a given set of rectangles covers the bounding rectangle with no gaps and no overlaps.)
+Interview notes
+
+* Onsite: HIRE/NO HIRE
+
+* Transcript
+
+After introductions, I posed an algorithms question: we are given an unordered set of axis-aligned, integer coordinate rectangles.  I defined the bound to be the smallest enclosing rectangle.  I defined a "perfect tiling" to be the condition when the given rects cover the bounding rect with no gaps and no overlaps (formally, iff every cell in the bound is covered by exactly one input rect).  Our goal is to explore algorithms to just answer true/false for the perfect tiling condition.  I emphasized that we should start with brute force solutions and go from there.
+
+To start, I asked how to compute the bound.  The candidate (C) immediately understood that we want to find the min/max extents, but struggled briefly describing the representation.  It took a couple minutes of going back and forth between a couple ways of describing it, but finally the candidate clarified that we want to compute the x/y extents independently (not just find the most extreme input point), which is correct.  Also C at first said it'd take two passes through the input but then realized you can do it in one pass [good], and said that in either case it's O(N) [good].  So C got this introductory part correct but just took a couple more minutes explaining than I expect most candidates to.
+
+Then I asked for a brute force approaching to answering true/false to the perfect tiling condition.  C's first response was to loop through all the cells in the bound, and for each cell, check for "gaps" by querying a anyRects(x,y) helper function which visits all the rects.  C correctly identified this as O(Nxy) and correctly said that this doesn't detect overlaps, but then got confused, saying that testing for overlaps will require more complicated pairwise testing.  [That's not true in this case.]
+
+When I asked why overlap testing is more complicated, C thought a bit more and realized you can instead use a numRects(x,y) function to count the number of rects, and by making sure that's == 1, you detect both gaps and overlaps [good].  At this point C had the first complete solution and correctly identified it as O(Nxy).
+
+Then I asked if we could do better.  Right away C pointed out that you can test for overlap between two rects in O(1) time [correct], and thus detect overlaps in O(N^2) time [good].  C recognized that this doesn't deal with gaps, but then noticed that the sum-of-areas must equal the area of the bound, and that you can compute this in O(N) time while you compute the bound [good].  C now had all the ingredients for another complete solution (just do sum-of-areas then the overlap test), and even said specifically that you can use the sum-of-areas as an early out [good].  C's first instinct was that the sum-of-areas was necessary and not sufficient [correct], but then C thought some more and decided that it's also sufficient [incorrect].  This is a point that I like examining with candidates, and when C struggled to decide, I asked specifically "can you think of a case where the sum-of-areas is right but it's still not a perfect tiling?"
+
+C struggled to think of an example, even saying at one point "what if you have both gaps and overlaps" [which is the correct insight] but failed to come up with a concrete example.  It took some pretty heaving hinting but eventually C found an example, and then realized how the pigeonhole principle could be used to prove correctness (which I've never had a candidate mention).
+
+Thus C understood that you need both the sum-of-areas and the overlap test [correct], yielding their second working solution which was O(N^2).
+
+I asked C if we could do better, and C's next idea was to use a hash table [which is very promising, since the optimal solution uses hash tables].  What C had in mind was to "optimize" the O(N^2) overlap test by "caching" operations, which still sounded promising, until C clarified:
+
+   for r1 in rects:
+     for r2 in rects:
+       test overlap(r1, r2)
+       
+C was worried about the redundant (r1, r2) and (r2, r1) tests, and was proposing to use a hash table to cache those.  This was an odd proposal because 1) that only reduces the number of tests by 1/2 and so doesn't improve the O(N^2) complexity; and 2) there's a much cheaper (and more common) way to avoid those redundancies.  To the first point, I asked what work this would save, and after some digging C worked out math like
+
+   n + n(n-1)
+       ------
+         2
+
+but failed to recognize the key point that this is still O(N^2), until I eventually pointed it out.  C said "yeah, it's still O(N^2) and possibly more expensive because of the hash table".  So I said, "well, what if you were to write your loops with integer indices instead of iterators", and C worked out
+
+   for (i = 0; i < len; ++i)
+      for (x = i; x < len; x++)
+      
+...and thus correctly realized you can avoid the redundancies just with careful indexing--but still got the details a little wrong (it should be x = i+1).
+
+At this point we were nearly out of time, so I took some questions about Google.
+          
+* Leadership (People, program, project, technical)
+
+Did not assess.
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+
+Did not assess explicitly.  C did end up writing some pseudocode (such as the loops above) and even made some simple logical errors there, so I saw some rustiness there.
+
+* Analytical/Cognitive Ability:
+
+This candidate got only two working solutions for this algorithms question, which is less than I expect from a strong SWE candidate, and had some pretty big missteps along the way.  C had sensible ideas and clearly has a lot of fundamentals but had a bit of trouble applying them today, suggesting some pretty rusty algorithm skills.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+
+Did not assess.
+
+* Communication Skills:
+
+C did take a bit longer than I'd like explaining the very simple first part (computing the bound), but I wasn't sure if this was nervous communication or sloppy thinking.  C recovered from that part, though, and in general was quite a good communicator.
+
+* Google Culture Fit:
+
+No red flags.
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+
+I only assessed algorithms (with some indirect coding signal from pseudocode written along the way).  I got a strong sense that this candidate is pretty rusty, with a long history of experience but struggling a bit to apply in the moment.  This interview would be below-the-bar in terms of algorithms for a SWE interview.  Based on what I saw I'm leaning toward no.  However, if leadership and other factors are very strong in the packet, then this might be a good TLM hire, since I think what I saw was rustiness.
+
+>>>>>>
+
+
+The candidate did a good job providing a high level system design, hitting many important points, and intelligently talking about decision points, tradeoffs, and possible future directions.  I would have liked to see more detail in points, but I saw enough positive signs to recommend a hire.
+Interview questions asked
+
+Design a data transportation system whereby users can create a configuration that Google will use to make periodic data retrievals of specified files.
+Interview notes
+
+I was asked to focus on system design for this candidate.  Doing so, I asked the candidate to design a data transportation system whereby users can create a configuration that Google will use to make periodic data retrievals of specified files.  I indicated that we should focus on the system that would understand the configurations, and do the data retrieval, and told the candidate they could assume there was distributed storage internally they could write to.
+
+The candidate started by drawing a bit of a information flow diagram.  They produced something like what follows (pardon the ascii art interpretation, please view with a fixed width font):
+
+ user                    Google
+   |    info                |
+   |----------------------->|
+   |                        |
+   |                  [ processing ]
+   |                        |
+   |       ask for updates  |
+   |<-----------------------|
+   |----------------------->|
+   |        (repeat)        |
+   
+He indicated the user would use a web form to send data to Google, and Google would then have periodic polling (on a schedule) to find updates for the data.  We chatted a bit back and forth about the various responsibilities, and I eventually asked him to clarify what was in the "info" that the user was sending to Google.  He responded it was the file, and the schedule on when to update.  I clarified that the user wouldn't be sending the file to Google, but rather giving Google the information needed on how to retrieve the file, and how often.  At this point, he made it clear he hadn't understood, and would suggest a different approach.  He modified his diagram to look more like the following:
+
+             config
+ user        store             Google
+   |             |       config |
+   |--------------------------->|
+   |             |              |
+   |             |   get config |
+   |             |<-------------|
+   |             |------------->|
+   |             |              |
+   |             retrieve file  |
+   |<---------------------------|
+   |--------------------------->|
+   
+While drawing up this diagram the candidate talked about a couple of high level points as well: in particular the need to handle security/authentication, validation (do we need it), and the need to handle multiple types of retrieval protocol.  It was good that the candidate was thinking of these issues early.
+
+Here, the candidate was much more clear that the meta data (how to retrieve files, authentication information, and schedule) should be separate from the file, stored and managed separately.  He then started talking about how that meta data could be structured.  He drew the following diagram:
+
+[User] 1------->* [Manifest]
+                      1
+                      |
+                      |
+                      *
+                  [Data Item]
+                       |
+               ________|_________________
+               |       |        |        |
+             [SCP]   [URL]    [FTP]    [...]
+             
+He used the term Manifest to indicate a collection of files.  I asked why the need for a Manifest, couldn't a User just be associated with multiple "Data Items".  He indicated that the extra layer of hierarchy might be useful for logical grouping, and could make the management of the file configuration easier for the end user if there were logical named groups.  Reasonable rationale.
+
+At this point, he started to consider how the schedule should fit into the structure.  He listed to choices, associated with each Data Item, or associated with the Manifest.  I asked him to compare the two options.  Initially he stated that associating with the Manifest would make it simpler for the user, but lacked flexibility (only one schedule for all the files in a manifest).  However, after consideration, he indicated that the complexity could be hidden from the user if desired, as a UI could expose one schedule if desired, and that could then be associated with each file on the backend.  I was happy to see the progression of thought here, and the consideration is reasonable.
+
+At this point, I urged the candidate to move past talking about the configuration / manifest, and talk about how the system would actually retrieve files.  After some whiteboarding and discussion, he indicated the following main components:
+
+- a manifest data store, with CRUD API
+- a "process" server responsible for executing a retrieval based on a manifest
+- a userID management service (assuming this would already exist for other Google services)
+- file storage (as I indicated at the start of the question, assumed to exist)
+
+I was happy to assume the existence of the userID management service.  The clear separation of the storage and management of the manifests from a service that would use that information to actually initiate the retrieval was good to see.  However, this was very bare bones, and didn't give me a great sense for how the schedules would actually be enforced.
+
+I pressed harder on this point, and the candidate indicated there should be a priority queue to determine what to do next.  This was a part of the interview I would have liked to see much more concrete detail/decisions being made.  Conceptually, he was making a reasonable point about keeping a work queue for the processor to work off of, but there were many missing details such as the ownership of the queue, how it would be updated/modified, and when jobs would "fire" to keep up with the schedule.  While I pressed on him for some of these details, he resisted providing more detail.  He did get to the point of talking about a "Transfer Manager" which would periodically scan the manifest store to determine what files needed to be retrieved, but again, no real detail.  We never got to the point of talking about how to have a time-based trigger for the processor.
+
+However, during the conversation, the candidate did talk about several important aspects, and briefly covered where in the system they could be handled.  As I mentioned above, we circled back around to authentication and security.  He also touched on distributing the manifest data storage, as well as creating multiple transfer processors (each with a independent chunk of manifests to be responsible for).  He also talked for a bit about handling failed transfer jobs, considering retries, and eventual complete failure with end user notification.  Finally, he also talked about other services that would want to act on the retrieved data, and how to provide meta data from the transfer service to those services.
+
+All in all, the candidate did a good job thinking of the high points, sketching out some rough components for the system, and providing some detail around the configuration.  I would have liked to see more detail in areas, particularly scheduling.  That being said, there was at least a brief consideration for many important aspects, and the identification of those aspects was done very naturally (I didn't have to probe or ask leading questions)  I think this is just above the bar, and recommend a HIRE.
+
+>>>>>>>>>
+
+
+Hire. I focused on project management and software process. Given the discussion about aspects of project management/software process and the concrete examples from past experience, I think that the candidate would be able to successfully lead a project at Google.
+Interview questions asked
+
+I focused on project management and software process.
+- Describe to me a time your project was failing and how you turned it around (if you did)
+- Describe different software development processes you have used
+- How would you manage a project with a distributed team
+Interview notes
+
+* Onsite: HIRE
+
+* Project management and software process.
+
+Q: Describe different software development processes you have used
+A: The candidate talked through several development processes. Much of his past experience focused on the waterfall development model (due to the organization for which he was working), and the candidate was able to give a very good overview of the problems that can arise in this approach. His key focus here was on mitigating risk, which is difficult with pure waterfall process. According to the candidate: healthy projects identify and tackle the areas of high risk. He talked about the use of prototypes and the importance of iterating among specs, architecture, and implementation. As such many times the candidate's teams effectively moved to a spiral / iterative process for the actual work. The candidate was also able to talk knowledgeably about agile development, despite not having direct experience with it.
+
+Summary: Good. Hit most of the key points for which I was looking.
+
+Q: Describe to me a time your project was failing and how you turned it around (if you did)
+The candidate described a project where the team produced a functional piece of simulation software (for air force war games), but didn't know about certain UI requirements. The solution the team came up with was a technical solution to improve the UI, so the example wasn't that interesting from a process point of view.  However it led into a digression about requirements which showed a lot of good insights.
+
+Summary: Okay. Not a lot of information from the primary question, but good followup insights into requirements and specs in development.
+
+Q: How would you manage a project with a distributed team?
+The candidate spoke about the importance of face to face communication, building trust, etc. He didn't go into much detail about technical approaches (e.g. coding standards) for this question, but did mention it briefly in the context of other questions. For example, on one project, he said he spent the first 6 months just getting everyone on the same compiler.
+
+Summary: Okay.  I would have like him to cover a wider range of points (coding style, check-points in the development plan, etc.), but he mentioned these items in other questions.
+
+We also spoke for a while about general processes of modernizing systems, which has been a major aspect of the candidate's career. He noted that one of the most important factors is getting buy-in from the teams supporting the current infrastructure. He described how he has approached these projects, worked with teams, and built trust. One example, an integration wasn't going well so he found out who the legacy system's expert was and shared an office with her for the next three years, allowing them to collaborate closely. Overall, the discussion left me with a very good feeling that he could handle the multi-team ownership issues that arise at Google.
+
+Summary: Really good discussion.
+
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+
+Management experience on large software engineering projects, including distributed teams. Experience in multiple types of software development processes.
+
+
+* Communication Skills:
+
+Good. Although at times the candidate's answers ran long and I had to jump in.
+
+
+* Google Culture Fit:
+
+No red flags.
+
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+
+Hire. I focused on project management and software process. Given the discussion about aspects of project management/software process and the concrete examples from past experience, I think that the candidate would be able to successfully lead a project at Google.
+
+
+>>>>>
+
+
+I support hiring based on his strength in people management (my focus area as interviewer).  He'd make a good first-line manager at Google - likes to stay very technical, conscious of good collaboration practices, thoughtful and creative person manager.
+Interview questions asked
+
+Q: Number of reports in various positions
+Q: What is your approach for figuring out who does what work on your team?
+Q: How would engineers on your team describe you?
+Q: How would your non-technical collaborators describe you?
+Q: Give an example of how you managed a star performer who's difficult to work with
+Q: What's your approach to bringing new people into the team
+Q: How would handle a situation where someone released confidential information
+Interview notes
+
+Q: Number of reports in various positions
+
+Right now in startup, so just a handful of direct reports.  In Air Force positions, team of around 20.  For NATO work, he was the cross-team leader for team of ~20, but most weren't directly reporting to him.
+
+
+Q: What is your approach for figuring out who does what work on your team?
+
+Talk to group to identify what the tasks are, who will have the time/bandwidth.  Consider the different strengths/domain expertise of people and often play to these.  Sometimes want to explicitly push people out of their comfort zone and encourage people to learn new strengths.  In his Air Force jobs, his culture and that of the org was constantly one of planning for and encouraging development.
+
+[Good to know to balance playing to strengths and developing new ones. This was sort of a warm up question, so I didn't try to go deeper.]
+
+
+Q: How would engineers on your team describe you?
+
+* Easy person to work for, not combative
+* Pretty technical.  For most of the codebase he could jump in work directly on it.
+* Makes it a point to learn
+* Has street cred.  When getting involved in a new project, likes to dive into some direct IC work
+* People like working for him, he's pretty fun.  He listens and solves people's problems.
+
+[Tim comes across as very technical and likes to be close to the codebase.  This is inclination well-suited to Google.]
+
+
+Q: How would your non-technical collaborators describe you?
+
+* Brings things to them that they can solve. 
+* Very transparent.  As much as possible reflects out risks, be in people, technical or cost
+* Takes the time to learn about their world.  Build the relationship early before there are tough times
+
+[Seemed pretty aware of the need for relationship-building and communication as keys for any kind of collaboration.]
+
+
+Q: Give an example of how you managed a star performer who's difficult to work with
+
+First need to build relationship and credibility with them
+
+Strongly believe in directly addressing issues with the person in question
+
+Example: Hired in a genius-level guy to lead on migrating a system from legacy to new.  Lots of friction between him and critical lead of legacy system.
+
+First, he worked with the two and did make some progress:
+ - getting them in the same room to talk (sometimes with him as well)
+ - establishing a consistent technical language so they weren't mis-understanding each other in bad ways
+ - encourage social environment interactions between the two
+ - got them both in front of users at the same time to help them see the big picture and understand their technical differences in context
+
+This helped, but not to the level he needed for a successful collaboration.  Eventually, he moved the new guy onto a new thing for a while.  This created space for the legacy guy to realize that his position and leadership was not being threatened and that he would continue to be the long-term owner even after the migration.  Then he was able to bring the new guy back into the team successfully.
+
+[I liked this answer.  It showed that he did a lot of the basics at first, and then that he found creative ways to go even further when needed.]
+
+
+Q: What's your approach to bringing new people into the team
+
+Don't baby them. Get them involved from the beginning.  Give them mentors and make the mentors feel invested with the understanding that they'll need to dedicate real time to this.  Make sure first-day experience is strong (e.g. hardware in pace, everyone welcomes them)
+
+Longer-term:
+ - check in regularly with them and team and explicitly about how the ramp-up is going.
+ - Plan for, and make team aware, that some team slowdown in short-term is expected, with long-term gains
+
+Task planning
+ - Aim for some early wins.
+ - Look for things where they don't need full cross-component knowledge, but can learn more of it at each step.
+ - Let them own full cycle, including integration testing and seeing it into production
+
+[Good.  Clearly understood there's short term things to do and longer-term things to do for successful on-boarding.  Had a fairly systematic and thoughtful way of building technical expertise and team collaboration.]
+
+
+Q: How would handle a situation where someone released confidential information
+
+First: Assume there's a company process/standard for what needs to be done.  This must be followed.
+
+Loop in HR and my manager right away.  Follow whatever the process is.
+
+Talk to the person.  See if they clearly understand the boundary between what's considered confidential vs. not.  See if you can figure out whether the release was intentional or not.  These are often the two big factors in determining appropriate actions.
+
+Transparency is important for all sides.
+
+[Good that he saw the company-mandated approach right away.  First instinct of looping in HR and manager is right.  Lots of communication/talking/figuring-out also good.]
+
+
+>>>>>>>>
+
+From what I saw, the candidate is smart, has a history of being a thoughtful and effective technical leader and manager, and is capable at navigating large orgs / having impact within them.  I think candidate would be a great fit for an Eng Manager role within Google.  My impression of the candidate is that he's ambitious, smart, highly creative, and will do what it takes to make projects successful.
+Strong hire recommendation.
+Interview questions asked
+
+0. Quick intro question: Tell me about current role.
+1. Question: What achievement are you most proud of?
+2. Question: Tell me about a technical project you managed. What were the challenges; how would you evaluate your performance?
+
+
+Interview notes
+
+* Onsite: HIRE/NO HIRE
+HIRE
+* Phone screen move forward?: YES/NO
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+
+0. Quick intro question: Tell me about current role.
+Answer:
+Dir. of engineering at a startup - java tools - static checks on program semantics, statistical checks based on data-gathering runs, for concurrency correctness etc. Small eng team, 3 total.  Does significant IC and a little of everything as he's the responsible party -- grants, people management, site management, take care of marketing. 
+
+1. Question: What achievement are you most proud of?
+Answer:
+- Led project, managed multi-site group. Air Force system for radar defense system evaluation. Have a radar. Have planes fly by at known varying heights / conditions to generate ground truth.  Calibrate how well the radar did, what it says, against that ground truth -- understand the delta between truth and what system says. Among other things, this generates the guidance for how low planes should fly in real life situations to avoid radar. Very proud of leading this.
+- On the org side of things, discovered that Navy was essentially building the same system. Since that information was not public, the discovery required some intuition and putting hints together. Convinced generals and admirals to give the Navy the Air Force system, saving huge amounts of money. This required a lot of work to bridge the Air Force-Navy divide and making ongoing technical communications happen between the AF and Navy groups. Neither was easy to do. Technical achievement and bureaucracy-busting achievement.
+Feedback:
+The sometimes delicate cross-team, cross-site, cross-PA leadership and negotiations in the "influence without authority" style are an essential part of doing the TLM or Dir job well.  Someone with this experience is set up well for success in the sometimes unstructured, overlapping world of managing Google tech projects.  This was clearly both a strong technical achievement and a good "navigating the tough org structure" achievement.
+
+2. Question: Tell me about a technical project you managed. What were the challenges; how would you evaluate your performance?
+Answer:
+Flight Test Data system. 4M lines of PL/1. Goal: rewrite system, modernize. 
+When candidate got involved, had been multiple projects to try this, including an ongoing one to generate data flow diagrams from the legacy code. The team wasn't trying to actually understand the system.  The current maintainers and the rewrite team were separate, not much communication. Legacy software team had vested interest in old system.
+Candidate made teams sit together and work together. Approach: modernize one chunk of the system and turn it on in prod, then iterate. This also had effect of showing the legacy folks how new technology worked, and got them interested, so they could help. Project was successful. Candidate noted that he's applied this model to multiple projects.
+
+Feedback:
+This shows good understanding of people and smart project management skills. 
+
+* Leadership (People, program, project, technical)
+TLM experience. Success at navigating tough orgs / influencing senior people to get things done. Success at challenging technical projects and smart team management.
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+Did not assess.
+
+* Analytical/Cognitive Ability:
+No concerns, is clearly a smart person.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+TLM / IC roles in software projects, technical expertise / PhD. 
+
+* Communication Skills:
+Clear communication.
+
+* Google Culture Fit:
+Good.  I think there will naturally be some adjustment to being in a large org that's Silicon Valley-esque instead of military-esque; and suspect that some of candidate's management experiences will have been with people who need more supervision that Google engineers. But, I have full confidence that this candidate, who is clearly savvy about how to work effectively and navigate well within organizations, will have no problem with that transition.
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+From what I saw, the candidate is smart, has a history of being a thoughtful and effective technical leader and manager, and is capable at navigating large orgs / having impact within them.  I think candidate would be a great fit for an Eng Manager role within Google.  My impression of the candidate is that he's ambitious, smart, highly creative, and will do what it takes to make projects successful.
+Strong hire recommendation.
+
+>>>>>
+
+
+
+

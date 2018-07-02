@@ -1,0 +1,23 @@
+1) Find the first non-repeating char in a string
+
+2) Find the pair that adds up to a sum n
+    - find the triplet that adds up to a sum
+
+3) For a given a telephone #, find all possible combinations of words
+   - find a word, find all possible combinations of phone #
+
+4) find kth largest # in a unsorted list
+
+5) implement merge sort
+6) implement quick sort
+7) implement heap sort
+8) implement count sort
+
+9) implement stack
+10) Implement queue
+11) clone a tree
+
+12) pointers, funciton pointers, double pointers,
+13) Templates, variable arguments
+14) Probability, statistics
+15) pass-by reference

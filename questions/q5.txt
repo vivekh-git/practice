@@ -1,0 +1,296 @@
+Strong showing, assessing for T (not M or L). I was the first interview of the day, so we spent a bit of time getting him oriented and setting expectations, but once we got to the questions he moved quickly and covered a lot of ground with clarity.
+
+He probably wouldn't jump in as an IC SWE/6 very comfortably (his coding was more pseudocode than not) but he showed a great ability to derive solutions from first principles and demonstrated a seasoned journeyman's perspective on a range of practical problems. If his systems design and architecture skills are also above the bar I think he can make a positive technical impact as a eng manager. If his management and leadership skills are strong, then I could see him at Google as a TL/M.
+Interview questions asked
+
+- Implement a hash table (from first principles, see below)
+- Design the API for for an online leaderboard
+Interview notes
+
+Q: Implement a hash table, first any way you want, then with additional constraints
+ 
+A: First, let's describe what we mean when we say hash table. In general, this will involve creating a hash function that maps a given key to an offset into a storage array, ideally where we have a good distribution of resultant hashes. For example, a hash function could map strings -> ints for use as an index. The hash will thus identify a bucket under which we can attach the values. The challenge is that multiple keys can collide into the same bucket, so we could store the values as a linked list.  You want the table big enough that the lists don't get too long. And you can create a perfect has if you know the keys ahead of time, though I don't actually know how off the top of my head. But the general idea is that the overall complexity should amortize to constant time, or O(1). [Good description, though we'll come back to the part about the linked lists.]
+
+Q: Want to code it? I'm language agnostic.
+
+A: I'll use a python like pseudocode:
+
+  get_hash(key):
+    # some hash function with good distribution here
+
+  class node:
+    string key
+    node next
+    void* object
+    
+  MAX_INDEX = 1024
+  
+  hash_table = new node()[MAX_INDEX]
+  
+  add_to_hash(key, object):
+    h = get_hash_key)
+    bucket = h % MAX_INDEX
+    n = node(key, object)
+    n.next = nil
+    if hash_table[bucket]
+       node.next = hash_table[bucket]  # insert at the head of the list, which is O(1)
+    hash_table[bucket] = node
+    
+  object get_from_hash(key):
+    h = get_hash(key)
+    bucket = h % MAX_INDEX
+    for (p = hash_table[bucket]; p != nil; p = p.next):
+      if key == p.key
+        return p
+    return nil
+    
+C: Wobbly syntax, the the idea is expressed clearly and correctly
+
+Q: That's nice and straightforward if you can dynamically allocate the memory for the lists, but what if you could only statically allocate a block up front?
+
+A: I could allocate two arrays, one for the buckets, and another for the nodes for the linked list, as a free store. 
+
+Q: True, but what if you didn't want to deal with the list at all? Could you store it all in the single array directly?
+
+A: <thinks for a moment> You know, I could handle collisions by just moving on to the next open slot...
+
+Q: Can you code that?
+
+A: This won't deal with the case when the table overflows, but this could work:
+
+  add_to_hash(key, object):
+    h = get_hash_key)
+    bucket = h % MAX_INDEX
+    while hash_table[bucket]: # notes this won't terminate if the table is full
+      bucket = (bucket + 1) % MAX_INDEX
+    hash_table[bucket] = (key, object)
+    
+  object get_from_hash(key):
+    h = get_hash(key)
+    bucket = h % MAX_INDEX
+    while hash_table[bucket]:  # notes this won't terminate if the table is full
+      if key == hash_table[bucket].key:
+        return hash_table[bucket].value
+      bucket = bucket + 1 % MAX_INDEX
+    return nil
+    
+Q: Great, how could you deal with filling the table? 
+
+A: Not sure, but you could just keep a counter and stop at MAX_INDEX [good]
+
+C: Very impressed that he derived a basically correct open addressing scheme on the fly, pseudocoded it correctly on the first try, and caught details like the wraparound without even a pause. While the pseudocode suggests that he isn't an expert in any one language (which he quickly admitted) he is  comfortable and confident the fundamentals.
+
+
+Q: Design an API for an online leaderboard
+
+A: Let's talk requirements. I understand that it needs to support posting scores (and maybe other things) and we need to retrieve the top scores, correct? [Sure, let's start there]. If so, the general concepts to track are:
+
+  - game id (probably provided by the server, like Google Play Games, or Apple Gamecenter)
+  - player id (also provided by the server via a sign-in flow) [good!]
+  - score, but really a blob of score, kills, deaths, etc
+
+Assume there's a place where the game registers, like a developer console. If necessary they can customize the board there, as well as get the game id. [good]
+
+Need a query API, something that supports filters (game type, etc) and can do pagination, offsets, etc.
+
+Might need to make the query asynchronous and provide a callback, too. [good]
+
+We should provide support at the library / SDK library for offline modes and conveniences (batching, queuing, deduping, etc). [good]
+
+On the write side we can be fire-and-forget, but on the read side we need to display the result. We can serve results in a small window for efficiency.
+
+Quick sketch of the API:
+
+  POST /game/score/gamerid/playerid
+  { score: ..., kills: ..., points: ... }
+  
+  GET /game/leaderboard/gameid?location=...&startindex=...&length=...
+  
+C: We didn't have enough time to go as deep as I'd like into the design itself, since there are some interesting questions to get into as you think about how to scale up a service that supports hundreds of millions of clients and allows for queries like "players close in score to me" or "my friend's scores" but as a quick approximation I found Brice thoroughly comfortable taking about an area he hadn't thought about before. 
+
+>>>>>
+
+
+No Hire. My interview focus area was project management and engineering leadership, and most responses were vague and non-specific. Candidate seems to have decent soft-skills, but I can't recommend a hire for an engineering leadership role based on my interview.
+Interview questions asked
+
+<Not answered>
+Interview notes
+
+The candidate was lead developer and manager at a game company, responsible for about 40 people. The environment was described as chaotic, and driven by a founder / owner who constantly wanted to add new features. (The candidate described "it would be neat if ..." as the 5 most dangerous words in the english language, from a software development schedule perspective.) The candidate helped to solve the problem by artificially padding schedules with work that could be easily removed if dates were missed, and by literally hanging out at the desk of the founder to block them from thinking up new features that would distract the engineering team. This did not seem like a healthy environment, and did not seem like a healthy response to it.
+
+On the Echo project at Amazon -- The candidate was dropped into an organization with a strong formal planning process, which the candidate did not really describe well in detail (even when asked a few times). It sounded like scrum and rollups to get organizational burndown numbers. The candidate did not like the environment, felt the management overhead was too much, and left after 1 year because that's allowed at Amazon after 1 year.
+
+On the Kindle project at Amazon -- The goal was to inject a dynamic page into Kindle books. Metrics driven (don't hurt book load time, don't use too much bandwidth). We talked about project management process, deadlines, and communication on that project. The candidate did not seem able to talk in specifics, even after multiple requests.
+
+Candidate is people focused (this is good), but weak on specifics (less good) -- I asked about structure, cadence, and topics for 1:1s. Weekly 1:1s with engineers. The candidate said that there were two types of managers -- those that structure their 1:1s and those that are focused more on how people are feeling. The candidate classifies themselves in that second group. I got no additional details on that topic.
+
+We talked about examples of cross-team collaboration. The candidate mentioned that at Amazon it could be very hard to get managers to decide to collaborate on efforts across teams, but that engineers had some success. In one case the candidate's team had expertise another team needed, and also the reverse. The candidate suggested that one of the engineers on the team work directly with an engineer on the other team to "trade" work. This led to success and avoided the political issues around resolving cross organizational goals.
+
+I asked about how the candidate goes about building plans and schedules for an engineering team, and how they avoid overcommitting the team. The candidate has a real (and probably healthy) skepticism around schedules, quoting Fred Brooks as saying that you "need to build one to throw away", and saying that it was the managers job to look ahead, and know what mattered and what was critically hard, and to get the team to do those things first to reduce risk.
+
+This sort of approach to risk reduction is valuable, but the candidate did not provide any details (when asked) and wasn't able to provide any suggestions for a structure in which this might be applied.
+
+We talked about team dynamics, and the candidate talked about the importance of the human side of managing teams. When asked about specific ways to manage that effectively, the candidate mentioned reading code reviews to check for the language being used, and to help pre-edit email and document communication from engineers to avoid language that might be inflammatory. The candidate mentioned a prior experience with two senior developers who would not speak to each other. The candidates solution was to invite them to lunch to at least force some social interaction between them, though it didn't sound like that helped much.
+
+I came away with the impression that the candidate has a bunch of reasonably good ideas about managing projects and teams, but has never actually been in an organization that did this well, and has never been able to develop a framework that they believe in.
+
+
+* Leadership (People, program, project, technical)
+
+This was an area of focus for me, and the candidate came across as fairly weak, and unable to talk in specifics. It seems as if most of the leadership experience that the candidate has is self leadership or smaller teams, and that sounds more like being the stronger senior developer (with lightweight project management) than really leading and driving a project or team. The early work at the game company was at a larger scale, but even there it sounds like the product (and company) leadership came from the company founder / owner, and the candidate's work was focused on keeping the engineering team from being distracted by new features.
+
+
+* Analytical/Cognitive Ability:
+
+The candidate seemed smart, but nothing really jumped out at me here. I'll defer to others who talked in more depth about code or system design.
+
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+
+Amazon experience seems the most relevant. The project on the Kindle team included a set of topics that we can relate strongly too -- latency, bandwidth, performance, a mix of front and back-end systems, etc.
+
+
+* Communication Skills:
+
+Seemed fine, though as noted above, the candidate had a really hard time talking in specifics about his work in the topic area we were covering together.
+
+
+* Google Culture Fit:
+
+The candidate kept using the word "kids" to refer to the more junior members of his teams. If it had happened once, it wouldn't seem notable, but it came up several times in our conversation, to the point that it really got my attention. Aside from that there were no red flags. The candidate seemed smart, nice, and like someone that people at Google would enjoy working with.
+
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+
+Based on my interview, I would not hire the candidate for a TLM role.
+
+>>>>
+
+
+No Hire. My interview focus area was project management and engineering leadership, and most responses were vague and non-specific. Candidate seems to have decent soft-skills, but I can't recommend a hire for an engineering leadership role based on my interview.
+Interview questions asked
+
+<Not answered>
+Interview notes
+
+The candidate was lead developer and manager at a game company, responsible for about 40 people. The environment was described as chaotic, and driven by a founder / owner who constantly wanted to add new features. (The candidate described "it would be neat if ..." as the 5 most dangerous words in the english language, from a software development schedule perspective.) The candidate helped to solve the problem by artificially padding schedules with work that could be easily removed if dates were missed, and by literally hanging out at the desk of the founder to block them from thinking up new features that would distract the engineering team. This did not seem like a healthy environment, and did not seem like a healthy response to it.
+
+On the Echo project at Amazon -- The candidate was dropped into an organization with a strong formal planning process, which the candidate did not really describe well in detail (even when asked a few times). It sounded like scrum and rollups to get organizational burndown numbers. The candidate did not like the environment, felt the management overhead was too much, and left after 1 year because that's allowed at Amazon after 1 year.
+
+On the Kindle project at Amazon -- The goal was to inject a dynamic page into Kindle books. Metrics driven (don't hurt book load time, don't use too much bandwidth). We talked about project management process, deadlines, and communication on that project. The candidate did not seem able to talk in specifics, even after multiple requests.
+
+Candidate is people focused (this is good), but weak on specifics (less good) -- I asked about structure, cadence, and topics for 1:1s. Weekly 1:1s with engineers. The candidate said that there were two types of managers -- those that structure their 1:1s and those that are focused more on how people are feeling. The candidate classifies themselves in that second group. I got no additional details on that topic.
+
+We talked about examples of cross-team collaboration. The candidate mentioned that at Amazon it could be very hard to get managers to decide to collaborate on efforts across teams, but that engineers had some success. In one case the candidate's team had expertise another team needed, and also the reverse. The candidate suggested that one of the engineers on the team work directly with an engineer on the other team to "trade" work. This led to success and avoided the political issues around resolving cross organizational goals.
+
+I asked about how the candidate goes about building plans and schedules for an engineering team, and how they avoid overcommitting the team. The candidate has a real (and probably healthy) skepticism around schedules, quoting Fred Brooks as saying that you "need to build one to throw away", and saying that it was the managers job to look ahead, and know what mattered and what was critically hard, and to get the team to do those things first to reduce risk.
+
+This sort of approach to risk reduction is valuable, but the candidate did not provide any details (when asked) and wasn't able to provide any suggestions for a structure in which this might be applied.
+
+We talked about team dynamics, and the candidate talked about the importance of the human side of managing teams. When asked about specific ways to manage that effectively, the candidate mentioned reading code reviews to check for the language being used, and to help pre-edit email and document communication from engineers to avoid language that might be inflammatory. The candidate mentioned a prior experience with two senior developers who would not speak to each other. The candidates solution was to invite them to lunch to at least force some social interaction between them, though it didn't sound like that helped much.
+
+I came away with the impression that the candidate has a bunch of reasonably good ideas about managing projects and teams, but has never actually been in an organization that did this well, and has never been able to develop a framework that they believe in.
+
+
+* Leadership (People, program, project, technical)
+
+This was an area of focus for me, and the candidate came across as fairly weak, and unable to talk in specifics. It seems as if most of the leadership experience that the candidate has is self leadership or smaller teams, and that sounds more like being the stronger senior developer (with lightweight project management) than really leading and driving a project or team. The early work at the game company was at a larger scale, but even there it sounds like the product (and company) leadership came from the company founder / owner, and the candidate's work was focused on keeping the engineering team from being distracted by new features.
+
+
+* Analytical/Cognitive Ability:
+
+The candidate seemed smart, but nothing really jumped out at me here. I'll defer to others who talked in more depth about code or system design.
+
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+
+Amazon experience seems the most relevant. The project on the Kindle team included a set of topics that we can relate strongly too -- latency, bandwidth, performance, a mix of front and back-end systems, etc.
+
+
+* Communication Skills:
+
+Seemed fine, though as noted above, the candidate had a really hard time talking in specifics about his work in the topic area we were covering together.
+
+
+* Google Culture Fit:
+
+The candidate kept using the word "kids" to refer to the more junior members of his teams. If it had happened once, it wouldn't seem notable, but it came up several times in our conversation, to the point that it really got my attention. Aside from that there were no red flags. The candidate seemed smart, nice, and like someone that people at Google would enjoy working with.
+
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+
+Based on my interview, I would not hire the candidate for a TLM role.
+
+
+>>>>>>
+
+
+Hire. Brice has sufficient analytical chops to understand the problems his team will be facing, and seems like an easy person to work with/for.
+Interview questions asked
+
+(1) (Resumé) How does one consult AND be a dev manager for AMZN simultaneously?
+(2) Design and implement a rate limiter or throttler (http://ideas/InterviewQuestions/view?idea=373)
+(3) Design a FOAF access-control system (http://ideas/InterviewQuestions/view?idea=316)
+
+Interview notes
+
+* Onsite: HIRE
+
+(1) (Resumé) How does one consult AND be a dev manager for AMZN simultaneously?
+One doesn't. Was a oddity in how linked-in shows timeframes. There wasn't an overlap.
+
+Instead he talked about most recently being a manager, with not much coding. He's alternated as developer and manager over the years. When he's working as a developer, he finishes things. When he's playing as a developer (e.g., home coding project), he starts things (but doesn't finish them) – lots of tries of this and that and kludging up something that works.
+
+(2) Design and implement a rate limiter or throttler (http://ideas/InterviewQuestions/view?idea=373)
+Brice mused about the problem out loud, saying that linked list of items works (aging out the oldest), but shouldn't be required, that he just needed to calculate something. He said he was whiteboarding code en route to an answer. He sketched out a simple model doing rate comparisons, then figured out how to assign a new prospective rate, and on the second passthrough of how things work for accept vs. reject, he fixed up the adjusted rate. (See code below.) I asked what if we wanted to change rates? He said reseting the rate to zero is probably bad; he had just been wanting to make sure it was initialized (I wonder why he didn't use a constructor). I asked if we could actually get 10^6 requests/s through it, and he did some analysis of the cost, saying only "now()" might be expensive and there's likely some cheap CPU metric to use; he just needed sufficient resolution. I tried to ask about, if this was the lightweight thing guarding a heavyweight process to hint toward not being able to do it all on one thread; he didn't take the bait so I asked about many threads handling requests, and he immediately talked about lock contention and looked at what needed to be locked to see if anything could be done; suggested not checking every time, having per-thread sub limiters (esp. if you're fair distributing work via a schedulers). At this point I wrapped it up to go on.
+
+Brice's solution is totally reasonable. We didn't get into any nitty gritty about bursts or traffic shaping in the 20m, but he had a pretty thorough analysis and code was OK. It has mild issues around the edge cases, but getting that now() might be expensive, and certainly locking would be was good.
+
+(3) Design a FOAF access-control system (http://ideas/InterviewQuestions/view?idea=316)
+Brice spent some time musing on the identifier, thinking product questions (he settled on actual name vs. an integer), qualified if it's Friendster friends or Twitter followers, and described a table with friends, getting those and looking up those friends. He suggested that just caching friends of friends might be preferable, though 3rd degree would be too big. He also said "since we don't have to change friendships", that the precomputation would probably work. He talked about some services having a friend limit and mused this might be related. He said the status data might be able to be sharded "over a bunch of stuff", and split the lists across servers. He thought about Kim Kardashian being popular and having a lot of friends to consider. He thought about storing friends names in a sort of compressed format, e.g., a Trie, so that you could walk down a tree and know if the friend existed. I asked him what would have to consider if his PM asked him to return a response within in a fixed time. He then backed up and thought about the auth service in the larger service and said we had to look up the owner anyway because presumably their resources are associated and that could be done in parallel with the auth check, possibly even preloading the resource in case the check comes back OK. He suggested caching (e.g., memcache, popular people) results, since people might ask for multiple resources from the same owner repeatedly. He mused that the lookup is O(log(N)) so sharding is actually sad (less efficient) and want to minimize it. At this point we ran out of time and didn't code.
+
+Brice's analysis was good, including realization of the size blowup for precomputing n-degree distances. I appreciated his product question about ids, but he could have separated external vs. internal id. His optimization towards the end was geared at improving latency in spots, but didn't tackle the problem of max latency until pressed.
+
+* Leadership (People, program, project, technical)
+N/A
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+allowThisR
+{
+  now = t.now()
+  deltat = now - last
+  new_rate = ((rate + 1)/(1 + deltat)) // <-- expressed mathematically on the whiteboard vs. parentheses
+  if (new_rate > alqps)
+    rate = rate / (1 + deltat) // <-- same; added this and the time cache later; mused that it might not be necessary
+    last_time = now
+    return false
+  rate = new_rate
+  last_time = now
+  return true
+
+setQps(   )
+  alqps = allow
+  rate = 0
+  last = now
+
+His code was correct but style was more pseudocode than code.
+
+* Analytical/Cognitive Ability:
+Brice showed understanding of both problems very well, and was able to quickly come up with both initial naive solutions and ideal aims which he then developed over the course of the session.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+N/A
+
+* Communication Skills:
+Brice explained what he was thinking and why he was tackling what he was tackling. He explained himself well and walked me through his solutions with ease. He was soft spoken and genial.
+
+* Google Culture Fit:
+He seemed like he'd fit, being inquisitive, thoughtful and regimented in his approach to problems. I saw no red flags.
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+Brice has sufficient analytical chops to understand the problems his team will be facing, and seems like an easy person to work with/for.
+
+>>>>>>
+
+

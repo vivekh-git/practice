@@ -1,0 +1,107 @@
+8:45 AM	Chris
+9:00 AM	Russell - BlueJeans
+9:45 AM	Vivek
+10:30 AM	Charlie
+11:15 AM	Brian H
+12:00 PM	Don
+12:45 PM	Chris
+
+>>>>>
+Russell  - event de-dup, hql/sql, top k spenders by app
+
+For an easy question, I had him walk me through how to guarantee that events are de-duplicated (this ended up including a HQL/SQL question because of the approach he chose).  For the tougher question, I had him design and start to implement the top K spenders by app program.  He used Storm.
+
+Vivek - team overview - technologie / framework understanding
+talked about kafka, flume, scribe, storm - had good understanding
+scribe - talked about log collection
+flume - for transport log to kafka, file based buffer in the source. using it to use kafka as channel for push model from kafka
+kafka - file based queue, topics, partitions in topic for throughput
+storm - talked about how he used for business  trends (pageviews / other in real time), used redis for caching, used grouping feature of storm do some in memory caching in bolt. 
+  - Did not ask about persistent store used after storm and how he is aggregating.
+Install cohort retention - data model - i asked about this. He did not know much about it. Also we ran out of time.
+
+Charlie - likely etl / pipeline workflow
+
+Brian Hansen -
+ - Java or any language programming question
+ - Stretch - ETL Testing  questions - how to test using smaller data ? 
+ - Debugging etl
+ >>>>
+ Song Xie
+ 
+ Mon 6/22	Pokemon
+ 9:00 AM	Charlie
+ 9:45 AM	David C
+ 10:30 AM	Russell - BlueJeans
+ 11:15 AM	Don
+ 12:00 PM	Vivek
+ 12:45 PM	Ryan
+ 
+ Charlie - etl / data pipeline workflow
+ David C - Java or any language programming question / data structures / algorithms, ETL testing/debugging
+ Russell - Russell  - event de-dup, hql/sql, top k spenders by app
+ Don - culture fit, depth of knowledge on his most recent project
+ Vivek - team overview / technologies, Programming
+ Ryan - closing call
+ 
+ >>>>>>
+ Ian LIn
+ 
+ 9:15 AM	Russell - BlueJeans
+ 10:00 AM	Brian H
+ 10:45 AM	Tristan
+ 11:30 AM	Vivek
+ 12:15 PM	Don
+ 1:00 PM	Chris
+ 
+ <feel free to switch topics / areas to your comfort areas>
+ Russell - Russell  - event de-dup, hql/sql, top k spenders by app (make it a stream processing question than etl)
+ Brian H - OO design - design a popular game.
+ Tristan - System Design -  search engine, design LRU cache,
+ Vivek - Programming - Write code to identify if a list is palindrome. identiy loops in linked list and code. Identify the head of the loop.  + Team overview
+ Don - culture fit, depth of knowledge on his most recent project
+ Chris/Ryan - closing call
+ 
+ 
+ 
+ 
+ 
+ >>>>
+ Cory 
+ 
+ 10:30 AM	Chris
+ 10:45 AM	Como
+ 11:30 AM	Russell - BlueJeans
+ 12:15 PM	Vivek
+ 1:00 PM	Charlie
+ 1:45 PM	Don
+ 2:30 PM	Chris
+ 
+ Como - Problem solving involving graph search in a game - identify the squares touched by bacteria in a board game.
+ Russell (feel free to change - these are just suggestions) 
+    - API framework internals - internals of Play / Spray / Flask
+    - How to intercept all rest calls, set cookies, generate sessions,
+	- How to setup code structure so that it is maintainable and debuggable, unit test code
+	- Scala Programming question - data structure / algo
+ 
+ Vivek 
+    - Programming questions
+	- compute median response time of all requests coming into api boxes
+	- compute k'th largest element from a unsorted array
+ 
+ Charlie (feel free to change)
+    - More on API development / Python / Scala questions
+	
+>>>>>>
+
+	
+	
+
+
+
+
+
+
+
+
+

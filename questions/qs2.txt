@@ -1,0 +1,804 @@
+>> System high level design >>>
+
+High level system design was OK but simplistic. Major issues showed up when pressed for specifics and sizing. Could not come up with numbers or made assumptions that are incorrect / extremely out of date. Shows either a lack of skill or experience, neither of which is acceptable for a lead / manager.
+Interview questions asked
+
+1. design a URL shortener
+Rated for: Tech-Software Engineer-General, Level 5-5, for people manager
+On role-related knowledge
+
+
+Distributed Systems Design
+POOR
+
+Comprehension & Communication
+BORDERLINE
+
+Efficacy
+BORDERLINE
+See notes. Had a reasonable design, but when pressed for specifics and sizing could not come up with numbers or made assumptions that are incorrect / extremely out of date.
+Interview notes
+
+1. design a URL shortener
+
+Started off OK. Use HTTP GET and redirect.
+Said we need a map from short URL to long URL, use some database.
+-What DB?
+Assume high read to write ratio, maybe 100:1. Could use Cassandra, Mongo. SQL overkill.
+
+Shard the DB. When creating a new URL, could assign using round-robin. For read, don't want to broadcast to all shards. Could encode shard id in the short URL.
+-How many shards?
+Estimate traffic. Add new shards when shard gets too hot/full, e.g. at 50%. Don't move existing URL between shards.
+NB: not too impressed by these answers. Explicitly encoding shard id in the URL makes it longer and is inflexible. Not doing real rebalancing means poor utilization.
+
+Keep track of which URLs are accessed so that we can clean up unused / old ones.
+-Do we need to do that?
+Yes, otherwise we'll eventually run out of URLs.
+-What's the alphabet and how long should the short URL be?
+Alphabet could be 0-9, a-z, A-Z, and _. 63 characters.
+URL could be 20 characters long?
+-How long until we run out assuming 1000 URLs created by second?
+"Will take a long time, but we'll run out eventually"
+NB: tried to get some back of the envelope calculation out of him to do to demonstrate that with a URL this size we'll never run out, but no success despite several attempts and hints. Major red flag.
+
+-What will performance be like?
+DB lookup should be under 10ms.
+Each row is small, cache entire data in RAM.
+NB: caching all data in RAM is a poor choice.
+
+-How many machines will we need?
+Assuming each long URL is 2k characters and each short URL 128+20
+NB: the 128 were apparently the domain name, which doesn't make much sense. 2k average for the long URL also doesn't make much sense. 
+For simplicity, assume 2k total.
+Server could have 2GB or RAM. so maybe 500k URLs per server.
+NB: 2 GB RAM per server is about 10 years out of date. Very odd choice.
+
+-How to keep track of access frequency / unused URLs?
+Don't store data in the same DB as our main DB is not write optimized.
+Could use logging and pass the events to some system like logstash, elastic search, kafka.
+-Is this real-time?
+Depends on how many machines we want to use for this.
+NB: I was hoping for more discussion of resource requirements, suggestion to process logs in batch rather than realtime, etc. It should be obvious that writing data is more expensive than the actual lookup, but did not comment on that.
+
+>>>>>
+
+6 Hire. I only evaluated on project management and leadership and found that Raphael is very solution oriented and googley. He also communicates clearly and speaks with confidence. His approaches also blends in very well with our team, so I think he will do well in our team. 
+Interview questions asked
+
+Q1: Your leadership asked you to take on a brand new strategic project. how would you respond?
+
+Q2: You cancelled the last 3 projects (out of 10) to support this brand new strategic project, how would you manage the stakeholders’ expectations who are not going to get their projects done? 
+
+Q3: 1 month into the project, you found out you under-sized it by 3x. what would you do?
+
+Q4: Scenario: web app in prod for a year: lots of serious bugs and infrastructure debt, how would you balance your eng capacity allocation across features, infrastructure and bug fixes?
+
+Q5: How would you pitch a rewrite to mgmt when you are under feature pressure from customers/PMs? (e.g. 10 yrs)
+Rated for: Tech-Software Engineer-General, Level 5-5, for people manager
+On leadership (optional)
+
+
+Manages Projects
+SOLID
+
+Gets Things Done
+SOLID
+
+Works as a Team
+SOLID
+Q1-3 is a 3 part question which involves project management and leadership. Overall, Raphael's answers are very practical, solution oriented and team driven. His recommended approaches/solutions are likely how we will operate in our team, so I find that very practical. He is weaker in GCA.
+On googleyness (optional)
+
+
+Cares About the Team
+SOLID
+
+Does the Right Thing
+SOLID
+Q2: stakeholder mgmt answers indicate that he cares about partners and stakeholders and would
+Many of his answers in Q1-4 are very practical and I felt that he strive to make the right decision. He is also very solution oriented.
+Interview notes
+
+Q1: Your leadership asked you to take on a brand new strategic project. how would you respond?
+
+Answer: need to understand the strategic project and relative priority. may ask leadership to rank. look for options: is this right team to do it? augment staffing? (assuming what we have planned is also important). 
+L: let’s say all of them are important, please tell me what you need to descope/cut? 
+R: look for options from other teams to augment. is consultants an option? 
+L: please walk me through the options. 
+R: first we need to scope it out. e.g. 3 ppl for 3 months. Look for opportunity to bring in extra help, get contractors (with some experience). may need to escalate to the VP. are there opportunities within VP org who could help? 
+L: are you open to getting others to write code in your teams’ code base? 
+R: the industry direction is open source, so yes, and we should have the team work out the details (design review, code review) and support other teams to submit to our code base
+
+Analysis: Overall, Raphael’s answer is not very systematic, but he did hit many important points and the answers are quite practical. I like the fact that he is looking for reasonable options to solve the problem. The share code base part is also very googley.
+
+Q2: You cancelled the last 3 projects (out of 10) to support this brand new strategic project, how would you manage the stakeholders’ expectations who are not going to get their projects done? 
+
+Answer: assume that the 3 projects cut are the lowest priority projects. will start discussing before the decision is made. May be the project is cancelled but think about what key features we should get in. Look for opportunities to address the most critical. Also need to consider dependencies on other projects. It should be a joint decision with stakesholders.
+
+Analysis: Overall also a very reasonable and practical answer. Raphael considered getting stakeholders in the decision process. Look for options to support a few critical features and also the considerations for bi-directional dependencies.
+
+Q3: 1 month into the project, you found out you under-sized it by 3x. what would you do?
+
+Answer: definitely need to let our VP know and talk to the Product owner to see if we can manage the scope (reduce it) to mitigate. Not sure why it is 3x. there could be a mismatch in scope and understanding. 
+L: what is a good method to size more accurately. R: get info upfront. pull architects and engineers to help with sizing effort. need to understand the requirements, current systems, dependencies. Identify all issues upfront and account for them earlier on. 
+L: can u dive deeper into sizing methodology? R: e.g. scenario: adding multiple shipping address on ebay. need to change order structure. broke it down into different segments and sprints estimates. E.g. dependencies on order structure, billing, payment, credit card, UI, data model, UER time. Everything is sized based on sprint estimates. 1 sprint is 3 weeks. E.g. do X will be 1 sprint, do Y will 3 sprints etc...
+L: typically how does this go? R: overall it is a wash. some area will get more time and some will be less. At least 1 sprint effort for integration. 
+
+Analysis: This is also a practical answer. Raphael is a very solution oriented person. In this answer, I like the fact that Raphael know that all estimates are inaccurate but when estimates are broken down enough, the overall total should be reasonably accurate. You usually get this answer from experienced eng managers. 
+
+
+Q4: Scenario: web app in prod for a year: lots of serious bugs and infrastructure debt, how would you balance your eng capacity allocation across features, infrastructure and bug fixes?
+
+Answer: live product needs eng capacity to support the product. e.g. 10-25%. L: let’s say you have 50 engineers. R: let’s go with 20% to fix bugs. We need a team to fix infrastructure issue. It is hard to sell infrastructure project. Look into how to bake infrastructure into the features. Most importantly, we should not add more infrastructure debt. Will likely reserve 10% on infrastructure and incorporate them into feature releases. 
+L: let’s say you have a 100 P1s. infrastructure issues: 50% test coverage, inconsistent widgets and components. 
+R: can live with inconsistent components but need to fix whenever we touch the widget. need to focus effort on test coverage. I would keep the allocation the same. The feature allocation will include fixing tech debt as we touch the feature. Will only fix the components we touch when building new features, but we need to establish a process that others also use this new component when their areas are touched.
+
+Analysis: This is so true “It is hard to sell infrastructure project.” and this “Look into how to bake infrastructure into the features.” is so practical/reasonable. This is an okay answer. I would have expected that he take a more critical look at the 100 P1s and ask more questions or consider a short term halt on all features to burn down the P1s first.  
+
+Q5: How would you pitch a rewrite to mgmt when you are under feature pressure from customers/PMs? (e.g. 10 yrs)
+
+Answer:  I will definitely pitch the rewrite. It is going to take exponentially more effort to build features on top of the legacy stack and also effort to maintain the app. 
+L: let’s say this is a 2 yrs long rewrite. R: form a small tiger team to figure out how to do the rewrite. Shift investment from legacy stack to new stack. Will work backwards. from 100% launch to 50%, 25%, 1%. Will probably freeze features in legacy system at 1% time. will run parallel dev.
+
+Analysis: This is also a very typical Eng manager answer and is likely how things will turn out. From a project mgmt/GCA perspective, I would expect a little more on the potential challenge of going with this approach and how we should mitigate. But we ran out of time, so I was not able to spend too much time on this question.
+
+>>>>>>
+
+
+As a TL, M has good experience and great exposure to a complex system over time.
+I wasn't as impressed with the way he expressed his perspective.
+I heard much more of ' we did this' than abstraction or principles that he had clearly learned.
+Interview questions asked
+
+* You've done a wide variety of things in your roles; what parts do you enjoy most?
+* What were key technical aspects of decomposing  into payments, checkout, order management?
+* How has agile-based approach worked in your more complex dev context?
+* Discussed familiarity with FE/BE architecture challenges?  Restful APIs
+* How do you oversee subsystems you're not familiar with?
+* How do you promote technical sharing and participation in a diverse team?
+Rated for: Tech-Software Engineer-General, Level 5-5, for people manager
+On role-related knowledge
+
+
+Design
+SOLID
+
+Distributed Systems Design
+SOLID
+
+Comprehension & Communication
+SOLID
+
+Efficacy
+SOLID
+Has good experience taking complex system and migrating to next-generation platform.
+Good exposure (but not impressive discussion of) to core system issues.
+On leadership (optional)
+
+
+Gets Things Done
+SOLID
+Has put in place large scale efforts (next gen app, migration etc) and carried them over time.
+Has put broader (beyond-eng) processes in place as well.
+On googleyness (optional)
+
+
+Thrives in Ambiguity
+SOLID
+Has worked in highly dynamic context and targeted solutions leading toward system flexibility (for growth or integrations)
+Interview notes
+
+* You've done a wide variety of things in your roles; what parts do you enjoy most?
+       challenges of dealing w legacy systems
+       -keep thing s moving on
+       -leverage what you've learned
+    e.g. rebuilding a system for higher extensibility 
+
+* What were key technical aspects of decomposing  into payments, checkout, order management?
+   gave a  summary of order mgnt and it's challenges 
+   order lifecycle is complex, many systems were interacting w same entity
+   changed to more clearly reflect the changes, 
+       -amendments to the order and have it be traceable
+
+What was impact on API?
+    didn't have true api's, originally
+     -hard to know what contract was
+    needed to reflect different views, buyer/vendor, etc
+ How did you proceed?
+    -decomposed  BE first in backward compatible manner for future proofing
+ How to maintain data integrity?
+  migration was challenging
+  both systems running in parrallel, needed to do 2 way sync
+ Process:
+   establish api, deprecate,cleanup direct access 
+
+* How has agile-based approach worked in your more complex dev context?
+     3 wk spring   2 was too small
+    challenges waterfall -> agile
+     design
+         lock down interfaces; address compatibility
+ 
+* Discussed familiarity with FE/BE architecture challenges?
+    decouple BE by adding api  e.g. mobile vs web
+ What were key performance drivers?
+    caching layer   (really is composite api + caching)
+* Discussed challenges with restful APIs for highly relational schema.
+ How did your apis cover order vs line item?
+   one is cache of other
+    in core, api line item is an adjustment to the order
+
+* How do you think of caching across the stack?  
+   - browser caching
+    works for static pages  (html)
+  BE
+    - reference data  cache to avoid db hits
+
+ * How do you oversee subsystems you're not familiar with?
+    - talk to the experts, re pain points, talk to team, learn challenges
+       play w ui,      play w restful services
+
+* How do you promote technical sharing and participation in a diverse team?
+    - they had a few teams (they used same basic platform).
+    - held forums
+>>>>>
+
+Coding
+
+I was asked to focus on coding.  Based on my coding question, Raphael is a hire.  He did less well on my design question, but admittedly, I was trying to spin it in an unnatural direction.
+Interview questions asked
+
+0) Confirm that best language is Java
+
+1) You are building a mission critical (e.g. missile guidance) system.  Your PM purchased a library (interface file + .jar) that included the following function
+    bool f(int x);  // returns true if x is a power of 2, false otherwise
+How do you ensure that f(x) does what it is intended to do?
+
+I also walked through several examples to confirm understanding, e.g.:
+f(0) == false
+f(6) == false
+f(8) == true
+
+2) Walk through transport protocol design for Scavenger for Docs & Spreadsheets.  Key dimensions:
+- Need to migrate end user documents (DOC, PDF, PPT, XLS) from MS Windows desktops to Google Drive.
+- In 1 year: migrate 100MM users spread across 20K organizations.  Median 10GB with a long tail of very large users.
+
+Rated for: Tech-Software Engineer-General, Level 5-5, for people manager
+On role-related knowledge
+
+
+Coding
+SOLID
+
+Tests Code
+SOLID
+
+Design
+SOLID
+
+Distributed Systems Design
+SOLID
+
+Comprehension & Communication
+OUTSTANDING
+Coding - the candidate handled a not terribly hard problem very quickly with an optimal answer.
+Tests code - the candidate was good at identifying boundary conditions and needed no prompting to walk through his own code before considering it done.
+Design - Raphael's broad design for Scavenger was fine, but it took more prompting than I would like to get him down to specifics.  For example, I had to ask more prompting questions than I'd like to get him to define his chunk size.
+Distributed System Design - ditto
+Comprehension & Communication - Throughout our discussion I found Raphael both easy to talk to and listen to.  
+Interview notes
+
+Question 1 
+- Raphael started by proposing that we work through some candidate values for x, including negative numbers.  He also quickly described boundary cases "or close" e.g. MAXINT
+- Raphael quickly landed on performing an exhaustive test, because it's good to do with modern computing power.  Many candidates struggle to get to this point.  I asked him how many iterations his test would have to do, and he said [paraphrasing] 64000.  He could not remember that Java ints are 32 bits.
+- He described his strategy to create a "sparse vector" of the powers only, then loop through all of the integers.  "The other way to do it is to write our own copy of f(x), probably don't want to do that."  I felt really good about how quickly he got to this approach and why he decided on this.
+- I asked him to implement, and originally he said he would focus on calculating the powers, but as he coded he ended up implementing the whole thing in one shot:
+
+Snippet 1
+=========
+int powers[32] = {};
+powers[0] = 1;
+for (int i=1; i <= 32; i++)   // Note 1.1 below
+{
+    powers[i] = 2*powers[i-1]; // Note 1.2 below
+    assert(f(powers[i-1] == true);
+    for (int t = powers[i-1] +1; t < powers[i]; t++)
+    {
+        assert (f(t) == false);
+    }
+
+- Note 1.1: after looking at his code for only a few seconds, he realized that <= should be <.  I did not have to prompt him to notice this.  Good.
+- Also, he could not remember if 2^32 would overflow, but some candidates don't even stop to consider the question.  Good.
+- I wish he had provided a function declaration and had been a little crisper on syntax, but those are nits.
+
+We then discussed a followup:  let's say the library also had g(x) which returned true if x were a power of 3 and false otherwise.  What would have to change in your code to test it?  Raphael had no problem answering this, quickly recognizing that the only thing that needed parameterization was the base (Note 1.2).
+
+All through the coding, Raphael did a good job narrating his thought process.  He came up with what I consider the optimal solution in 15 minutes; TLM candidates often flail at this for 25-30 minutes without getting as good of an answer.
+
+Question 2
+I described a one way migration system that would suck files out of legacy desktop hard drives and push them to Google Drive.  Since I was wearing the coding hat, I attempted to dispel with my normal request to design the e2e system and get Raphael to focus on designing just the wire protocol between client machines and server.
+
+Unfortunately, this did not go as well as the coding question (somewhat counterintuitively, given that Raphael has been leading larger teams for a while now).  We ended up having a reasonable brainstorming session about the system architecture, but I was less able to get Raphael to commit to a specific protocol: file format, chunking strategy, metadata management, etc.
+
+>>>>
+
+
+Interview questions asked
+
+Given two independent family trees, one for Alice and one for Bob, find the nearest relative in either tree.  There is a brute force solution, and multiple solutions that reach linear time, along with additional optimizations that minimise the number of nodes touched.  You can code any solution you choose, but you must be code complete by the end of the interview.
+Rated for: Tech-Software Engineer-General, Level 5-5, for people manager
+Interview notes
+
+Given two independent family trees, one for Alice and one for Bob, find the nearest relative in either tree.  There is a brute force solution, and multiple solutions that reach linear time, along with additional optimizations that minimise the number of nodes touched.  You can code any solution you choose, but you must be code complete by the end of the interview.
+
+So the candidate did a good job of analyzing the problem; visualized the trees on the board, walked through a variety of cases where the nearest was in different positions in different trees, talked about using shortest path if there was a single tree rather than two, etc.
+
+However, the candidate then coded a subset of the answer; he struggled to get a complete implementation ready in time, and so there are specific shortcomings to the answer provided that result in incorrectness.
+No time was available at the end of the interview to debug the code as written to see if it had reasonable answers, as too much time was spent earlier on in the process.
+
+The coding process also went dramatically wrong at several points; he attempted to build a non-recursive response, but struggled to remember how to do so.  Coding is clearly not a recent or fresh activity for this candidate; and the mechanisms chosen for walking the parent tree node by node were awkward, nesting multiple manual loop walks.
+
+With some assistance, we got back to a saner implementation with a single loop.
+
+ArrayList children = new ArrayList()
+HashMap visitedNode = new HashMap()
+children.add(new VisitedNode(Alice, 0))
+
+>>>>>
+
+I am supportive of hiring this candidate into a leadership position. Sukumar was articulate, technical, and had good answers to the various interview questions that I posed to him.  I asked him a technical design question and another one on management. He was very crisp with his answers and convinced me that he could be a good hire.
+Interview questions asked
+
+* Describe the design properties of a system that interfaces with consumers at the one end and has to read a lot of data at the other end - for example a payments portal. How would you architect the system and what would you do to make feature development fast and easy.
+
+* How would you work with a new team that does not believe in what you bring to the table. How would you win them over. What approach would you take to make sure that you understand the complexities and make the right decisions.
+Interview notes
+
+My interview with Sukumar lasted 30 minutes or so a bit on the shorter side, I spent a few minutes also answering questions related to the work culture at Google, describing the PA organization and structure, and his questions about decision making.
+
+On the system design question, he went through the various components of building a frontend facing consumer reporting application that dealt with large amounts of data. He described the architecture of two systems, one where it would be easy and fast to build initially and another that would require careful thinking of interfaces and boundaries across various layers that would make the longer term feature development and maintenance easier. I also probed him on questions pertaining to making such a system scalable and reliable and low latency. He had good answers to these on how he would build fault tolerance and scalability to these systems. It was a very good discussion.
+
+On the management question, I asked him about how he would build credibility with the team. We had a good discussion on this subject. His answers demonstrated that he has great deal of experience in moving into situations that he is unfamiliar with and winning over the team. He was not prescriptive about how he would approach it but talked about the various options / tools that he had in his tool kit that he would deploy. I learnt a thing or two as well in the process.
+
+Sukumar has very good communication skills, he will be a great fit at Google in this regard. While my time with Sukumar was a bit limited, in the time I had to talk to him he 
+I have little hesitation in recommending him as a hire for Google.
+
+>>>>>>>
+
+
+Recommend hire, senior-level (T9/T10), pending successful follow-on interviews with a specific PA (Shopping, TI) to confirm fit.
+Interview questions asked
+
+How would you describe the overall narrative arch of your career - that is, what interests/priorities led you from one role to the next? What's the next-step in that story?
+How does the leadership and management culture at Amazon compare with Microsoft or what you've learned about Google culture?
+Interview notes
+
+Sukumar opened by explaining that he was early-stage in exploring potential fit with Google (piggy-backing this visit on separate travel plans to the area this week). He felt that the goal of today's meetings was to sample various aspects of Google product portfolio and org, with the intent to follow-up with more specific, focus interviews in a particular area if there is mutual interest. I read this as low-commit, but candid and honestly engaging the recruiting process.
+
+I had reviewed his resume and was familiar with the scale (~500-person org) and focus (enterprise apps, CRM, catalog management, large-scale infrastructure) of his leadership experience and responsibility (chief architect, eng manager, product manager, marketing), so asked him to describe the narrative arch that had tied these experiences together and had guided his career to this point.
+
+Sukumar briefly traced the highlights of his resume, including: UT-Austin PhD in MSIS (customer support) -> Scopus (startup, significant market share, IPO, marketing->PM->architect roles, learning environment) -> Oracle (full-stack, DB/middleware/application suite) -> PeopleSoft (architect, tools-focus) -> Microsoft (infrastructure + apps) -> Amazon (product catalog, 1M+ tps, 100B+ tpd, Eng/PM/Ops, no P&L). Cohesive themes he highlighted included business domain (business process, enterprise apps, infrastructure), technical depth (Oracle, Microsoft, Amazon), industry dynamics (moving up the app-stack Oracle->Peoplesoft, consolidating infra+apps at Microsoft, pivoting to consumer catalog at Amazon).
+
+I later asked which points in his career had stood-out from a personal satisfaction or fulfillment standpoint. He answered with the 'bookend' roles of Scopus (startup environment, engaging learning, decisions quickly tested and validated) and Amazon (scale, impact, talent, integrating previous experience). Throughout the exploratory conversation I get a strong sense that Sukumar is quite comfortable and happy in his current role with Amazon - this is a big, challenging, high-impact role and he's doing well. His primary motivations in exploring a change seem to be (1) lifestyle preference for the Bay Area (still has his local phone-number), and (2) one kid in college and another just entering high-school (so limited window to move or stay-put over next 4-years).
+
+We discussed observations and differences around Oracle, Microsoft, Amazon and (initial impressions of) Google culture. Most of his insights were accurate, emphasizing -  Amazon: leadership hierarchy, domain ownership (control-your-own-destiny vs reuse), operational-responsibility, management-centric reviews, customer-focus, frugality/efficiency, Microsoft: management discipline (perf reviews, levels), competitive-focus, Oracle: ad hoc management (Larry decides one morning to give spot-bonuses), Google: technical breadth/ambition, peer-centric reviews, customer-focus, engineering freedom.
+
+Overall, my impression after a half-hour conversation was that Sukumar is an experience engineering leader with very strong communication skills, good energy, ability to think clearly, take a position and advocate for a point-of-view on complex tech/org/product/industry dynamics. His experience in successfully leading large 250-500 person organizations with significant ownership and responsibility suggest that he would be appropriately leveled at T9/T10 here at Google. Specific domain knowledge aligns most obviously with Shopping or Tech Infrastructure, though I could also see him taking-on a large role in Ads or Commerce. No media, mobile or apps experience. Presents as more engineering/tech focussed than business-minded, with limited (no?) full P&L responsibility to date.
+
+Given time constraints I was not able to get a strong read on technical depth in a particular domain (though GCA is very strong), management/leadership style, personal interests or career motivations. However, I had a strong positive impression overall, could confidently see Sukumar succeeding in a senior-level role at Google and would enjoy working with him as a peer. As such, I would recommend proceeding with another round of interviews, focussed on a particular domain to probe for technical depth, management style and team fit.
+
+>>>>>>
+
+
+I think Sukumar deserves a close look. I had a rushed 30min with him in which he held his own better than his resume suggested, so I guess I was pleasantly surprised.
+Interview questions asked
+
+see below
+Interview notes
+
+From the resume (management degree, terminology) I assumed Sukumar was non-technical. I began with a pretty low bar to see if he had the technical chops.
+What metrics would you study for an application's performance?
+- he clarified what I meant by an application (he said that for him an "application" runs in the cloud and not a mobile device) and discussed latency, utilization, memory in good detail in terms of tail latencies etc ...
+I asked him what if it were on a mobile device instead?
+- he was surprisingly cogent in his answer, calling out battery life, crash rate etc - parameters we barely track today.
+I asked him how he'd measure these and he had reasonable answers for one who doesn't do mobile development (he expected the OS to be able to return these, I told him why it was difficult).
+
+Overall, I was struck that he seemed technically sharp and thought on his feet. I think he merits further exploration.
+
+>>>>
+
+
+Very good conversation - candidate presented as an experienced and savvy engineering manager.  Bright, articulate, talkative but not to the point of a problem.
+Interview questions asked
+
+see below
+Interview notes
+
+[Amazon has a silo'd model for dev & ops]
+
+> Problems with pushing to canary environment?
+
+It's often broken [ed: No one washes a rental car] and we don't deal with it well.  The bigger problem is that we don't understand our dependencies well, and we can break downstream systems particularly with data [rather than with code].
+
+> So how do you deal with dependencies breaking?
+
+For code we do well - we can tell if you've broken a build via dependencies.  But for data and [semantic] dependencies it's hard.  We do shadow builds and run [A|B testing] to compare output of old, new system.  But if you're programming via debugging, you're in bad shape...
+
+One approach we've used is to store the config information in the SCMS with versioning etc. - or you can store both config and data in a versioned system and flip both semantics and data at the same time.
+
+This is the standard problem for development - where do you catch problems?  If you leave the problem to individual teams, they have integration tests, but they're also defining the integration tests and so the bar can be low or high.  And we use code reviews etc. etc. but those are also imperfect.
+
+We do have [code chill] before Black Friday and Xmas, that means risk accumulates and riskiest weeks are a few weeks before Thanksgiving, and the early weeks in January.
+
+> You observe the, at the limit, each team is responsible for setting their quality bar - but teams have an incentive not to worry too much about their impact on other teams...?
+
+We have a "correction of error" process for handling problems -- a post-mortem etc. -- and the controls are largely social, we look at the quality of the work the engineer and the team are producing.  And, the emergency response applies back to the team which makes the change - if you push a change which breaks a different team, the paging ticket is quickly assigned back to you.  And we track both number of "touches" (how many people had to look at the ticket before it is resolved?) and number of problems in an area.  I prefer non-normalized metrics, because you should have fewer problems as you add developers, not a linear increase.
+
+Related: Developers don't value turning down old systems as much as they do bringing up new systems, but that's incorrect.  [how do you get developers to do this turndown work?]  
+We (a) say it's important, (b) put it on the roadmap, (c) track the results.  Really, driving this top down - incenting the EOL work.
+
+Also - the system corrects itself over time, operational work generates high operational metrics which in turn discourages transfers-in, particularly for senior engineers.  We also make the operational metrics available for teams.
+
+> How do you get folks to work on services which are in trouble? 
+
+I inherited some services which were in trouble.  I said that we'd stop doing feature work, and we'd transfer in some senior engineers, until we could get healthy in the code base.  Part of this was splitting the binary, so that teams could make progress in development; part was transferring senior people in from other teams who were interested in the challenge.  Finally, we added operational support [which we don't normally do] to take part of the operational load off of the development team.
+
+> Did the team realize that they were in trouble?
+
+No, I needed an intervention.  I injected a couple of "senior principals" into the group to be able to assess and plan their way out.
+
+> How do you dig your way out?
+
+Incrementally - we don't have a "big bang" project to rewrite the entire thing in 3 years, we rather have specific projects which peeled pieces off.  6 calendar-weeks of developer time is about the right 'slice', 2 per quarter.  We do sprints of 2 weeks, 3 per period - we tried 4 week sprints and they were too long.  We also keep developers relatively static on their projects, rather than the classic agile "who wants to work on what", because of [the domain knowledge acquired] and because it creates more ownership.
+
+For your top people, you want to avoid putting process in their way.  They'll already write unit test without being told etc.  And process won't fix your low performers either.  It helps the middle portion.  Pushing ownership down is the right approach.
+
+We run teams of 6-7 people - you carry pager one week in 6 (or so).  We share oncall rotation between 3-4 teams, so one person in 24 has the pager.  The oncall should be able to follow the SOP, bounce the server etc. for any of their services.
+
+We haven't intentionally rotated engineers through teams; we let market forces do this but don't push them.  This is one area where I think I should do more.
+
+>>>>>
+
+
+Could be a good fit for a b2b-oriented role. Not consumery; more technology-driven than product-driven, but seems to have worked on some interesting stuff and had some good insights. Stuff that he worked on didn't demonstrate extreme complexity (but other interview examples may have).
+
+RECOMMENDATION: Weak hire.
+Interview questions asked
+
+Why chat w/Google?
+What kinds of problems does he like to work on?
+Talk to me about something at Amazon that he's particularly proud of + why?
+Tell me about a conflict with product management - give me details, what happened?
+How would your employees describe you as a leader?
+Interview notes
+
+Summary: Could be a good fit for a b2b-oriented role. Not consumery; more technology-driven than product-driven, but seems to have worked on some interesting stuff and had some good insights.
+
+Detailed transcript:
+
+Why chat w/Google?
+
+Former manager interviewed w/Google. Asked for contacts. 
+
+Google on list of 2-3 interesting co's. Interesting domain. Place you can go and build.
+Others on list: FB, eBay?, Apple
+
+What kinds of problems does he like to work on?
+
+In Eng as IC architect or Eng Manager (+ Architecture). Development + PM. Working on requirements and specs. Less biz dev aspects.
+
+Domains: 1. Platform-level infrastructure. E.g., Storage, Workflow. Dev tools.
+2. Applications - business apps. B2B. Enterprise. "It's what I've done historically." He likes building apps + infra. 
+3. Building apps on large datasets.
+==> E.g., policy violations on large datasets.
+
+Talk to me about something at Amazon that he's particularly proud of + why?
+
+- People+process: Inherited very junior team. Buried in operational work. 60-70% capacity in operational load. Couldn't solve big prob's. Completely built the team over 3-4 years. Moved transformation system into javascript + Java. Still not 100% there to the point where the structure is stable when he leaves.
+
+- Product: Being responsible for the selection @ AMZN. How do you know about everything? Built technology to figure out "the universe" then compare to what they currently have. Pivot was to "good data" rather than acquiring the universe of data.
+- Product normalization (e.g., blue and black pen).
+
+Tell me about a conflict with product management - give me details, what happened?
+
+Scoping of features. Now entering a set of customers who are biz customers. Their notion of account or identity is diff. The entire workflow is diff. Business team wanted "business only item". PM said wrong approach. Wanted policies to dictate, which is a big infrastructure project. 
+
+What persuaded you that the policy approach was the right approach? Clean model. 
+
+How would your employees describe you as a leader?
+
+Highly involved. Fairly detailed/hands on.
+Most team would come back & work for him.
+10 prinicipal eng's. 6 from MSFT who worked for him.
+Stand up for and support team. Very tight on some processes. Loose on others. Cut to chase.
+
+Other:
+- Seems like a good culture fit for Google
+- Personable; good communicator
+
+>>>>>>
+
+
+Hire. Rupesh is a solid engineering manager who knows what it takes to cultivate a technical infrastructure team.
+Interview questions asked
+
+- If you have an infrastructure system that is doubling in size every year, and yet things still seem to be running quite smoothly, what do you worry about?
+- How do you ensure that an engineering team has impact?
+- In a small team (e.g. <8 ppl), what is the role of the manager?
+Interview notes
+
+** Overview **
+
+I was impressed by Rupesh. He understands the nuances of a long-running infrastructure project, and what it takes to retain a healthy engineering team and make continual forward progress.
+
+** Analytical/Cognitive Ability **
+
+Summary: He is a broad thinker and looks at a problem from all sides.
+
+Question: If you have an infrastructure system that is doubling in size every year, and yet things still seem to be running quite smoothly, what do you worry about?
+
+* Check if the the team is becoming complacent. There is a need for constant evolution of infrastructure software. The RDBMS->NoSQL->NewSQL transformation is an example of this.
+* Try to identify where the need is going to be in the future. DynamoDB secondary indexing is an example of a such a feature (which was not originally part of the implementation, but became very popular when it was released).
+* Team dynamics are also important. For example, check to see if the team is getting bored due to a lack of challenges.
+* Other things the team can work on are automating capacity planning, provisioning, and customer onboarding.
+* With respect to onboarding, the team should look at it from a customer developers POV, and do what it takes to streamline the developer's onboarding experience.
+
+** Experience Relevant to Google **
+
+Summary: I think he has the kind of technical leadership we need more of in Cloud/TI: solidly technical, but with an emphasis on the "M" as well.
+
+Question: How do you ensure that an engineering team has impact?
+
+* Need to understand the team's pain points. For example, one of the teams he took on had been constantly thrashing because of changing priorities. They would get 80% done and then the focus would change. Solution was to work with upper management and shield the team as much as possible.
+* It is important for a manager to be passionate about the technical issues; for example, working with the team on their hypothesis why a system is performing poorly, helping the team to engage with other subject matter experts (in his example, a guest visit from the developer from Facebook who wrote the library they were having problems with), 
+* In an infrastructure team, it is often difficult to show constant progress (for example, when making performance improvements), and this means the manager may need to do some evangelism with partners/customers/upper management.
+* That being said, it is important to make incremental progress, rather than big-bang releases.
+
+** Google Culture Fit **
+
+Summary: I can definitely see him fitting in well here.
+
+Question: In a small team (e.g. <8 ppl), what is the role of the manager?
+
+* (Most of the teams he currently manages are small teams of 3-10 people.)
+* The manager needs to adjust their style depending on the level of experience that the team members have. Very experienced teams may need very little "management", whereas more junior teams may need the manager will like need to roll up their sleeves, write code, and be a backup to the TL (at Yahoo, the two roles are separate).
+* Need to protect the team from burnout.
+* Infrastructure teams need to do a lot more than just write code. The greater part of the work is often "mundane things" (his words) like debugging production logs, customer onboarding, etc.
+* Need to understand everyone's perspective and show each team member a path forward. (He used the term "exit path" at one point in this conversation, which I understood to mean that he was thinking about a team under a lot of pressure.)
+* The manager needs to be able to connect technically with customers and partners and speak their language.
+* The role of a technical manager often includes the roles of architect and project manager too.
+
+>>>>>>>
+
+Weak thumbs-up. He didn't blow me away with his system design prowess, but if he is very strong on the management side, we should hire him.
+Interview questions asked
+
+Design a distributed linked-list system. 
+Interview notes
+
+I focused entirely on technical chops, not management, as instructed. I asked him this system design question and we spent most of the interview discussing it. It is a broad question meant to tease out how the candidate thinks about distributed system design.
+
+Q: Design a system that can provide as a service, hosted linked lists. The system should scale to 1000s of lists, that are each able to store 10s of TB of data.
+
+Rupesh started by asking (rhetorically) what the requirements of the system are, and what operations it should support.
+Operations: traverse the list, add and remove items (in any position). Later on he proposed that the system should support a "match" operation, where the caller can provide a regex or other matcher, and the service returns a node that matches, by walking the list in order (he didn't specify whether it should return just one match, or all). I thought that was a good suggestion, as it seems like it would be a common operation and would eliminate a lot of RPC traffic that would otherwise be necessary.
+
+He suggested that there should be a "metadata store". Each list should have an ID, and the store maps LIDs (list IDs) to a machine & filename that stores the root node. This is a good suggestion. Starting with naming and proposing the core metadata for locating lists is important, and some candidates who I've asked this question to don't really get that far.
+
+He began to fixate on using files to store list elements. I think this would lead to an implementation that is a lot slower than an in-memory list. I did prod him at one point, suggesting that his design seems very slow, and asking him how he could make it faster. His major suggestion at that point was to pack multiple list elements in the same file, which is just not a good suggestion--it would not really improve performance, and introduce another problem (how do you locate elements in a file). He never considered the a design where the list data was just stored in memory, but I didn't prod him too hard either.
+
+He proposed a design where the pointers between list elements include a machine ID / filename tuple. When inserting new elements, you pick a new server to hold that element based on load and other bin-packing criteria. He correctly pointed out that this means that insert operations involve 2PC, likely driven by the client. I was again concerned about performance, and asked him whether he could avoid 2PC for most inserts. He suggested having a separate "pointer store" which essentially tracks all the relationships between data. If each piece of data in each list element has a unique ID, then you can place those in a separate blobstore. This avoids 2PC, though each insert involves 2 distinct operations: updating the pointer store, and updating the blobstore. He didn't propose an alternative that others who I've asked this question come up with: keep entire lists as much as possible on one server. If the list grows too big, then you split the list to another server. But it's only the split that involves 2PC.
+
+He started to get into how to ensure reliability (most candidates don't have enough time to really explore fault tolerance in great detail, and Rupesh was no exception. We were short on time so he didn't get very far at all). He pointed out that some kind of replication is necessary to protect against single-node failures. He started to talk about separating the server from storage, and using replicated storage. That would be pretty slow (a faster mechanism would be master-slave replication of in-memory state).
+
+If we were hiring a SWE or a TL, I would be a no-hire based on this interview because I think Rupesh was not a brilliant system designer. But he communicated well, had some good ideas, and a good approach to the problem. I think if others find him really strong on the management side, we should hire him.
+
+>>>
+
+
+hire as manager - solid candidate with good handle on how to lead -- but concerned about scoping to director
+Interview questions asked
+
+see below
+Interview notes
+
+Your recruiter will provide you with the specific interview feedback format for this opening.
+
+
+What are his thoughts on the org and what he wants
+what works and doesn’t work in an org
+owns a single k/v store team and then has other managers
+when joined team in 2012, team had bad rep wrt missing deliverable dates
+was one of the customers
+spent first few weeks taking the pulse of the org wrt what is working
+3 weeks into the job i prepared the analysis
+resource constraints wrt staffing 
+hard to keep lights on and also build new features
+often move people to new projects before previous project is complete
+engineers always under pressure, not feeling proud
+operations and development team didn’t work well together
+different incentives (keep things stable vs. new features)
+now operations reports into Rupesh 
+make sure everyone believes operations is everyone’s problem
+more interest the dev’s take in operations, the more the ops folks are willing to accept risk
+people challenges 
+most had gone through attrition, except old timers who had checked out
+had to have hard conversations 
+people had lost faith in yahoo - tried to get it back, but then best for people to part ways
+team has now reached stability wrt attrition
+infrastructure is not a first class citizen at yahoo now
+so how do i recruit - go into tech discussions and get their technical passion for the deep tech stack
+also, very good at explaining the complexity to my senior VP to help the VP understand why we need to invest and not keep switching engineers between projects
+How do you keep people interested once you’ve got them to a 10X or 100X goal
+continue to raise the bar on performance
+compare with open source systems
+at 40K QPS, we shifted efforts to router and it’s bottlenecks
+slowly iterate on features to deliver stability
+What do you consider a stable service?
+had a bad hire of a manager who was checked out and had to move him out
+while not delivering, team had a good relationship with the manager
+team questioned when the manager was moved out 
+so asked him to become a TL/IC  — but he decided to quit
+lost one team member to linked-in
+when i brought in an internal transfer, then the team came to realize what was a much higher bar
+how do you set dates when you are building something you don’t know how long it will take?
+get team to agree on aggressive goal and timeline
+give team confidence that if they miss, you are technical enough to understand what was the effort - so their work will be appreciated
+what do you look for in a 1st line manager
+passion in the technology
+not just good with people
+what was their contribution on past projects
+were they able to connect with the team
+where they deep enough to take interest in engineer’s problems
+what were they learning
+ask what went well vs. what went poorly - can they give good introspectiion
+are they willing to challenge the status quo
+with fresh hire, look for past track record and how they have grown people under them
+can they retain talent
+had one guy very hard working, very committed
+but survey results came back 
+didn’t care, only talks business, nothing about career
+more i chatted with team, it became clear that he cared for team but he was not very open person
+so team had difficult time approaching him
+gave him some coaching
+
+>>>>
+
+system
+
+Strong hire. Rupesh has a deep understanding of practically all the issues we deal with here in storage. I don't really know how hands-on he has been, but he is able to articulate the motivations being the technical improvements he's been making.
+Interview questions asked
+
+* Sketch a design for serving thumbnails for image search.
+Interview notes
+
+I asked Rupesh to sketch a design for serving thumbnails for image search, knowing that this sort of use case is part of what his group does at Yahoo.
+
+Rupesh hit all the high points: some form of hash distribution, some form of metadata management, choosing to be an AP system since the data is all derived, etc. I asked him to go into some additional detail about performance of individual storage nodes, and he described the trade-offs between BTree-oriented storage and LSM storage, favoring a BTree for this use case. Knowing that he had some experience with using LevelDB at meaningful scale, we talked for some period about he overcame its limitations.
+
+I used to work in the group that Rupesh now manages, so I'm reasonably familiar with the systems he's working on. We spoke for a while about how several of the systems have evolved, and he was clear about how some of the difficult architectural limitations were addressed. I don't know what role Rupesh played in those improvements, but he demonstrated good knowledge of those systems in describing the problems and solutions. In keeping with Yahoo style those solutions were mostly the integration of tools and techniques built elsewhere, of course.
+
+
+>>>>>
+
+Interview questions asked
+
+Design: tell me how you would implement lookup in a relatively large dictionary (1 million words with 1 KB picture attached to each word).
+General: talked about complexity/reliability tradeoff, hardening, planning, etc.
+Interview notes
+
+* Onsite: NO HIRE
+
+* Coding Ability (design and implementation. Please include the actual code candidate wrote):
+
+Rande openly admitted he didn't write code for 14 years but he thinks he's still technically
+strong and can architect things, estimate dev cost/time, etc (and, based on the results of
+our subsequent conversation, I don't quite believe it).
+
+* Analytical/Cognitive Ability:
+
+I asked Rande how he would implement a lookup function for a dictionary containing
+1 million short (20 bytes each) words where each word has a picture attached to it.
+The size of the picture varies from 100 bytes to 1 MB, 1 KB on average.
+The dictionary is created once in 10 years, it never changes, and we own all the
+algorithms, data structures, -- everything. So if you say "paint it black", it will be black.
+
+Rande did not ask how this dictionary will be used, what are the requirements, scenarios,
+hardware, what we can and cannot do, etc.
+
+In my book, it is a huge mistake for anyone T5+, and lethal mistake for anyone T7+.
+How could one [attempt to] solve a problem without knowing what the problem is?
+The question is quite open-ended for a reason. It is an obvious trap, and Rande fell for it.
+
+Rande mentioned that the dictionary is rather small (true) but didn't elaborage on what
+exactly small is. I.e. he didn't even try to figure out how large the dictionary is, whether it
+will fit into RAM or on disk, etc (though I hinted by saying "it is shipped to us on DVD").
+
+Then Rande suggested to put sufficiently large distributed cache with consistent hashing
+on top of actual dictionary implementation. Two problems: 1) it implies that dictionary
+lookups are for distributed service, and 2) I still do not understand how it could help and
+how implementation of the cache layer would be so much different from the raw dictionary
+implementation to make any substantial difference (I am talking cache vs just more dictionary
+nodes).
+
+That was obvious case of premature optimization, and I'd expect better from a guy
+with Rande's level of experience.
+
+Rande never talked about how exactly the dictionary lookups will be implemented
+even though I hinted him many many times. So I felt is his assumption was that dictionary
+lookup is a really hard problem.
+
+He asked about target QPS (ok, 100,000) and target latency (10-15 ms per lookup) and
+ruled out storing data on disk (well, we sill could), and suggested partitioning the dictionary
+to keep all the data in memory. Right direction but a little bit of math shows that entire
+dictionary fits into 1 GB of RAM, so it is unnecessary.
+
+Rande tried different approach. He asked (finally!) about hardware the dictionary
+will he hosted on. Answer: typical modern server of el cheapo flavor. 10 gig nic,
+a lot of cores, a lot of RAM. Assume no network oversubscription.
+
+Rande wasn't sure whether the bottleneck will be CPU, RAM, or network.
+We agreed that likely 32 cores will be sufficient to handle even full 100K QPS
+load and the dictionary will fit in RAM (no justification), so the bottleneck will
+in network.
+
+Rande still tried to optimize the system and suggested partitioning small pictures
+and large pictures on different servers, but couldn't justify why we would want to
+do it and how it work better than round robin across N identical servers we'd likely
+like to have for reliability, even though 1 server will easily handle everything.
+
+Overall: I was not impressed. Rande managed to fall into each and every trap.
+He didn't try to understand what exactly we're trying to accomplish and what
+restrictions we need to work around. He didn't even use the information he
+already had. He was pretty much clueless about actual implementation,
+tried to do a lot of premature and unnecessary optimizations, etc.
+
+One of the worst performances I've seen. I'd actually question both the
+technical depth and the attitude. I got the feeling the Rande didn't try
+too hard and had a kind of "whatever!.." attitude. It is just hard for me
+to imagine a guy with his level of experience being unable to come
+up with at least something if he'd really wanted to solve the problem.
+
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+
+10 years working on Microsoft SQL and then 10 years in Amazon, leading Amazon Dynamo DB.
+
+* Google Culture Fit:
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+
+Spectacularly failed technical question. The worst performance I've seen in years.
+
+The most charismatic guy I've seen in years. Exceptional communication skills. Asked a lot of good
+questions -- really good ones -- about how we do things here (do 20% projects really exist and how
+it all works, review process, manager role, how we handle complexity, how we deal/prevent data
+corruptions, etc). Obviously a lot of managing experience.
+As long as we keep him away from technical stuff he may be a good addition -- he definitely knows
+how to handle people.
+
+>>>>>>
+
+
+No hire, purely from a technical standpoint. I asked Rande a coding question and he wasn't able to even get started. I shifted to a higher level question, but couldn't really get a feel that he was motivated and interested in solving it.
+Interview questions asked
+
+1. Best outcome from playing a full deck of mod10 game (https://ideas.corp.google.com/InterviewQuestions/view?idea=659&f_text=mod+10&f_field=text).
+2. How would you decide how to price a new block storage system
+Interview notes
+
+* Onsite: NO HIRE
+
+1. This question didn't go well. Rande warned that he hasn't coded in many many years. He asked a few clarifying questions, but got really stuck trying to solve it. I gave him a few hints, like you can see the full deck, decision from one hand can affect the rest of plays. He was still drawing blank. We talked about a few examples, like 3, 1, 1, 3, 1, 1; where the player can win all hands if he can see the whole deck and makes the right decisions, but loses every hand if he tries to look at only his current hand. He experimented with some other examples, but didn't get much further. He kept saying that he hasn't done this type of problems for a long time. I gave him a few more hints, like literally saying that greedy algorithm won't help and that he needs to play all hands to know the best outcome possible. He was still unclear how to structure a solution. At this point, I decided that we wouldn't be productive to continue on this question, so I told him the solution and shifted to a question that didn't involve actual coding.
+
+2. I wanted to ask him a question that mixed business with technical stuff. Given that Rande built DynamoDB from scratch, I wanted to see if he would be able to make a good analysis and come with some good ideas on pricing model, where cost comes from, what aspects are important so on. The problem I had though, he kept talking about he had done in DynamoDB and not much about the question at hand. He said all the right things about DynamoDB and is clearly very knowledgeable about it. He said that they charge and provision for IOPS. Space usage is fairly small compared to other key/value stores and values are restricted to 64KB. He mentioned that they had latency problems running on HDD because of multi-tenancy and decided to go for SSD because it gave much better perf and was cheaper if you consider $/IOPS. They use consumer level SSDs and had problems with stalls in the controller, defective parts, etc. We also talked about consistency models, how it gets affected based on replication over fast/slow links, what customers expect and so on. I tried to steer the conversation back to pricing for block storage a few times, but we always ended up digressing.
+
+So my conclusion is that he knows a whole bunch and can talk in details about how things work with DynamoDB. He know how the service runs, is well aware of the effects of latency, how multi-tenancy makes everything more complicated, etc, etc. But I wasn't able to tell how much of all that he knows is due to him having these ideas and building the service, or how much this is from observing others doing it and whether he's actually capable of doing it himself. Given how badly he's done in the technical question, I'm doubting whether he's able to drive new ideas and solutions.
+
+>>>>
+
+
+
+
+
+
+

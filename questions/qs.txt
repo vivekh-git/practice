@@ -1,0 +1,1067 @@
+CP
+
+Interview questions asked
+
+1. Tell me about a time when you had to track down a scalability issue in a distributed system.
+2. Write a function that takes an array of integers and finds an index such that the sum of all elements to the "left" of the index is equal to the sum of all elements to the "right" of the index.
+Interview notes
+
+* Onsite: HIRE
+
+After some initial pleasantries, I asked the candidate to describe how he would go about tracking down a scalability issue in a distributed system.  The candidate started by saying that there are a lot of places where scalability problems can arise, from network-level issues such as congestion, load-balancing problems, or dropped packets, to low-level system issues such as exhaustion of file descriptors.  He explained that he would have to look at these issues one by one until he found the problem.  He was rambling a little bit, possibly because the question was very broad, but he seemed to have a lot of fairly low-level technical experience (e.g., knows about diagnostic tools like lsof that can be used to track down file descriptor exhaustion)
+
+He then went on to describe a time not long after he had started at Yahoo.  His manager was out of town on vacation as was the engineer that had designed the system he was working on.  Due to increased load around the winter holidays, the service was catching on fire, essentially a total outage.  He explained how he worked his way, tier-by-tier through the system, eventually isolating the issue to an underprovisioned MySQL instance.  He successfully made the case for more machine resources to provide higher capacity in their database tier and resolved the outage.  They also made some architectural adjustments so that they would shed excess load.
+
+I hadn't expected the candidate to spend quite as long on this topic as he did, but it was a good demonstration of his depth of knowledge.  The candidate claimed he hadn't had to do any coding in other interviews, so I asked a small coding question that could reasonably be solved in the last fifteen minutes.  I asked the candidate to write a function that would find an index within an integer array such that the sum of all elements before the index was equal to the sum of all elements after the index, not including the indexed element on either side.
+
+The candidate started talking through solution of this as a dynamic programming problem, but quickly noticed that it could be solved more easily by making two passes through the array.  A few moments later, he started writing up some C++ code.  His first implementation was almost correct, but it missed the detail that the element at the index shouldn't be included in either sum.  After clarifying that point, he quickly revised his code.  Because the time was short, he asked if he could sketch out the code, and go back through to add some of the syntactical requirements, e.g., variable declarations, later.  I said that would be ok.  Here's what he had produced by the time the clock ran out:
+
+// JW1
+int equalSums(int []a, int n) {
+  if (n <= 0)
+     return -1;
+  // JW2
+  if (n == 0)
+     return 0;
+  p = 1;  // JW3
+
+  sumLeft = a[p-1];
+  for (i = p+1; i<n; i++)
+      sumRight += a[i];
+  i = p;
+  while (i < n) {
+     if (sumLeft == sumRight)
+        break;
+     sumLeft += a[i];
+     i++;
+     // JW4
+     sumRight -= a[i];
+  }
+
+  return (i >= n ? -1 : i);
+}
+
+Comments:
+JW1: This isn't quite right array syntax for C++.  Candidate may have been confusing C++ bracket placement with Java bracket placement.
+JW2: This second  special case is unnecessary.  Candidate wasted a few minutes trying to add in an n = 2 special case as well.
+JW3: Candidate was calling 'p' "pivot", and seemed to be working up towards using p as the loop variable, but ran out of time.
+JW4: This line will access out-of-bounds memory when no matching index is found.
+
+I asked the candidate whether his implementation had any bugs.  He mentioned that it might have some edge cases he hadn't analyzed yet.  I asked if there was anything else.  He thought for a moment, and then mentioned that this solution may suffer from integer overflow, if the sum of the elements is larger than 2^31, and that he'd have to switch to a larger type, possibly some sort of bignum in order to make it general.
+
+* Leadership (People, program, project, technical)
+He speaks confidently and with significant technical depth.  He seems well qualified for a TL/M type role.
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+Candidate quickly coded up an efficient and conceptually correct solution.  Due to the rush in which he wrote the code, he missed a few points (e.g., an out-of-bounds memory access, a few places the code could have been clearer), but it was clear that it was backed by clear analysis and solid methodology.
+
+* Analytical/Cognitive Ability:
+Candidate was very sharp.  Candidates typically hit on less efficient solutions to the coding problem before getting to an O(n) solution, but this candidate quickly saw the optimal solution.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+Candidate demonstrated experience with system-level programming on Unix and familiarity with working in a distributed computing environment.
+
+* Communication Skills:
+Candidate's communication was reasonably clear.  A few times he seemed to be rambling a little, but it was always clear what he was saying.
+
+* Google Culture Fit:
+No red flags.  Would happily work alongside this candidate.
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+Recommend hire.  Candidate seems well-suited for a TL/M role.
+
+>>>>>>>
+CP
+
+Interview questions asked
+
+Q: Tell me a little about the structure of your current/past team
+Q: Suppose you hear that there is executive concern about waste in Cloud compute spending, for which your team does accounting. How might you go about understanding the situation?
+Q: How do you set technical direction for eng group/org?
+Q: How do you roadmap in problem area with policy and technical risk (unknowns), cross-team dependencies, and competing stakeholder demands on same heads?
+Q: Talk about software interfaces in context of large and/or distributed systems
+Q: How do you keep engineers productive?
+Interview notes
+
+* Onsite: HIRE
+
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+
+* Leadership (People, program, project, technical)
+Articulates examples of leadership in past work well, particularly the personalization project where I found his approach indicated solid engineering management with focus on long-term correct technical direction while still working to meet the business need. His claim that this pulled team out of discouragement seems credible to me for situation, and reflects sensitivity to people aspect. He described structuring project to subdivide, demonstrate core end-to-end quickly, plan to swap out components and allow different pieces time they needed, focus on highest risk areas, all good steps for large difficult project.
+
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+My focus was Tech/Eng Leadership skills and I asked no coding questions.
+
+
+* Analytical/Cognitive Ability:
+His discussion of pursuing cost reduction reflected ability to think about varied issues like average vs. peak compute resource use, normal vs. abnormal, and creative ideas like bringing in machines just for predictable peak. It’s a bit unclear what he personally did but he clearly very familiar, can talk about issues and it suggests he was very much involved in analysis and can engage with team around detailed data in ambiguous problem cases like “make your cost 0”.
+
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+He clearly has highly relevant experience as demonstrated by talking about their use and operation of Cloud services (in the question on cost management) and in engineering scalable personalization solution for Yahoo home page under serious executive pressure and short time line. My assessment of technical skills is limited but the things he talked about in setting technical direction for the personalization project and reflecting on issues for software interface design indicates that he can engage on a technical level and knows what he is talking about.
+
+
+* Communication Skills:
+A pleasure to talk with, seemed very conscious of time and effective to communicate as much as possible in short time, really responsive to move conversation along and try to ensure answering question. Very effective communication.
+
+
+* Google Culture Fit:
+Looks like a good fit: concern for empowerment of engineers and motivation of working with smart people is very Googley, but I think his effective communication and grasp of heart of problems looking at understanding cost, pursuing optimization, and structuring feature project for technical success are also good indicators.
+
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+I saw strong qualities as well as relevant experience in his response to questions. I would like to have been able to better understand his willingness and ability to go hands-on with data and code but I don’t see any negative indications within the scope of questions I used.
+
+>>>>>>
+
+Detailed question(Q)/answer(A)/comment(C) notes follow:
+
+Q: Tell me a little about the structure of your current/past team
+
+Motorola team works on software updates: web portal, back-end, on-device client
+most packages system software. People want to test dogfooding devices, customers create target set of devices to push package.
+Client team had indiv mgr, server team small so managing directly: US
+on-device client in Bangalore with mgr
+interacting with lead engineers in Bangalore
+mostly mgr and indiv. contributor
+
+C: context that he has been managing just one level of mgrs, distributed team, still working directly with engineers
+
+Q: Suppose you hear that there is executive concern about waste in Cloud compute spending, for which your team does accounting. How might you go about understanding the situation?
+Things I’m looking for
+looking into the data
+would candidate get hands-on into data personally?
+thinking about what is or is not waste and the difficulty of that question as you look into data related to utilization
+exposing useful data systematically
+
+Fresh in mind [example].  Motorola was part of Google, no concern about cost. Now part of Lenovo, extremely cost conscious.
+Multiple teams using Google cloud infrastructure. Started digging through what it means.
+Initial: my boss decided to put program mgr to understand.
+Pulling relevant data together to get size of problem. Delegated to every org that was part of the cost. Ops team was not managing Cloud side of world, so pulling operational folks in.  CEO gave to operations thinking all costs there. Partnership between us and operations.
+We have access to our dashboards, we could go and start looking at everything.
+Decided to get rough estimate for indiv. teams.  I can see the future, don’t want to do this every week. Decide to put tool together to generate report data pulled from Google. Now we know size of problem.
+Have to figure out where we can get to: mandate from top to say got to be 0 cost.
+Try to come up with metrics. Sell devices, BOM cost is so much, there has to be a cost for software.  Set goal, start digging in to break down across teams to create sub-problems out of it.
+e.g. Gmail vs. Search: each team can optimize. Do we have services sitting idle? do we really need that, are we keeping it only for spikes?  Some parts are elastic, some parts not like our DCs (data centers).  Start looking at normal usage vs. abnormal based on past charges.  Forecasting is really difficult.  How prepared can we be, e.g. bring hardware in for spike and then let it go. Are we capable of doing such things?
+Primary focus had been to optimize and reduce our costs.
+Looking at e.g. choice of being in App Engine vs. not.
+
+Q: What did you do?
+Was part of core team looking at cost reduction exercise. Had weekly trend graph. Had to put some of pieces together.  Easier to use APIs to make calls: one guy running script on weekly basis.  Once you start seeing curves, people immediately start wanting to dig in, finer grained data.  Trying to understand ‘what does it really mean; Correlate cost + X% for service, why happened.
+
+C: Very positive focus on data, sizing problem, automating to expose data, and digging to root solutions of optimizing actual resource usage. Appreciation of the complexity of problem with things like issues of average vs. peak exposed. Creative thinking about adjusting relatively inelastic costs for peaks. Have hard time teasing out what was him personally, as clearly this was a real situation with a lot of people involved.  In particular couldn’t figure out how much he got his hands dirty with data vs. just delegation and mgmt, but he was able to talk about this with enough detail and insight that I think it indicates he was personally engaged by it.
+
+Q: How do you set technical direction for eng group/org?
+Things I’m looking for
+understand customer/business problem and domain but strong tech leadership
+shape architectural framework leaving room to iterate details on use cases
+core basic modelling for domain
+
+A: Two scenarios: [1st] personalization
+joined team from Yahoo ads, Marissa directive to personalize everything by Q1 (in ~Sept). Team was new, Yahoo front page run by editorial team, challenge to do better CTR-wise than editorial.
+Articles personalization system was not scaling.
+having such a BHAG, breaking down into smaller set of problems: what is MVP (minimum viable product), doesn’t satisfy eventual goal but heads us there
+decision: build scalability from beginning
+initially flow all the way through without personalizing, get feel of end-to-end system.
+team thought couldn’t do this
+break down to first step to get towards end goal: re-scoping problem to achieve something while still conscious of overall timeline
+architectural components: trade-offs between technology, tried to rapidly iterate, do quick check, piggy back on other knowledge, e.g. Yahoo Mail using HBase
+started building MVP that whole team could see size of problem, set aggressive goal by Thanksgiving to see end-to-end system
+negotiation with mgmt to understand, to support first step
+identified additional resources: needed to piggyback on other technology, acquired commitments and resources
+negotiating timelines to ensure we get support
+need to have plan B
+look at risky components how to go after those.
+isolated couple other teams to start working on other pieces
+collaborative to have big picture: what are right set of components because have proven to reach levels of scale, choice internal technology vs. other.
+need end-to-end time of minutes (vs. hours).
+MVP had simplified pieces, don’t need to solve every scaling problem right away, knowing underlying pieces will be scalable.  Still production code but smaller scale.
+
+C: I was very happy with clear expression of base technical objective (build scalability) to drive the direction even though it wouldn’t give the customer feature (personalization) immediately. I like the subdividing, rapid iteration, and focus on an end-to-end structure that works even though components have to be refined/replaced with better technology that has been identified as existing/tractable. Description expressed concern for getting team to point where they could see path to success, and also bringing mgmt along to get cover to do the right thing. Also articulates focus on high risk and key elements to make or break (scalability for Yahoo home page).
+
+This seemed to cover everything I would hope. I didn’t give him any chance to go to second scenario but moved us along.  
+
+Q: How do you roadmap in problem area with policy and technical risk (unknowns), cross-team dependencies, and competing demands from different stakeholders on same heads?
+
+A: Defining roadmaps: I heard at Google a percentage of it probably comes top-down. Big percentage bottom-up. If I own this then goals will be satisfied.  If two guys say will do it, stuff coming down, stuff coming up, need intermediate layers to talk together. How do you make it happen. When build OKR, broad set of goals taking multiple Q, defines thread going through, new ideas, tech debt.  Team A wants this from us, Team B wants from us. Try to keep empowerment as much as possible, align to business goals but have empowerment with freedom to do something [innovative]. Job of mgr or indiv is negotiate how and when to satisfy them.
+
+C: I couldn’t make much of this, perhaps it is too packed a question. Empowerment is nice goal but doesn’t really answer how you balance or get to a reasonable plan.
+
+Q: Talk about software interfaces in context of large and distributed systems
+Things I was looking for
+clean division of concerns
+coupling
+defend yourself from clients
+
+A: Some pieces I have learned over the years. APIs should be simple, KISS principle. Do specific sets of things, esp for RESTful today.  Loosely coupled architectures, keeping it simple.
+For scaling, trying to avoid statefulness as much as possible. Using caching where feasible. Throwing key pieces in memcache and ensuring ratio is good enough; were able to reduce cost dramatically. CRUD operations involve reads as well, and often write to read ratio is dramatically different [low he meant I think]. Read volumes are typically very high. Separate out reads vs. writes in some cases.  Overall goal to have zippy experience. Want to keep UI less than 200ms.  Don’t need to talk directly to DB for read. One case, using mapped files.
+
+Q: different types of interface: RPC vs. query?
+A:  Learned protobuf thing may be better vs. textual processing of JSON. Thinking at design time about performance. Thinking of what are the bits flowing across for best possible solutions in place. Once you have simple interfaces, keep reads hot hot as much as can. DB of MySQL kind of thing hot [] kinds of mechanisms. Writes may be expensive, write to local colo and replicate to other colos.
+
+C: Answer reflects understanding of issues. This is a bit open ended partly to see if candidate thinks of technical issues, matters of system design rather than just say team organization or division of work. I like emphasis on simplicity, thinking about coupling.
+
+Q: How do you keep engineers productive?
+
+Biggest complaints are my build takes a long time, should I do pre-commit.
+Next big complaint is you’re pulling me into way too many mtgs. Personally feel that coming from engineering, if people excited about doing something, tend to work hard and produce great code. Empowerment in some sense, probably #1 criteria. take care of basic needs, now talking about those things that really matter: having people enjoy working with other smart people. Take care of other irritants, blockages. Can I reach you [mgr] to resolve something. Can my mgr negotiate with someone. Pointing me to right resources to unblock.
+
+C: Great answer once he got going. He didn’t really elaborate on how to deal with the meeting thing, where I would hope to see emphasis on minimizing meetings and/or making very productive, but otherwise unblocking and letting people run with interesting problems is good.
+
+>>>>>>>
+
+
+CP
+
+Interview questions asked
+
+Imagine that your company offers a Cloud storage service to customers. It uses compute (CPU, RAM) and storage (disk) resources to function and scales to meet customer demand (QPS). Design a system to provision compute and storage resources for this service needs.
+Interview notes
+
+* Onsite: HIRE/NO HIRE
+HIRE
+
+* Phone screen move forward?: YES/NO
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+Question:
+Imagine that your company offers a Cloud storage service to customers. It uses compute (CPU, RAM) and storage (disk) resources to function and scales to meet customer demand (QPS). Design a system to provision compute and storage resources for this service needs.
+
+/candidate: What's the pattern of Reads Vs Writes for the service
+/me: Read: Write = 10:1. Explain why you ask that question
+/candidate: To better understand which resource needs are more (reads = more compute; writes = more storage). This provides better insight into the flexibility of provisioning. Often compute resources are stateless and storage is stateful and this is a big constraint in efficiently repurposing resources.
+
+/candidate: Are they Geo distributed/replicated?
+/me: yes
+/candidate: QPS range?
+/me: varies between 1k qps to 10k qps (low to peak) daily for reads.
+
+/candidate: 
+Follow the steps as below:
+* Forecast - Forecast the growth of the service
+* Understand resource translation - Benchmark what each QPS translates to in server/machine resource dimensions. Use this translation factor to provision resources to meet the growth needs
+
+Overall this is an allocation problem. If you have a suite of services like this, the solution would be to measure utilization of each service and re-allocate unused resources to services that are in need, to meet their growth, based on the translations learned above.
+
+The system in question will consist of a meta-data service that keeps track of what each service uses (track metrics) or is allocated and a watcher to decide when to re-allocate resources from one service to another.
+
+When there are no available spare resources, provision new machines/resources, i.e add new supply. Depending on the provisioning latency for new resources, maintain enough buffer to cover risk.
+
+/me: What are the key metrics here tracked by this system to effectively govern here?
+/candidate:
+1) Lead time to provision new supply
+2) Available resources for the service (unused resources)
+3) Forecasted usage
+4) Stock-out point - point in time where the service will run out of resources to meet customer demand.
+
+/me: Infinite supply solves all problems. What's the sweet-spot/optimality being targeted here
+/candidate: The stock-out point and lead time to provision will help us optimize the resource re-use model. The goal is to keep minimal supply while avoiding running out resources for the service.
+
+My analysis:
+----------------
+Candidate has some prior experience in product rollout where such forecast, planning and supply had to be balanced. He drew from that experience to approach this problem very well. The clarifying questions were purposeful. The metrics designed were all important. The understanding of the forces at play here when considering the optimization is clear. Overall, the candidate required some hints here and there, but went about removing ambiguity from the problem and designed a workable solution. This didn't go into detailed system design choices for APIs, Model, etc. but in the given time, a broad overview of the system outlined is very convincing for me to recommend HIRE.
+
+
+* Leadership (People, program, project, technical)
+In the last couple of minutes, I asked what metric he would use to view his team's success. The candidate noted attainting goals as an important measure. This aligns well with Google philosophy of focusing on impact. We didn't have time to dive deeper into this area, but I like what I heard from the candidate in the brief interaction.
+
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+
+
+* Analytical/Cognitive Ability:
+Seemed strong - Asked all the right clarifying questions to disambiguate and understood what was requested after clarifications.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+Significant experience leading teams for many years, and led efforts to scale services. His machine learning experience will be useful in this space as we attempt to reduce waste through the supply chain of resource delivery.
+
+* Communication Skills:
+Good.
+
+* Google Culture Fit:
+Seemed humble, yet enthusiastic.
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+
+See notes above on my overall analysis of candidate's approach to the question. I think the candidate would be a very good hire for Google.
+
+>>>>>>
+
+CP
+
+Has clearly run and managed large teams building critical product under harsh deadlines. Has broad and deep technical knowledge across a wide variety of platforms. His project at Yahoo shows many examples of how technology compromises must be made to deliver on a fixed schedule, project was clearly high-risk high-reward as partitioning major efforts into parallel tracks (machine-learning, indexing, hardware scale-out) and then pulling them back together would make anyone nervous.
+
+I liked the fact that when I asked about challenges he didn't focus solely on technical ones and covered both motivational (project seemed to be a death march) and structural issues within the organization (locality, loosening quality to improve velocity pros & cons)
+
+His background is clearly as TLM/M so those would be the roles I would recommend him for.
+
+Interview questions asked
+
+How big was the effort to personalize the Yahoo home page?
+
+What was the process used to choose a new technology stack?
+
+What were the most challenging aspects of the project?
+
+Why shift to Motorola, seems like project was going well at Yahoo?
+Interview notes
+
+* Onsite: HIRE/NO HIRE
+* Phone screen move forward?: YES/NO
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+
+* Leadership (People, program, project, technical)
+
+How big was the effort to personalize the Yahoo home page?
+ - Team size, 8 US, 10-12 China
+
+What was the process to choose a new technology stack?
+- Mandate from Yahoo CEO to enable personalization for each user by Q1 or you're fired !
+  - There was a precursor effort that personalized image searche, used findings there as basis.
+  - Pulled in TLs/Scientists across org to brainstorm options and define minimum viable product.
+  - Incoming article rate from partners of 6k docs / day, goal to order incoming document stream (content ingestion), feed it through ranking while still maintaining temporal order (age based ranking)
+  - Following step to add basic RSS crawler (initially just crawled CNN to verify)
+  - Chose Storm to process content to analyze article content and extract features (stream based data processing pipeline)
+  - Extracted features put into HBase
+  - Had end-to-end flow demonstrated in 2 months
+  - In parallel track separate team was working on user-personalization based machine-learning algorithms
+  - Took US team to Beijing when content ranking & personalization were ready to intersect
+  - Issues with the potential readniiss of next-gen 'scalable HBase' vs running vanilla HBase at higher cost.
+  - Took break at xmas as team was worn out but started partial rollout
+  - Two dimensions of scale (content ingestion & indexing, personalization, scaling out underlying infra). Had to buy hardware....
+  - Scaled up to 100000x RSS feed ingestion
+  - Ran A/B testing on personalization algo, tests showed major CTR bump
+  - Ramped to 100% over 2 days (mandate from CEO)
+  - 50% CTR improvement vs old platform which was directly curated by editorial.
+
+What were the most challenging aspects of the project?
+- Technical challenges:
+   - Scaling search platform. Had their own custom flavor of search, not the mainline Yahoo one.
+   - Constrain temporally as usage is primarily temporally local
+   - Regionalization of HBase was flaky
+   - Monitoring required SWE team to contribute to effort as Operations team came late.
+
+- Team management:
+  - Pervasive concern about timeline which dissipated as progress was made and team became optimistic. Shows that people are motivated by challenges.
+  - Rapid iteration with time-zone differences caused churn. One of the offices adjusted work hours to better align.
+  - Pushed for an 'integrate-early' approach so work didn't drift to far apart. (Followed up on this, how did he help)
+      - Define a CI pipeline with greater focus on integration-tests vs unit-tests - catch incompatible API changes across team boundaries.
+      - Unify source tree so team have common source of truth for changes
+      - Key checkins have code review, others do not
+  - Constrain partner teams to constrain data ingestion so that experimentation did not have to many changing variables.
+  - By the end of project 15 US, 30 China
+
+Why shift to Motorola, seems like project was going well at Yahoo?
+- CTR improvements were becoming incremental
+- Went after video recommendations as new project. Had low user adoption rate, needed more volume.
+- Switched to making their content personalization recommendation platform available to 3rd parties.  Again had user volume issues that made recommendation algos less useful. 
+  Competitive market with startups in this space
+- Churn at VP level causing organizational issues
+- Pervious boss joined motorola, tempted to go work on mobile.
+
+
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+
+
+* Analytical/Cognitive Ability:
+
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+
+
+* Communication Skills:
+
+
+* Google Culture Fit:
+
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+
+>>>>>
+
+CP
+
+Hire.  The candidate seems to have effectively managed a team of 18 people (8 in the US and 10 in China) while delivering a product on a tight deadline. He seems to understand trade-offs and sacrifices needed to deliver on time. However, he had a tendency to be more verbose than needed -- his answers gave more detail than needed and did not add much useful information, they could have been more succinct. I also got the impression that some of his answers were not well thought-out -- he switched contexts/train-of-thought a few times during the answers.
+Interview questions asked
+
+* Experience as Director at Yahoo:
+  -- What did you do?
+  -- How big was the team
+  -- How did you figure out what to build? What was the plan?
+  -- What was the biggest non-management challenge?
+  -- What were the organization/best practices you instituted?
+  -- Seems like Yahoo project was successful, then why did you leave for Motorola?
+Interview notes
+
+* Onsite: HIRE
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+
+* Leadership (People, program, project, technical)
+  We asked him questions about his experience as Director at Yahoo:
+  -- What did you do?
+  Marissa Meyer tasked us with personalization for users in Yahoo, and gave us a quarter to build it
+
+  -- How big was the team
+  The team was 8 people in the US and 10 people in China.
+
+  -- How did you figure out what to build? What was the plan?
+  Previous version was a top scroll-bar, but it wasn't scalable. Wanted an infinite stream of personalized data. Started with brainstorming discussion -- how to make this in one quarter? 
+  Solution: create an MVP small enough to demo, including an end-to-end piece with some content flowing in (ingestion), going through ranking, and query to pull out stuff in a time-ordered stream (age-based ranking). Ingest bare-bones content through these pieces.
+    -- Came up with an RSS crawler (first component)
+    -- Chose Storm to piggy-back on to extract content features (stream-based data-processing)
+    -- Store data in HBase (similar to BigTable)
+    -- Goal: Gave all pieces ready in ~2 months, so we can see the end-to-end flow.
+    -- In parallel, do personalization: content ranking and user personalization.
+
+  Schedule:
+    -- We evaluated if timelines align with other teams (e.g. there was a global HBase team, but they may not be ready in time, so we may need to use our own local HBase deployment).
+    -- First pass, 2% of Yahoo front page used the product, and performed well. It scaled to a large number of providers, with RSS streams.
+    -- Improve for launch: aim for processing ~10k RSS feeds, use multiple small buckets with different training data for personalization.
+    -- Outcome: 50% CTR improvement over previous platform.
+
+  -- What was the biggest non-management challenge?
+  Technical challenges:
+    -- Scalability of custom search was not good.
+    -- How to scale to ~millions of articles? 10s of millions?
+    -- Flakiness was a challenge: we needed to solidify operational aspects.
+    -- Monitoring: we needed to monitor critical pieces ourselves, and also allow application-specific monitoring.
+  People aspect:
+    -- Initially, the team had no hope, but slowly they became enthusiastic.
+    -- Remote teams were also a challenge for rapid iterations.
+    -- Aligning various integration points throughout the timeline rather than all at-once at the end.
+  Algorithmic challenges:
+    -- Algorithm was sensitive to front-page content
+    -- Needed to be made more robust.
+
+  -- What were the organization/best practices you instituted?
+    -- Use CI/CD pipeline
+    -- Unit testing was sub-par in the team, had to sacrifice for quick progress.
+    -- All components in the same source tree, ran automated integration tests.
+    -- Incorporated peer reviewing of source-code in team.
+
+  -- Seems like Yahoo project was successful, then why did you leave for Motorola?
+
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+ -- No coding questions were asked.
+
+* Analytical/Cognitive Ability:
+
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+ -- The candidate seems to have relevant experience as a Director for several years at Yahoo and Motorola. While at Yahoo,
+     he was tasked with a large project and a fairly tight deadline, and he was able to produce a good product, which improved
+     CTR by 50%.
+ -- He understood the planning and trade-offs required to launch the product within the short time frame of a single quarter.
+
+* Communication Skills:
+ -- He was overly verbose. Many of his answers were long, and did not provide additional useful information.
+ -- His thoughts seemed somewhat disorganized. For example, while talking about the biggest non-management challenge, he talked about technical
+    challenges (scalability, testing, monitoring), then switched to the people aspect (team, morale, remote teams), and then switched back to technical
+    challenges (integration testing, unit testing), and then to algorithmic challenges. I felt this could have been better thought-out and more logically
+    organised, and prioritized, taking his experience in account.
+
+* Google Culture Fit:
+ -- He seemed affable, I would like to work with him/have him as a manager.
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+
+
+>>>>>>
+
+CP
+
+No Hire. Candidate did not seem very confident when discussing technical topics. He was more at ease describing problems rather than solutions and liked to keep discussions high-level and devoid of detail. I have concerns about candidate's technical depth and don't see him as a good T6/TLM fit.
+Interview questions asked
+
+- What does your current role at Motorola Mobility involve? 
+- What if one of the vendors you depend on constantly missed deadlines? How would you handle the resulting slip to your product's schedule?
+- Design a system for ordering machines for Google's datacenters. Make suitable assumptions about the system and its scale, but talk through the rationale for each assumption.
+Interview notes
+
+* Onsite:  NO HIRE
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+
+* Leadership (People, program, project, technical)
+QUESTION: What does your current role at Motorola Mobility involve? 
+Candidate described his current role which is to oversee E2E OTA notifications for Motorola phones. Manages teams locally and in India. Managed both server and client teams working on enhancements such as Lollipop support. Works extensively with managing various vendor engagements as well cross-team efforts for product launches. I asked him how big a team he manages; and candidate said "not very big".
+
+QUESTION: What if one of the vendors you depend on kept slipping on their delivery dates? How would you manage the resulting slip to your product's schedule?
+Candidate first wondered if he had faced such a scenario. I told him to treat it as a hypothetical question and just talk through ways in which he'd handle such a situation; but he said he likes to draw from personal experiences. He then described a scenario with one of the vendors who was unable to keep their dates during a global launch. Candidate mentioned that he then decided to work with the vendor and discuss options available - they ended up taking a few steps (a) introduced checkpointing and demos to ensure that vendors and core teams made demonstrable progress, and (b) reduced the deliverable to only support English to enable limited launch in US and India & defer global markets. He said he always considers 3 parameters or levers to control -- timeline, resources, features. Something has got to give - so you tweak levers accordingly & make the appropriate judgment call. I asked him how things would have been different if the slips were from an internal Motorola team instead of an outside vendor & he said that in that case he would have also checked to see if he could help with resources to the other team but would have otherwise had a similar collaborative approach where he likes to sit down with affected parties and figure out solutions. I then asked why he did not talk about escalation & if he believes in it. He said he does & he had in fact CC'd the vendor's managers right from the beginning and had included management in discussions which is why they could reach a quick resolution. But that in general he prefers to work with & understand problems rather than premature escalations. 
+
+During this discussion, candidate kept going off-topic and describing specifics of the problem scenario wrt mobile phones and I had to repeatedly try to get him to focus back on the question at hand. 
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+N/A. Did not probe.
+
+* Analytical/Cognitive Ability:
+QUESTION: Design a system for ordering machines for Google's datacenters. Make suitable assumptions about the system, its scale, but talk through the rationale for each assumption.
+Candidate said he would like to first understand use cases. He came up with the following:
+- Use machine configs to do:
+-- allocations
+-- usage analysis
+-- ordering
+-- inventory
+- Where do inputs come from:
+-- supply : vendors
+-- demand sources : internal
+-- new services - explicit signals (ball park for growth)
+
+Candidate said it would be important to model supply and demand in a common system for consistency. So, the complete system would consist of an ordering system for capturing demand, an inventory of configs in fleet, and supply information for vendors.
+
+Scale: Candidate wrote the following :
+-There may be about 1000s of datacenters at Google
+-There may be about 10^5 types of configs in Google's fleet. (He first said 10^7 and I asked where that number comes from & he said he would like to move on and come back to answer the question later as he thinks he got it incorrect)
+- # machines / config (Again said he said he would come back with estimates for metrics)
+- # svc
+He was unable to come up with estimates for scale for these metrics until the end when we ran out of time.
+
+
+His system architecture was as follows:
+- A DB that stored the demand and supply data. The supply data would be stored in 2 formats (a) vendor format & (b) a "usable" format, which is vendor format massaged by some business rules and stored in a common format.  DB would also store Roles for access control.
+- Rest APIs to expose the data, apply business logic and expose the inventory data
+- A portal that has 2 views to query the internal Google & external / vendor data views. Depending on ACL check, based on Roles in DB, viewers would see one of the views.
+
+        portal
+        -----------                    ---------------           --------
+        |             |                   | Rest APIs|         |   DB |(Demand / Supply / Roles)
+        |             |                   |                 |         |         |
+        ------------                       ------------           --------
+consumers
+vendors
+
+
+I pointed out that same portal & data based on roles seems risky for an internal/external app that has sensitive info about Google's datacenter machine configs. Candidate then said he would partition the portal into 2 portals instead & that he had done something similar on a previous project. I asked if data in DB would be the same though & he then decided that the DB would be partitioned as well.
+
+Vendor machine config -----(iRules)----> Usable machine configs
+
+I asked what other kinds of security mechanisms may be in place & he said the ACL checks would be good.
+We were out of time by now.
+
+Overall, the candidate had a hard time with the system design question. Architecture presented was very high level. Candidate could not defend his design choices or make suitable assumptions. Based on performance in interview, I got the impression candidate was really out of touch with systems design.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+Candidate is currently Director of Cloud Mobility at Motorola & was a Director of Engg at Yahoo! His technical management experience seems relevant to role he is being considered for.
+
+* Communication Skills:
+Candidate had no trouble making himself understood. However I found that candidate had tendency to ramble and I had to often make an effort to get the discussion back to the point to be able to probe his technical skills. Whiteboarding and system diagrams were messy / scribbly and not very organized. I had to ask several questions to understand the system design.
+
+* Google Culture Fit:
+No red flags. 
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+No Hire. Overall, throughout the interview I did not get a sense that the candidate was particularly technical & did not signals that he'd be a good fit for a leadership role at Google. 
+
+>>>>>
+
+The candidate did well on this systems design problem. He demonstrated good design skills, relevant experience of both the problem space and managing distributed systems, and a mature approach to system development. He was insightful and communicated well. I vote thumbs up for hiring, plausibly at L6.
+Interview questions asked
+
+Q: Design a distributed rate limiter.
+Interview notes
+
+
+* Onsite: HIRE
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+
+Q: Design a system that other services within Google can use to perform rate limiting.
+
+We could have a centralized service that just holds configuration. If we want more of a policing construct, we could have some model of tokenization... every service needs a token to call another service, and the central system authorizes/gives tokens. This adds a lot of overhead to individual calls. I'd prefer not to do that if we don't have to, but if we charge for the calls, the tokenized approach adds value. It also makes it easier to add security, billing.
+[Good that he proposed two different approaches and addressed costs and benefits.]
+
+> Which approach do you follow?
+If internal micro-services, I'd choose the first. Central config service, individual services handle the actual throttling. For example, a disk I/O service may not want strict throttling.
+[Good]
+
+> What does the config service look like?
+
+ThrottleConfig
+- write. service providers can write limits
+- read. providers and clients can read config
+When a call is made in one of our customers, they check configuration and decided whether to throttle.
+[This actually sounds more like the centralized token allotment system he decided against.]
+
+client session tps
+client call tps
+
+> Ok, walk me through how this works.
+Before sending an rpc, the client queries our config provider: have i exceeded quota? If not, it sends the rpc to a backend. The backend receives the rpc and asks config if client has exceeded its quota.
+> That sounds similar to the token approach.
+Well, there's no data creation overhead per call. [I'm not sure what he meant by that.] Wait, there are both read and write calls.
+Maybe instead we read a static config and add a library to have a local cache of how they're being hit by clients. You could have partitioned datastores supporting the config.
+[Ok, that gets the config reading out of the serving path.]
+
+> Ok, suppose this system we've built gets popular, so everything else in the company wants to start using it. How does that inform reliability and performance design decisions?
+It needs to be highly available. Partitioning will help. We still have too much overhead to enforce throttling.
+> How highly available do we need to be?
+It depends on downstream SLAs. If they're 99.99%, we have to be better than that.
+[Good]
+> Let's say some of our customers will have a 4-nine SLA
+
+We could also go with best effort throttling. Use async calls that can fail open. This is more of an aggregation behavior, and we'd talk to the config every fraction of a second. If best effort throttling is ok, each of the providers could emit messages on a metric stream infrastructure. When a provider gets a message, it publishes it to a stream. The config listens to the stream and writes "breaches" to another stream. The providers listen to that stream. Either this or the async have better perf.
+[The two-stream approach feels a bit too complex.]
+> How would you decide which approach to take?
+The first one has fewer moving parts, so I'd prefer it. Unless there's a reason for the message stream approach I'd like the simple one.
+[Good, and this system is very similar to go/throttler.]
+
+> Ok. let's go with the first approach. What's next?
+We'd review the design with biggest customers to see if it meets their use cases. [Good]
+Identify metrics to see if the system if effective for use cases. Are we actually throttling when we want to? [Good!] If we have hot keys, we may need to add caching. 
+
+> So what happens if everything starts using the service?
+We may need to think about regionalizing, providing local availability pools.
+[Good, but I'd also like to hear about intra-region sharding.]
+
+> Ok, so how does the service work? How does a customer find and talk to our system?
+It depends on the operational framework. I assume we have regional CNAMEs, some load balancing infrastructure. You could have global virtual IPs that resolve to regional CNAMEs. [Good.]
+> What does our config server do with the request?
+We'd provide some API like:
+checkTPS(service, client, time1, time2, request_count)
+We could have a trailing 5min tps count, and a trailing 50 min count.
+
+> Let's talk about the programs that constitute the config server and datastore
+We want a key-value datastore. Our schema looks like service, client, time1, time2, request_count. We can have redundancy in the datastore, where we try to write to two servers and need at least one write to complete.
+> What if one write fails?
+It depends on our consistency model. With eventual consistency we can implement a catch-up strategy. It's based on our contract 
+> What if reads from the two replicas don't match?
+We could use last update time. We could also kick off a sync tool to repair the discrepancy.
+
+> What's the bottleneck in our system?
+Probably the datastore, pulling data from disk. Then cpu to compute on the config server.
+
+> What's operationally difficult?
+As-is, troubleshooting is a nightmare. We'd need to add monitoring and alarming. Since we're doing opportunistic throttling, production impact would probably only show up after a lot of our system had gone down. [Nice observation]
+
+
+* Leadership (People, program, project, technical)
+
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+n/a
+
+* Analytical/Cognitive Ability:
+Strong. The candidate thought productively through the problem and was consistently sharp.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+The candidate seems to have significant experience building/running distributed systems.
+
+* Communication Skills:
+Strong
+
+* Google Culture Fit:
+Good
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+The candidate did well on this systems design problem. He demonstrated good design skills, relevant experience of both the problem space and managing distributed systems, and a mature approach to system development. He was insightful and communicated well. I vote thumbs up for hiring, plausibly at L6.
+
+>>>>
+
+I think the candidate would probably make a good manager from their people skills. I was a bit concerned with their technical abilities. I would not suggest hire as a sr swe ic.  Consider hire as a program mgr or mgr if other interviewers see technical expertise that I missed.
+Interview questions asked
+
+Dedupe the web 10b
+Interview notes
+
+* Onsite: HIRE/NO HIRE
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+
+We started with the candidate getting coffee. We had a casual chat about Google and Amazon company culture. The candidate seems to genuinely like amazon but is also very interested in Google. We had an entertaining discussion about failing fast vs longer horizons to prove big bets.
+
+* Leadership (People, program, project, technical)
+Seemed like the candidate is interested in leading others. They seemed to value the people they worked with.
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+The candidate was able to create more or less correct code however it required a fair bit of back and forth with me. They admitted that they do not currently spend much time writing code.
+Did not know how to iterate over a map in java
+The coding was a bit clumsy. Several false starts and refinements.
+30m Coding is done. I point out several bugs which the candidate fixes. (Sometimes requiring several pointers.)
+35m Talk about scaling the problem. Using dynamo db. Mentioned using a tree like structure using a round robin.
+Given a table of [Url, Content] pairs produce a new table of [Url, Set of duplicate Urls].
+
+Example Input:
+a.com => <html>a</html>
+b.com => <html>b</html>
+c.com => <html>c</html>
+d.com => <html>a</html>
+e.com => <html>a</html>
+
+Example Output:
+a.com => [d.com, e.com]
+b.com => []
+c.com => []
+
+JAVA
+Map<String>, <Set<String> > dedupe(Map<String>, <String> inputMap) {
+  Hashmap<String>,<String> contentURL = new Hashmap(); // Several syntax errors here
+  Hashmap<String>, <Hashset<String>> outputMap = new Hashmap();
+  foreach (String key : inputMap)
+  {
+    String val = inputMap.get(key);
+    if (outputMap.get(contentUrl.get(val)))
+    {
+      contentUrl.put(val, key);
+      Hashset hs = new Hashset();
+      hs.add(key);
+      outputmap.put(contentUrl.get(val), hs);
+    }
+    else
+    {
+      outputMap.get(contentUrl.get(val)).add(key);
+    }
+  }
+  return outputMap;
+}
+
+
+* Analytical/Cognitive Ability:
+I found the candidate to be a smart individual however they are not the most technically skilled coder I have interviewed.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+From casual conversation the candidate seemed to know most of the key words, cassandra, big table etc. I was a bit frustrated that they missed key bits like using a MR.
+
+* Communication Skills:
+I found it easy to communicate with the candidate.
+
+* Google Culture Fit:
+I think they would fit in well at Google.
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+Appended Oct 26, 2015
+I realized I never really wrote up their approach to scaling the problem. The best they came up with on their own to move the hash map into a large data store but could not remove the 3 sequential RPCs that requires.  They did eventually get closer to a solution but struggled with how to shard the data. With enough coaching they got close to the idea of hashing the content mod by the number of machines but that was long after the 45m had finished and I was waiting for the next (very late) interviewer.
+
+>>>>>
+
+Interview questions asked
+
+I asked the candidate a design question related to trending topics feature in a social network.
+Interview notes
+
+The candidate started by establishing a similarity with Fixed-size LRU cache. His thoughts was on how to store the final rank of trending topics, update them by the server and share them with the user.
+
+He outlines his design as the following components
+- Content entities (a post) : which stored posts (say from twitter or facebook)
+- Keyword extraction - hash tags
+--- use dictionary to eliminate common words. The candidate described  a way to organize topics by always selecting them from a given dictionary.
+- Update cache, 
+---  The cache will be implemented as a Linked hash-map. 
+---  The cache expiry strategy will be (least count of hits). The candidate initial thought is that users are going to pull data from the cache.
+--- To find trending the candidate thought of tracking the trailing 5 minutes, keyword count and update the cache correspondingly.
+--- The candidate first thought of having a single sliding window and I needed to explain to him that, this may not be adequate to discover trending topics. At this point the candidate refined his solution to track  2 sliding windows (2 caches) and compare the corresponding counts. 
+--- expiry strategy will use 2 caches
+- Get Trending Topics
+- Compute rank and put the rank on the cache
+- I asked the candidate on the ranking signals and he listed the following
+--- count of distinct sources that reference the topic, 
+--- count of references (sharing), 
+--- count of how many times people are looking to it, 
+--- recency (weight for things that are recent), decay for things that rank.
+The above we all good signals
+
+- Dump the cache to the users, 
+- Figure top n to send the user, 
+---- feed in keyword completion
+
+When I asked the candidate on his thoughts of scoring function, the candidate reply was to maintain BST to sort things in the cache and getTopN trending topics. 
+
+I asked the candidate to describe the workflow and he described the following:
+- in the backend
+---- listener to the posts 
+------- register to get trending topics
+------- provide configuration, to get my cache (configuration here refers to user's profile)
+------- billions of caches (not scalable)
+-- What will be in the configuration, filter signals according to ranking function. Signals like count 
+-- Predict the configuration: see the rejections for the user to classify things to maintain. This was a good idea, i.e., count of user signal to update the profile.
+
+Finally, I asked the candidate about testing and how to quantify if the system is working as expected or not. The candidate described the following
+--- manual, by tracking reject list, i.e., trending topics that the user did not like when presented to her.
+--- provide api to the user to tell up about usage
+These were all good ideas.
+
+I asked the candidate how to filter spam from user input. The candidate described the following.
+- Having an authentication model to authenticate users.
+- watch for pattern, density of calls, always ranking particular stuff very high/low
+- observe for trends, 
+- reject rate, useful rate, blacklist clients.
+
+I asked the candidate on bottlenecks in the design and what to do with that. The candidate described the following:
+--- compute for keyword extraction, horizontally scaling, load balancing
+--- configuration-based filtering, filtering on the fly, client side cache
+--- disk storage, persistent disk cache,
+
+
+
+* Leadership (People, program, project, technical)
+
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+
+
+* Analytical/Cognitive Ability:
+
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+
+
+* Communication Skills:
+
+
+* Google Culture Fit:
+
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+The candidate provided good answers to many of my design questions. I recommend moving forward.
+
+>>>>>>>>
+
+Weak no hire. I probed both management ability and technical ability. He did quite well on the former, less well on the latter. Overall, it brings me down to slightly below neutral.
+Interview questions asked
+
+1. Roughly how many people do you currently manage?
+2. How do you participate technically on your current team?
+3. Why did you become a manager?
+4. What was the hardest part in transitioning to management?
+5. What data structures and algorithms would you use to solve this problem: Count the islands (on-line version): https://ideas.corp.google.com/InterviewQuestions/view?idea=987&f_text=islands&f_field=text
+Interview notes
+
+* Onsite: NO HIRE
+
+Questions and answers:
+
+1. Roughly how many people do you currently manage?
+He currently manages a team of 32, 5 of which are direct reports. He has grown the team from only 4 people since he joined it a little over a year ago.
+
+2. How do you participate technically on your current team?
+This was the management question he spent the most time on. He began by saying there were 3 main ways he contributes technically, but he ended up listing 5:
+a. Recruiting Engineers: he spends a *lot* of time on this, and I agree this is important and requires technical acumen.
+b. Design reviews: He reviews all design proposals from his team, of which there are roughly 10-15 per year.
+c. Code reviews, mentoring, pairing (a bit).
+d. Streamlining requirements: He acts as a buffer for the new requirements on his team, and looks to avoid "reinventing the wheel" if new requirements can be solved by an existing Amazon service. This requires a broader understanding of technical developments outside his team. He mentioned that he sits in on other teams' design reviews to stay abreast of new developments.
+e. Measurement: He builds reports and monitors for his team's systems. He wants to know if his team is *really* making a difference and where they can improve.
+
+3. Why did you become a manager?
+He said he loves solving problems that can't be solved by 1 person. He's excited by building teams to solve larger *real world* problems (as opposed to abstract/academic ones).
+
+4. What was the hardest part in transitioning to management?
+He said that "honestly, it was fairly easy for me". He went on to describe how he grew into a management role at the startup he worked at before Amazon.
+
+5. What data structures and algorithms would you use to solve this problem: Count the islands (on-line version): https://ideas.corp.google.com/InterviewQuestions/view?idea=987&f_text=islands&f_field=text
+
+I presented the problem to the candidate, and walked him though a few examples to illustrate why the problem is non-trivial. Since several other people earlier in the schedule had been asked to test the candidate's coding ability, I explicitly phrased this as an algorithms and data structures question. To be solved efficiently, this problem requires the use of a union-find data structure, but there are variants (such as the use of path compression and always merging the smaller set into the larger one) that lead to better performance.
+
+The candidate started by describing some high-level data structures (a map and a set). He stated that upon receiving a new point, he could probe the 4 immediate neighbors, which is good. I had trouble following the next part of his description, so he got up to the whiteboard and wrote:
+
+Map<Point><String> map  // maps each received point to an island "name"
+List<String> islands
+
+Rather than explain his algorithm at a high level, he launched into writing some pseudo-code:
+
+AddPoint     // map.put(p, null)
+List<Point> n = getNeighbors(p)   // gets a list of the 4 neighbors of p that have already been added (if any)
+if (n == null) {
+  i = createIsland()
+  map.put(p, i)
+} else {
+  MergeIslands(p, n)
+}
+
+He then started fleshing out the MergeIslands algorithm in detail. There was a lot of erasing and infilling of text on the whiteboard over the next 20 minutes or so. I'm going to try to recreate what he wrote initially. Note that along the way, he changed the "islands" data structure from a list to a Map:
+
+Map<String><int> islands   // maps each island name to its size
+
+MergeIslands(p, n):
+  lastIsland = null
+  foreach (Point pi : n) {
+    if (lastIsland == null) {
+      lastIsland = pi.getIsland()   // pi.getIsland() == map.get(pi)
+    } else {
+      islands.put(pi.getIsland(), islands.get(pi.getIsland() - 1)
+      updateIsland(pi, lastIsland)   // == map.put(pi, lastIsland)
+      islands.put(lastIsland, islands.get(lastIsland) + 1)
+      if (islands.get(pi.getIsland()) == 0) {
+        remove pi from islands
+      }
+    }
+  }
+  map.put(p, lastIsland)
+  islands.put(lastIsland, islands.get(lastIsland) + 1)
+
+A couple of things to observe at this point:
+
+1) In the top-level block of code he wrote, he never indicated what value his routine would return, as required by the problem. When I asked him about that, he said it would just return the size of the "islands" map.
+
+2) His algorithm attempts to solve the problem by keeping track of the size of each island. However, if the added point 'p' has more than one neighbor, the code in the "else" branch of the algorithm neglects to take into account the fact that each of the neighbors might be part of a much larger island. He realized this when I asked why he was simply subtracting 1 and adding 1 in the else block. In reaction, he changed the "else" block to this:
+
+    } else {
+      int n = islands.get(pi.island)
+      islands.put(pi.getIsland(), 0)
+      updateIsland(pi, lastIsland)   // == map.put(pi, lastIsland)
+      islands.put(lastIsland, islands.get(lastIsland) + n)
+      if (islands.get(pi.getIsland()) == 0) {  // interviewer comment: This "if" test is no longer necessary
+        remove pi from islands
+      }
+    }
+
+At this point, he again thought he was done. But I pointed out he had failed to maintain his map. So he changed the "else" body once more by adding the following line of pseudocode immediately after the "updateIsland(pi, lastIsland)" line:
+
+      update all points in pi.getIsland to be mapped to island ID lastIsland
+
+(Note that this would actually make the updateIsland(pi, lastIsland) statement redundant, but he did not cross it out.)
+
+Due to the way the map is organized, this would require iterating over not just the points in pi.getIsland, but the *entire map*. In any event, when I asked him what the overall computational complexity of his algorithm was, he stated that to process N points it would require O(N^2) time, which I believe is correct. (Note that using the optimal union-find data structure produces a solution that is a bit worse than O(N).)
+
+* Leadership (People, program, project, technical)
+
+I was impressed by his answers to my management questions. It sounds like he's fairly hands-on and well-suited to a management role. I probably should have pushed back on has answer to question #4, but I wanted to leave enough time for a technical question.
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+
+I liked the fact that Anubhav took the initiative to get up at the whiteboard to explain his ideas. And I was frankly surprised when he started writing full-blown pseudocode rather than drawing diagrams to go into more depth.
+
+The candidate eventually produced what I would call a "brute force" solution to my problem. I think I could have been satisfied with that if it were not for the fact that his initial solution to the problem was so broken. He did not realize that it was wrong, which indicated to me that he had never really grasped the challenge of the problem. And when I pointed out the flaw in his solution, his instinct was to just patch it up quickly, without really stopping to consider if his approach might be sub-optimal. I was also disappointed that his first attempt at trying to fix his
+initial solution was still incomplete, especially because the part that he left out until the very end was the part that made his solution so inefficient.
+
+* Analytical/Cognitive Ability:
+
+Anubhav was quick to realize that he need to keep a Map indexed by points seen by the algorithm so far, and he also stated quite early in his response that he would need to probe the 4 immediate neighbors of each new point. He worked at a rapid rate, which is also a good sign. Unfortunately, his thinking was flawed.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+
+He seems to have both technical and managerial experience that would be quite relevant to a TLM position at Google, especially his more recent work at Amazon and Reasoning Global eApplications Ltd.
+
+* Communication Skills:
+
+No concerns.
+
+* Google Culture Fit:
+
+No concerns.
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+
+Weak no hire. I probed both management ability and technical ability. He did quite well on the former, less well on the latter. Overall, it brings me down to slightly below neutral.
+
+>>>>>
+
+
+Anubhav is generally a smart person who I think can see the big picture and can figure out who should be involved with the details. His code seems a bit rusty, but he can think critically and design a skeleton solution well. He communicates well. HIRE.
+Interview questions asked
+
+- Parse a text file, remove the second word of every other line.
+- Design search for a bookstore.
+- Open ended: What do you want to do? Why Google?
+Interview notes
+
+Overall
+======
+
+Anubhav is generally a smart person who I think can see the big picture and can figure out who should be involved with the details. His code seems a bit rusty, but he can think critically and design a skeleton solution well. He communicates well, but is a bit of a smooth talker who could BS his way around tough, pointed questions (he tried to avoid some of mine, but when pushed, did the right thing and answered it after all). I think we would do well here as a TLM of a small project and he could grow from there.
+
+
+Parse a text file, remove the second word of every other line.
+==============================================
+
+Asked a few clarification questions: can I assume I get each line and word or do I have to tokenize them? A: use whatever java gives you.
+Mentioned what the algorithm would be in high level before going to the board.
+
+Here's the code written. Indentation and formatting are the author's. My comments are prefixed by // EP:
+
+InputStream is = FileInputStream("A.txt");
+OutputStream os = FileOutputStream("B.txt");
+Integer flipflop = 0;
+   while (is.hasnext())
+       {
+            string s = is.readline());
+             if (flipflop == 0) 
+                 {
+                      os.writeline(s);
+                 }
+             }  // EP: added extra closing brace here.
+             else 
+             {
+                    StringTokenizer st = new StringTokenizer(s, " ");
+                    StringBuilder sb = new StringBuilder();
+                    int i = 0;
+                    for each (string s : st.getArray())
+                        {
+                              if (i==1) continue;
+                                 sb.append(s);
+                                 sb.append(" ");
+                                 i++;    // EP: added later when I pointed out.
+                        }
+                    os.writeline(sb.getString());
+                    if (flipflop == 0)
+                        flipflop = 1;
+                    else
+                        flipflop = 0;
+             }
+
+Overall for this question, he was messy, wrote in quasi-pseudo-code (but generally close enough to Java) and managed to explain to me his solution. I'd have preferred to see a cleaner solution with non-weird indentation (this wasn't just a matter of being on the board, he was explicitly indenting things that didn't need to, like open braces, the line and randomly throughout the code), but this was generally okay.
+
+
+Design search for a bookstore.
+=======================
+
+He drew some tables on the board and slowly walked me through his reasoning as he went along. The tables are representative of data structures and are mentioned below.
+
+Map<ID, <Content, Location>> as shortcuts for books.
+
+Extract keywords from books or from queries. Keywords are just words in the dictionary, in queries or from the book or all of them.
+
+Ranking by word frequency (see Rank and WordCount in structure BookEntry below).
+
+Map<Keyword, List<BookEntry>> is the map that associates a word in any book with the list of books that contain that word, in the form of a structure with more metadata:
+
+BookEntry = { ID, Rank, WordCount, TotalWordCount }
+
+WordCount is the keyword count for the given book, whereas TotalWordCount is the size of the book on words, for later normalization (this was added later when we talked about ranking books of different sizes).
+
+Rank is computed primarily from WordCount, but with weights from other signals such as clicks, user feedback, etc.
+
+getRank(List<Signals>) 
+{
+   f = w1 x s1 + w2 x s2 + ...
+}
+
+Normalize wordcount: WordCount / TotalWordCount.
+
+For a Multi-word query he would show results as follows in this order: Phrase, Intersection of Lists, Union of Lists. Meaning he would try to find an exact phrase first and return those. Then the books that contained all words in the query (intersection) and then the union of all the results for the words in the query. 
+
+We did not get to talk about how to find exact phrases. We talked about the intersection, which is equivalent to an "AND" query.
+
+Ranking of multiword queries. For two words: nr = 1 / (1/r1 + 1/r2), where r1 and r2 are the ranks for each word 1 and word 2 in the query. The inverse is just for the sake of having the most frequent words rank as the lowest ranking. I asked whether the summation would be a problem and gave him the following example: book A and book B for a query containing words W1 and W2 with the following word counts:
+
+        W1           W2
+---+---------+------------+
+A |     100  |      1       |
+---+---------+------------+
+B |     50    |     51      |
+---+---------+-----------+
+
+To make the math easier, we wanted the biggest word count, not the lowest inverse of word count.
+
+In this case both books would add up to  score 101, for a tie. But he intuitively understood book B was better. So he said that summation doesn't work, but multiplication would, which is right (not very many people think of multiplying the two scores as a way to maximize both at the same time, so kudos to him).
+
+
+What do you want to do? Why Google?
+==============================
+
+As to why Google, he said it's because Google is one of the only companies thinking about moonshot projects and things that benefit humanity and not just things that make money necessarily. 
+
+He wasn't sure what he wanted to do, but thought it would be good to explore a few possibilities and be open to change.
+
+>>>>>>
+
+
+
+
+
+

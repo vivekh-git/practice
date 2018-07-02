@@ -1,0 +1,944 @@
+>>>> Coding >>>
+
+No hire, purely from a technical standpoint. I asked Rande a coding question and he wasn't able to even get started. I shifted to a higher level question, but couldn't really get a feel that he was motivated and interested in solving it.
+Interview questions asked
+
+1. Best outcome from playing a full deck of mod10 game (https://ideas.corp.google.com/InterviewQuestions/view?idea=659&f_text=mod+10&f_field=text).
+2. How would you decide how to price a new block storage system
+Interview notes
+
+* Onsite: NO HIRE
+
+1. This question didn't go well. Rande warned that he hasn't coded in many many years. He asked a few clarifying questions, but got really stuck trying to solve it. I gave him a few hints, like you can see the full deck, decision from one hand can affect the rest of plays. He was still drawing blank. We talked about a few examples, like 3, 1, 1, 3, 1, 1; where the player can win all hands if he can see the whole deck and makes the right decisions, but loses every hand if he tries to look at only his current hand. He experimented with some other examples, but didn't get much further. He kept saying that he hasn't done this type of problems for a long time. I gave him a few more hints, like literally saying that greedy algorithm won't help and that he needs to play all hands to know the best outcome possible. He was still unclear how to structure a solution. At this point, I decided that we wouldn't be productive to continue on this question, so I told him the solution and shifted to a question that didn't involve actual coding.
+
+2. I wanted to ask him a question that mixed business with technical stuff. Given that Rande built DynamoDB from scratch, I wanted to see if he would be able to make a good analysis and come with some good ideas on pricing model, where cost comes from, what aspects are important so on. The problem I had though, he kept talking about he had done in DynamoDB and not much about the question at hand. He said all the right things about DynamoDB and is clearly very knowledgeable about it. He said that they charge and provision for IOPS. Space usage is fairly small compared to other key/value stores and values are restricted to 64KB. He mentioned that they had latency problems running on HDD because of multi-tenancy and decided to go for SSD because it gave much better perf and was cheaper if you consider $/IOPS. They use consumer level SSDs and had problems with stalls in the controller, defective parts, etc. We also talked about consistency models, how it gets affected based on replication over fast/slow links, what customers expect and so on. I tried to steer the conversation back to pricing for block storage a few times, but we always ended up digressing.
+
+So my conclusion is that he knows a whole bunch and can talk in details about how things work with DynamoDB. He know how the service runs, is well aware of the effects of latency, how multi-tenancy makes everything more complicated, etc, etc. But I wasn't able to tell how much of all that he knows is due to him having these ideas and building the service, or how much this is from observing others doing it and whether he's actually capable of doing it himself. Given how badly he's done in the technical question, I'm doubting whether he's able to drive new ideas and solutions.
+
+
+
+
+Right Answer
+Given a deck of cards, find the best score that can be achieved by playing the game of mod10 through the entire deck. There are 100 cards with values 0-9. 
+
+At the beginning of a hand Player gets a card face-up and Dealer also gets a card face-up. Player then decides whether to get another card face-up. After Player does/doesn’t take a card Dealer looks at both hands and takes another card only if Player is currently winning. 
+
+The value of a hand is determined by adding the values of the cards together and reducing the sum mod 10. Here’s an example: 
+
+Player gets a 3, dealer gets a 4. 
+Player asks for additional card and gets a 9. 
+Player score is now 2 because (9 + 3) % 10 = 2. 
+Dealer has a higher score so he does not draw a card. 
+Dealer wins. 
+
+It may help for Player to lose a hand if it helps win the next several hands. For example with cards: 9 - 5 - 7 - 3 - 9 - 2 - 1 - 8 - 3 - 2 - 7 - 1 - 5... 
+
+Player draws a 9. 
+Dealer draws a 5. 
+Player can win by doing nothing (i.e. not taking the 7) because Dealer would take the 7 and have 2. 
+Player could lose the first hand by taking the 7. Dealer would be currently losing and take the 3 to win the hand. 
+
+In the first outcome 3 cards were removed from the deck. 
+In the second outcome 4 cards were removed from the deck. 
+In other situations there may only be 2 cards removed the deck. 
+
+However, the sequence 9 - 2 - 1 - 8 - 3 - 2 - 7 - 1 - 5 is better for Player than 2 - 1 - 8 - 3 - 2 - 7 - 1 - 5 because in the first sequence Player wins 3 hands while in the second sequence Dealer wins 2. 
+
+Play ends when there are fewer than 4 cards left in the deck because in that case it would not be possible for both player and dealer to take a second card. 
+
+[Why this works well -- sell us!] 
+
+Good signals for ability to go from abstract to concrete. There's a fair number of details to keep track of. Also shows who is good at writing maintainable code. It's moderately difficult to write the code to score each alternative for a hand, keep track of the number of cards used and not repeat logic multiple times. There are actually many levels of code repetition that can sneak in. 
+
+Most candidates will go for the exponential recursive algorithm first. Good candidates will notice on their own the amount of redundant computation and come up with a memoization scheme to convert it to O(n). Great candidates will do this and will avoid duplicating any logic. Awesome candidates will do this all on the first pass. 
+
+Bad candidates will get totally lost trying to code up basic evaluation for the current hand. 
+
+There is an alternative implementation of computing scores from the bottom of the deck up is actually a lot easier to code because the logic for keeping track of the number of cards used is much simpler. This approach also allows a constant space solution of only keeping track of a moving window of scores. You can challenge candidates who whip through it to implement this. One candidate did this on his own from from the outset. 
+
+[Areas that have tripped up candidates when you gave this before.] 
+
+Most common mistake is not focusing on the fact that the player only has two actual alternatives for a given hand. Candidates will often get sidetracked by the different possibilities for the number of cards consumed or by thinking of the dealer as a player with choices. I usually point out these early ("the dealer's play is completely determined", "you only need to compute a score for each of the two choices") 
+
+Some have trouble understanding that they are dealing with a particular ordering of cards. One way of dealing with that is to give some backstory at the beginning ("you are hired by a casino to write code to evaluate sample decks to see how much money they could possibly lose"). 
+
+A few have made the mistake of trying to remember how to set up a dynamic programming problem and fumble around trying to figure out what the dimensions of the 2D array are supposed to represent. 
+
+[Follow-on questions this leads to.] 
+
+As a follow-on I often ask a design question of "Design a system to support a million simultaneous online players in tables of 10". This is only tangentially related and you will have to ask some candidates to suspend disbelief because the game actually doesn't work with more than one player :-) 
+
+[What else?]
+
+
+>>>>>>
+
+Coding
+
+Q: Implement copy-on-write as an add on to standard C++ strings
+
+Since a lot of candidates are no familiar with copy-on-write, I usually provide the following pseudo-code example. 
+String a = "hello"; // O(n) space since it has to allocate the string 
+String b = a; // Also O(n) space as b is a separate string object 
+a.ToUpper(); 
+print a -> "HELLO" 
+print b -> "hello" 
+
+If copy-on-write were enabled, line 2 would have a space complexity of O(1), since |b| only has a shallow copy. When |a| is modified in line 3, we would have to deep copy |b|, as it no longer has the same data as |a|. 
+
+Good candidates are quick to note that we need to modify every method in the String class that modifies its internal data. To get around that, I ask candidates to assume that the String class handles updates to its internal data through an update method. This way, we only need to modify the update method in the subclass. The signature for this method is below: 
+void update(char* new_data); 
+and calling a.ToUpper() in the above example is equivalent to calling a.update("HELLO") 
+
+Candidates fall into two categories when solving this problem. The more systems oriented candidates will note that the problem can be solved by refcounting. Once on this path, a hurdle that candidates often run into is where to save the refcount. Having it in the string objects is a consistency nightmare, so the best solutions save the refcount in the same location as the string data. This is achieved by using a struct or having an int* on the heap. Algorithmically inclined candidates realize that the relationship between copy-on-write strings can be modeled cleanly by a tree. In such a case, the copy c'tor is an insert operation into the tree, and the update method a removal from the tree. Sample code for both these solutions is below: 
+
+Sample 1: RefCounting 
+struct CwData { 
+  int ref_count; 
+  char* data; 
+} 
+class CWString : public std::string { 
+  private: 
+    CWData* data; 
+    update(char* new_data) override { 
+      data->ref_count--; 
+      if (data->ref_count > 0) { // others have a ref 
+        data = new CWData(); 
+      } 
+      data->data = new_data; 
+      data->ref_count = 1; 
+    } 
+  public: 
+    CWString(const CWString& copy) { 
+      data = copy.data; 
+      data->ref_count++; 
+    } 
+    ~CWString() { 
+      update(NULL); 
+      delete data->data; 
+      detete data; 
+    } 
+} 
+
+Sample 2: Using Tree operation 
+class MyString : std::string { 
+ private: 
+  char* data; 
+  MyString* parent; 
+  std::set<MyString*> children; 
+
+ public: 
+  MyString(const MyString& copy) { 
+    data = copy.data; 
+    parent = © 
+    copy.children.add(this); 
+  } 
+  void update(char* new_str) { 
+    if (children.empty() && parent) { // leaf node 
+      parent->children.erase(this); 
+    } else if (!children.empty() && parent) { // internal node 
+      parent->children.erase(this); 
+      parent->children.merge(children); 
+    } else if (!chilren.empty()) { // root node 
+      MyString* root = children.pop(); 
+      root.parent = NULL; 
+      root.children.merge(children); 
+      for (MyString* child: children) { 
+        child.parent = root; 
+      } 
+    } else { 
+      free(str); 
+    } 
+    str = new_str; 
+    parent = NULL; 
+    children.clear(); 
+  } 
+}; 
+
+In rare cases, candidates have enough knowledge of C++ to propose a solution using shared_ptr. These solutions tend to be very elegant and short. When it happens, I allow the candidate to implement it using shared_ptr, and then depending on if we have time, ask what would happen if we were not allowed to use shared_ptr (which have some heavy weight atomic operation semantics) or move on to a different question.
+
+
+>>>>>> Coding >>>>
+
+
+Design and implement a "bag" data structure.	Aug. 4, 2015 7:46pm
+PART 1 - SIMPLE INTRODUCTION 
+
+Question: Code a “bag” data structure that has insert and remove methods: 
+* "insert" puts an element into the bag 
+* "remove" removes a random element from the bag and returns it 
+
+This question is on the surface very simple. A reasonably good C++ answer is: 
+
+template <typename T> 
+class Bag { 
+ public: 
+  void Insert(T elem) { 
+    elements.push_back(elem); 
+  } 
+
+  T Remove() { 
+    auto iter = elements.begin() + (rand() % elements.size()); 
+    T elem = *iter; 
+    elements.erase(iter); 
+    return elem; 
+  } 
+
+ private: 
+  std::vector<T> elements; 
+}; 
+
+(The necessity for iterators in combination with erase() is a bit unfortunate but it's a good test of C++ proficiency; otherwise pseudocode is also completely acceptable.) 
+
+PART 2 - COMPLEXITY ANALYSIS 
+
+Question: Analyze the complexity of the Insert() operation. 
+* A bad candidate will not know how std::vector works and will make something up. 
+* A borderline candidate will have some idea of how std::vector works, and will say that in the common case complexity is O(1) and in the uncommon case it is O(N). When asked to derive the average case complexity, they will conclude O(log(N)), because that's how many resize operations there will be over N push_backs. 
+* A good candidate can derive and/or prove that it is amortized O(1). 
+
+Question: Analyze the complexity of the Remove() operation (assume the implementation shown in the example). 
+* A bad candidate will say that their implementation is O(1). 
+* A borderline candidate will, upon inspection, recognize it is O(n) but will not know how to improve it despite giving hints about how there is a *hole*. 
+* A good candidate will recognize that it is possible to simply fill the hole with the the element at the end and then reducing the size by 1. Other creative solutions involving marking entries "invalid" are acceptable if they are able to explain how such an implementation could be amortized O(1). 
+
+PART 3 - TAKE IT TO THE NEXT LEVEL 
+
+Question: Modify the Insert() method accept an integer weight, with Remove() returning an element with probability proportional to its weight. 
+
+I don't require code for this, but candidates can code if they want to. 
+* A bad candidate will suggest repeatedly inserting an element "weight" times, and then keeping the same implementation of Remove(). This works, obviously, but has terrible performance characteristics when weights are large. 
+* A borderline candidate will observe that a random number can be used to index relative to the sum of all weights such that, by iterating over partial sums, we can return the first element with partial sum weight greater than or equal to the random number. This yields an O(1) implementation of Insert() and O(N) implementation of Remove(). 
+* A good candidate can spot that, by maintaining a list of partial sums internally, we can perform the look up using a binary search, which is O(log(N)). A LookUp() operation, if it existed, could be O(log(N)); however, the act of removing requires updating the partial sums of all elements following the removed element, yielding O(N) Remove(). 
+
+WHY I LIKE THIS QUESTION * We have algorithms, coding, programming language fundamentals, and complexity analysis all in one question flow. The questions themselves are not particularly hard, but they are stimulating, which means that they are good warm-up. Great candidates can get through this in 25 minutes or less, which means there is then time for tougher domain-specific follow-on questions. 
+* There are lots of ways to fork this question. One question I sometimes insert in the middle -- when I have a good candidate -- is to ask them if they can think how they might implement std::vector so that it had O(1) push_back() AND O(1) push_front() (without giving up any its other nice properties).
+
+>>>>>>> Design >>>>
+
+Hire - I found Rande to be very Googley in the way he interacts, was able to explain a complex system (DynamoDB) including some of the edge cases they worked through, and fielded my "how do you keep teams happy" well.
+Interview questions asked
+
+- Explain DynamoDB
+- Explain replication in DynamoDB
+- What is more important - Predictability or Cost? Why?
+- Where is the query API?
+- How do you keep teams happy?
+Interview notes
+
+Rande readily admits he does not code now, but does get involved in technical discussions and tradeoffs.  To really check out of the depth of this I asked Randy to walk me through a product he was worked on / built which is DynamoDB.
+
+- Explain DynamoDB
+
+Randy started with what DynamoDB is and why they build it.  In many ways DynamoDB is a V2 of an earlier product he worked on called SimpleDB.  Both are a key value pair store.  What they have worked to do in DynamoDB is to avoid the complexities that entered into SimpleDB.  In SimpleDB that had a really rich query engine which meant lots of structs and data had to be in memory.  This limited how they could change and evolve that system.
+
+With DynamoDB they set out with a core set of value props:
+- 9ms replicated writes (3 zones)
+- High durability (>300 years)
+- 4 9's availability
+- Predictability (more on this in the Q & A below).
+
+One of the innovations with DynamoDB was to use provisioned IOPs vs the multi-tenant model used in SimpleDB.  This created greater predictability for customers.  
+
+One of the interesting decisions around PIOPS is they decided to let users grow and shrink what they are getting rather than automatically handle the burst you might get on a TV voting system.  The declaration gives them time to provision to meet SLAs.
+
+ - Explain replication in DynamoDB
+
+Once Rande laid down the foundation of what DynamoDB is be talked about the overall architecture and one cool issue they solved.  The system is replicated in 3-regions for reliability, used SSD's to meet SLAs, and have a master-slave commit model.
+
+One issue they hit with Master-slave was their original decision to stripe 12 commodity SSD's.  This striping caused them to almost always miss their 9ms SLA because one drive would hit a  300ms delay cycle.  To get around this they broken down the stripes from 12 disks to 2 disks each.  This fixed a lot of the issue however not completely.
+
+In the next iteration they added code to allow any system of the 3 replicas to complete a write as long as two has committed to a durable log.  They hit way too many issues at scale by committing when things were only in memory.  I never got to dig into more here.  He seemed to clearly know why.  Hope to ask him one day.
+
+Because of their master-slave replica model they could hit consistency issues.  Image if A is the master and B and C are slaves.  If a write comes in and B and C hit quorum they complete the wirite.  If a read later comes into A they would return the old value because they read from the log and it was not updated yet.  They fixed this by storing all writes in memory as well as the log.  When reads come in they hit memory.  However once all systems hit quorum they read from the log.
+
+ - What is more important - Predictability or Cost? Why?
+
+His answer here was pretty interesting and actually points to a weakness in Google Cloud Platform.  He says customers using DynamoDB from inside AWS are building Metadata servers, control planes, etc which absolutely need predictable writes.  He said it would be nice if their customers would build in a bit more buffer into their system rather than directly depend on DynamoDB, but they dont.
+
+Customers from outside AWS (ie across the internet) dont care about latency.  What they care most about is hiding latency via batch APIs (this is the GCP weakness - no batch APIs).
+
+So the answer is it depends on who is using it.  Given the heavy internal usage they optimized for latency via SSDs.
+
+- Where is the query API
+
+I've done a bunch of reading on DynamoDB and one thing is pretty clear.  There is NO SQL API and to getting data out of the system is really complex code.   I asked Rande about this.  
+
+He said there is no SQL because it was a time to market decision and yes customers have given this feedback.  It does make sense or systems like this to have SQL because it helps adoption.  Nuff said.
+
+- How do you keep teams happy?
+
+When DynamoDB first shipped it was done with a team of 17.  It now is a team of about 65.  Somewhere in the middle seems like a sweet spot for where Randy likes to work.
+
+When the team was small (17) it was easy to motivate them.  It was all new, the team knew they were building something amazing, and so it did not take much.  What he did do was stay late with the team when they were there, created sub-groups that always included JR and SR engineers, and made sure work like testing never fell to people that were not working on important problems.  He made sure they all worked on important problems.   They worked in groups.
+
+As the team scaled he says it is harder to motivate people because a) there is the size (65) and b) people have different motivations for what they are doing.
+
+Good he recognizes this.
+
+>>>>>>> System Design >>>>>
+
+Didn't solidly demonstrate system design, but had a decent sense of it, and generally seemed sharp. I didn't have the ability to evaluate leadership or Google fit.
+
+If he was hired, I'd be happy to work with him, including having him on my team if I had a suitable position.
+Interview questions asked
+
+Design a "FOAF" ACL system for a Facebook-like social graph https://ideas.corp.google.com/InterviewQuestions/view?idea=316
+Rated for: Tech-Software Engineer-General, Level 6-6, for people manager
+On role-related knowledge
+
+
+Distributed Systems Design
+BORDERLINE
+He was outside of his comfort zone on this question; the systems he's been responsible for have not needed to operate at this kind of scale or be designed around lots of low-latency requests. I think he would have shown more strength if I'd asked him to design a multi-stage provides/requires pipeline with fallible operations.
+
+Plus points:
+ + Engaged with the problem well, captured requirements, understood some underlying needs (e.g. latency) proposed a viable solution from a data management standpoint.
+ + Comfortable with a multi-machine solution.
+ + Some understanding of the need for spares, etc.
+ + Decent conception of the value of a request routing layer
+ + Reasonable instincts about opportunity for caching data in other layers
+
+Minus points:
+ - Didn't have an intuitive understanding of multiple ways of solving this problem and ability to suggest alternatives and trade-offs.
+ - Wasn't brisk on mental estimation which impaired ability to evaluate alternatives and implications in the short time we had available. This kept me from getting to other parts of the problem (reliability, mutations, etc.).
+
+On this question, I think he acquitted himself reasonably well; I'm on the verge between "solid" and "borderline", but the "borderline" rubric is more accurate, particularly in its mention of evaluating alternatives. So call it "Borderline+" or "Solid-".
+
+While he's unlikely to be a strong candidate for a storage TLM, he has a general sense of system design and underlying constraints that should be sufficient to allow him to be successful. 
+Interview notes
+
+I was running a little late (room confusion), so I didn't spend a lot of time on warmup, but we did chat briefly about the interview process.
+
+I asked the FOAF question: given a system with 500M users and bidirectional friend relationships, how would you implement the isFriendOfAFriend(requestingUser, owningUser) predicate?
+
+The conversation was back-and-forth enough that I didn't capture super-detailed notes on his thought process, but here are some points:
+
+ * He immediately saw the intersection method rather than trying to crawl the graph to depth 2.
+
+ * He discussed having an in-memory table of relations with a reasonable schema (user 1, user 2, primary key)
+
+ * He discussed using MySQL with a B-Tree index with 8 hops deep at 20ms / each for a total of 160ms. I didn't ask for details on this, because the conversation didn't really allow it, and I'm not familiar with it; but this doesn't make a huge amount of sense to me; at the very least, I think the number of hops is wrong unless the tree is n-ary, and 20 ms/hop sounds like the index is entirely on-disk or multi-machine.
+
+ * He was aware of why latency was a problem (user experience), but didn't have a great sense of where the problem would be (e.g. he said that 160ms for the query was too long for user reasons; I agree the budget is high, but it's maybe not unthinkable, particularly if you can do the ACL check in parallel with fetching a photo.) Later in the meeting, he seemed to indicate that even 20ms was a long time, which I think is just a roughness on units / expectations, but reflects a lack of practical experience in this area.
+
+ * He had good thoughts and directions, but wasn't good at mental estimation and bumped into some problems because of it. I didn't really mark him down materially on this, but he turned to the calculator on his phone for doing rough order-of-magnitude math (e.g. 500M users * 1 thousand friend * 64 bit IDs, he wasn't comfortable arriving at 4TB without a calculator). He also just didn't have some things at hand (e.g. proposed using 16-bit shorts for IDs and wasn't immediately aware that he was going to have a problem giving 500M users distinct 16-bit IDs; didn't know 2^16 off of the top of his head). Didn't have a great sense of how much RAM is in a single machine.
+
+ * We discussed the pros & cons of using a [user, list of friends] schema vs. a decomposed [user, friend]*. His intuitions around this seemed OK.
+
+ * He didn't have any problem extending his design to multiple machines.
+
+ * He arrived at a proposed design of using 150 machines to store the 4 TB friend graph; he also said that he'd need another 150 machines as hot spares and a few more machines to route requests. I asked him why he'd route requests from a standalone router vs. putting the sharding info into the clients, and he had a good response of the challenge of distributing shard location, resharding, etc., info to a few request routers vs. a lot of clients.
+
+ * We also estimated the QPS necessary. He wasn't super-comfortable with this and needed some encouragement to guess some numbers for how many photos each user would access. He correctly pointed out that we could cache the requesting user's friends with their session, and that requesting users may show some locality among the users from whom they request photos (e.g. browsing an album) that could reduce the number of queries against the main datastore.
+
+ * As we ran out of time, we had a short discussion about update QPS based on number of friending / de-friending events.
+ 
+>>>>>>> System design >>>
+
+No hire. I liked what I heard about Josh's team development experience and his self awareness as a manager. However given the seemingly severe algorithmic weaknesses and general inability to dive in and come up with concrete answers to some of my questions, I have trouble imagine him being effective as a TLM at Google.
+Interview questions asked
+
+What are you working on right now to improve as a manager?
+Scale up the Game of Life
+Rated for: Tech-Software Engineer-General, Level 6-6, for people manager
+On role-related knowledge
+
+
+Data Structures and Algorithms
+POOR
+
+Distributed Systems Design
+BORDERLINE
+
+Comprehension & Communication
+BORDERLINE
+
+Efficacy
+POOR
+Weak order complexity analysis skills
+Weak insight into which data structure to apply to solve the sparse problem
+Required a lot of hints to come to a good solution
+On leadership (optional)
+
+
+Works as a Team
+SOLID
+
+Strives for Self Development
+SOLID
+
+Empowers Team
+SOLID
+J thinks deeply about how to empower team members
+He also related a very brutally honest appraisal of a management incident that brought home the need to focus on these skills.
+On googleyness (optional)
+
+
+Cares About the Team
+SOLID
+
+Values Different Perspectives
+SOLID
+Again, J thinks a lot about how to develop his team members skills and make them thrive.
+Interview notes
+
+What are you working on right now to improve as a manager?
+J immediately said "distilling values" meaning mapping from what people really cared about to aligning their activities with the organization's needs.
+He expounded by saying he spends time with team members finding out what they really want - whether it's having a big impact, making lots of money - and mapping to their "blind spots" and strengths in order to see how they can grow and contribute to the org in order to meet those needs.
+J said he had developed good question to elicit values from people such as "if you could do anything what would it be" and "what kinds of things make you come home and say 'that was an awesome day at work'?"
+I asked J what he was doing to get better at this as he had verged more into talking about what sounded like a strength.
+He said he was working on his listening skills, at talking more slowly, and reading a lot about management and leadership. He also cited developing communication channels with other managers "upstream, downstream" and peers.
+This was a bit hand wavy so I asked him what led to the realization that this was an area he needed to work on?
+J initially said that this was something he'd been "messing up" over and over again. He then elucidated: early on in his career he did everything himself and excelled as an IC. He then ended up in a position of leadership, as do so many in similar situations. He was hampered by his attitude of "do things to my degree of competence or I'll do it myself". He gradually realized that building a team is way more than this and it's worth slowing down and letting others make mistakes in order to build a well functioning team.
+I thought this was a promising line of investigation so I asked if there was a pivotal moment where he realized he needed to learn this. J related an incident where there was a 3 person team consisting of very different individuals working on some new storage system. There were tight deadlines looming but when it came time to test the system in their live network it blew up. He got involved in diagnosing the problem and ended up ordering the team around on what to do. J said this killed the team's trust in him and it never recovered after that moment. He characterized it as putting the business's needs above the individuals. I thought this was a pretty brutally honest account and showed self awareness and a desire to grow as a professional.
+
+Scale up the Game of Life
+J had never heard of the GoL so I explained the rules to him and he absorbed them pretty quickly.
+He identified the corruption problem early on and clarified that earlier changes shouldn't affect later cells in the same generation.
+J quickly described a workable naive solution, iterating through each cell, counting the neighbors and filling in a second matrix with the next generation states.
+After doing this he mused on whether he could increment other cells' counts as he recognized there would be many cases where the same cell is counted. He apparently has been working on some chess-related project that brought this approach to mind as he was doing something similar when processing a move on the board. While an interesting thought that I haven't seen other candidates come up with, it doesn't really help much in this case.
+I asked J when he thought this approach would run into trouble, assuming it was running on a typical PC with 4Gb RAM. He did a very rough calculation of the amount of storage but got the math wrong. He initially assumed he had all the storage available for the matrix, then remembered he needed to store two equal-sized matrices. A stronger candidate would have set aside storage for the OS and optimized the storage required for the second generation matrix.
+He hadn't talked about CPU time at all so I asked him about that. He asked me about what the speed requirements were which is a reasonable question but one he could have made some assumptions about. I told him to run with <1s for each iteration. He said it would be a function of clock speed, how efficient he could make the inner loop of his algorithm, and how many cycles per operation in the inner loop of his algorithm (hopefully just one). I thought his thinking here was ok but he was a bit handwavy about the calculations; a strong candidate would have come up with estimates for all of this and figured out how what the maximum sized array would be given the speed limit.
+
+I moved on to scaling up to 1MM x 1MM. J immediately chose to shard the matrix. He grasped the overlap problem well, saying each shard would have to carry the state of all the bordering cells, therefore the shards must overlap. He left it at that so I quizzed him on what post-processing might be required. He had to think about this a bit but eventually came up with the need to share border state between shards after each iteration.
+
+I asked J how to optimize further. He went back to the counting idea he had come up with earlier and I had to walk him through why this wasn't going to help. This set off a bit of an alarm bell that his knowledge of algorithmic complexity might not be so good. He then moved on to exploring an idea he termed "coagulated zeroes" which sounded a lot like compression - promising as this is very much related to a sparse implementation. But he got bogged down here so I gave him a hint: What do you think is going to happen to the board over time? He took the hint really well, noting quickly that overall there is a 25% chance of an on cell staying on, and a 12% chance of an off cell becoming on, therefore the matrix will end up being sparse. Very good.
+However J really struggled to translate this insight into a workable approach. He continued to go investigate approaches that iterated through the entire matrix. He confessed somewhere during this part of the interview that his knowledge of order complexity was spotty and I believe it.
+
+I gave J a big hint: don't check every single cell, only consider the "on" cells
+His initial approach was an array of on cells that he would iterate through. I walked him through the fact that this would make indexing a nightmare. 
+I had to say "what about a hashmap" and "what would you key it by"
+He then saw that he could use the two coordinates as a key and described how he would iterate through all the on cells and look up neighbors by this key.
+He missed the 0->1 cases, I pointed this out, and he correctly said that he would iterate through all the off neighbors surrounding the current on cells in order to figure out if any became on. He was still concerned about the number of operations here, saying it could potentially be 56 times the number of on cells or something like that. This just strengthened my sense that he didn't really get order complexity at all.
+
+We had a couple of minutes left so I asked J if he had any questions for me. He immediately said "So how did I do? that's what everyone really wants to know right?" So we had a good laugh about that.
+He then asked me about how I first came to join Google all those years ago - that was the first time anyone ever asked me that so I told him my story.
+
+>>>> System design >>>
+
+Didn't solidly demonstrate system design, but had a decent sense of it, and generally seemed sharp. I didn't have the ability to evaluate leadership or Google fit.
+
+If he was hired, I'd be happy to work with him, including having him on my team if I had a suitable position.
+Interview questions asked
+
+Design a "FOAF" ACL system for a Facebook-like social graph https://ideas.corp.google.com/InterviewQuestions/view?idea=316
+Rated for: Tech-Software Engineer-General, Level 6-6, for people manager
+On role-related knowledge
+
+
+Distributed Systems Design
+BORDERLINE
+He was outside of his comfort zone on this question; the systems he's been responsible for have not needed to operate at this kind of scale or be designed around lots of low-latency requests. I think he would have shown more strength if I'd asked him to design a multi-stage provides/requires pipeline with fallible operations.
+
+Plus points:
+ + Engaged with the problem well, captured requirements, understood some underlying needs (e.g. latency) proposed a viable solution from a data management standpoint.
+ + Comfortable with a multi-machine solution.
+ + Some understanding of the need for spares, etc.
+ + Decent conception of the value of a request routing layer
+ + Reasonable instincts about opportunity for caching data in other layers
+
+Minus points:
+ - Didn't have an intuitive understanding of multiple ways of solving this problem and ability to suggest alternatives and trade-offs.
+ - Wasn't brisk on mental estimation which impaired ability to evaluate alternatives and implications in the short time we had available. This kept me from getting to other parts of the problem (reliability, mutations, etc.).
+
+On this question, I think he acquitted himself reasonably well; I'm on the verge between "solid" and "borderline", but the "borderline" rubric is more accurate, particularly in its mention of evaluating alternatives. So call it "Borderline+" or "Solid-".
+
+While he's unlikely to be a strong candidate for a storage TLM, he has a general sense of system design and underlying constraints that should be sufficient to allow him to be successful. 
+Interview notes
+
+I was running a little late (room confusion), so I didn't spend a lot of time on warmup, but we did chat briefly about the interview process.
+
+I asked the FOAF question: given a system with 500M users and bidirectional friend relationships, how would you implement the isFriendOfAFriend(requestingUser, owningUser) predicate?
+
+The conversation was back-and-forth enough that I didn't capture super-detailed notes on his thought process, but here are some points:
+
+ * He immediately saw the intersection method rather than trying to crawl the graph to depth 2.
+
+ * He discussed having an in-memory table of relations with a reasonable schema (user 1, user 2, primary key)
+
+ * He discussed using MySQL with a B-Tree index with 8 hops deep at 20ms / each for a total of 160ms. I didn't ask for details on this, because the conversation didn't really allow it, and I'm not familiar with it; but this doesn't make a huge amount of sense to me; at the very least, I think the number of hops is wrong unless the tree is n-ary, and 20 ms/hop sounds like the index is entirely on-disk or multi-machine.
+
+ * He was aware of why latency was a problem (user experience), but didn't have a great sense of where the problem would be (e.g. he said that 160ms for the query was too long for user reasons; I agree the budget is high, but it's maybe not unthinkable, particularly if you can do the ACL check in parallel with fetching a photo.) Later in the meeting, he seemed to indicate that even 20ms was a long time, which I think is just a roughness on units / expectations, but reflects a lack of practical experience in this area.
+
+ * He had good thoughts and directions, but wasn't good at mental estimation and bumped into some problems because of it. I didn't really mark him down materially on this, but he turned to the calculator on his phone for doing rough order-of-magnitude math (e.g. 500M users * 1 thousand friend * 64 bit IDs, he wasn't comfortable arriving at 4TB without a calculator). He also just didn't have some things at hand (e.g. proposed using 16-bit shorts for IDs and wasn't immediately aware that he was going to have a problem giving 500M users distinct 16-bit IDs; didn't know 2^16 off of the top of his head). Didn't have a great sense of how much RAM is in a single machine.
+
+ * We discussed the pros & cons of using a [user, list of friends] schema vs. a decomposed [user, friend]*. His intuitions around this seemed OK.
+
+ * He didn't have any problem extending his design to multiple machines.
+
+ * He arrived at a proposed design of using 150 machines to store the 4 TB friend graph; he also said that he'd need another 150 machines as hot spares and a few more machines to route requests. I asked him why he'd route requests from a standalone router vs. putting the sharding info into the clients, and he had a good response of the challenge of distributing shard location, resharding, etc., info to a few request routers vs. a lot of clients.
+
+ * We also estimated the QPS necessary. He wasn't super-comfortable with this and needed some encouragement to guess some numbers for how many photos each user would access. He correctly pointed out that we could cache the requesting user's friends with their session, and that requesting users may show some locality among the users from whom they request photos (e.g. browsing an album) that could reduce the number of queries against the main datastore.
+
+ * As we ran out of time, we had a short discussion about update QPS based on number of friending / de-friending events.
+ 
+>>>>>> Coding >>>>
+
+Interview questions asked
+
+1. What's an interesting and difficult problem you've had to solve recently? [Warm-up question
+2. Validate a UTF-8 string (https://ideas.corp.google.com/InterviewQuestions/view?idea=240).
+Rated for: Tech-Software Engineer-General, Level 6-6, for people manager
+On role-related knowledge
+
+
+Coding
+SOLID
+
+Tests Code
+SOLID
+
+Design
+OUTSTANDING
+
+Comprehension & Communication
+OUTSTANDING
+
+Efficacy
+SOLID
+Coding: The candidate checked boundary conditions. IMO it was evident he is still programming regularly, this candidate wasn't "rusty" as too often TLM candidates are.
+
+Tests code: He explicitly worked through a number of examples, for each of the two functions he wrote.
+
+Design: Wrote code that was suitably simple and discussed issues of performance and trade-offs.
+
+Comm: His discussion of the algorithm he was going to use was clear and we had clear communication throughout.
+
+Efficacy: This candidate progressed at the pace I'd except most Googlers to faced a not-very-difficult but unfamiliar problem, with few nudges. He completed a working solution the alloted time and was able to discuss some issues about the code as well. There were no silent moments of no progress.
+Interview notes
+
+1. What's an interesting and difficult problem you've had to solve recently? [Warm-up question]
+
+The candidate has been working on a chess strategy bot algorithm. He discussed the problem of representing the data in a way suitable to quickly compute next possible positions, into "bitboards" and bit operations. Remarked that Java 8 will have an operator to do bit operations and that he won't have to resort to some De Bruijn algorithm for counting bits. In talking about this, he quoted fairly precise measures of scale (e.g. "it starts at 20 positions, in the middle of the game the average branching factor is around 35", etc. showing familiarity with this problem).
+
+I thought this was an interesting discussion and felt like asking more questions, but refrained, in the interest of time.
+
+
+2. Validate a UTF-8 string (https://ideas.corp.google.com/InterviewQuestions/view?idea=240).
+
+Over the 35 minutes allowed, the candidate wrote this Java code, with a few minor revisions (omitted):
+
+  static final char continuedRuneMask = 11000000;
+  static final char continueRunePrefix = 10000000;
+
+  boolean isValidUTF8(char[] a) {
+    int runeLength = 0;
+    for (int i=0; i < a.length(); i++) {
+      char b = a[i];
+      if (runeLength == 0) {
+        runeLength = getRuneLength(b);
+      }
+      if (a.length < i + runeLength + 1) return false; // [A]
+      for (int j=1; j < runeLength; j++) {
+        char test = a[i+j];
+        if ( (test & continuedRuneMask) == continuedRunePrefix) {
+          // Yay, we are allowed to continue
+        }
+        else {
+          return false;
+        }
+      }
+      i += runeLength;
+    }
+    return true;
+  }
+
+  int getRuneLength(char b) {
+    char mask = 0b10000000;
+    int runeLength = 0;
+    while ( (b & mask) != 0 && mask > 0 ) {
+      runeLength++;
+      mask = mask >> 1;
+    }
+    return runeLength;
+  }
+
+Comments:
+
+- Based on some comments, I believe this candidate is enthusiastic about Java programming.
+
+- The candidate began with a pretty cogent high-level description of what he needed to do, including loops and functions required to do it. I really liked his quickly analysing and describing the problem to be solved instead of jumping into writing code. He did this quickly as well.
+
+- The candidate make a very good description of boundary conditions and was careful to work through a few examples to make sure the conditions were right. He revised his indexes a few times to get them right.
+
+- He also make a very clear description of masking mechanics required for his getRuneLength() function.
+
+- For a while his code was raising a InvalidArgumentException() exception instead of simply returning false, but 10 minutes to completion he realized this was not necessary and changed it to simply return false, as per the function's definition [correct]. FWIW his deleted exception code read like this, showing attention to detail:
+
+  throw new InvalidArgumentException("Rune[" + i + "] has invalid continuation at " + (i+j) + ".");
+
+- I asked the candidate when he was done why he was using explicit masks in order to check for continuation bytes instead of just calling getRuneLength(). He said it was unnecessary to loop for this particular check and did it this way for performance reasons (to avoid unnecessary looping).
+
+- The candidate initially forgot about overflow of the array when he was done. I pointed it out to him and he inserted line [A], fixing the problem. The candidate then remarked on his not using a {} block on one of his conditionals, "is this bad?", showing he's been working using code guidelines before.
+
+- I just noticed that this question was banned. This is probably my last time asking it.
+
+>>>>
+
+
+Seems very smart, and will really drive things. Will take initiative. I have some cultural concerns – but hire if there's a strong signal from others, especially if he's technically very strong, and we can mentor him on the management side.
+Interview questions asked
+
+Handling poor performers.
+Rated for: Tech-Software Engineer-General, Level 6-6, for people manager
+On leadership (optional)
+
+
+Gets Things Done
+OUTSTANDING
+
+Empowers Team
+BORDERLINE
+
+Helps with Career Development
+BORDERLINE
+See notes – I think he may need some management mentorship.
+Interview notes
+
+(My apologies – this feedback isn't great – I lost my handwritten notes)
+
+I spent quite a while talking to Josh about his experience at Shapeways and Littlebits. He told me about the messy system (lots of PHP, quite a bit of Fortran) at Shapeways. It was a bit of a technical turnaround, implementing more scalable systems, and bringing down page latencies. At Littlebits, he worked on fulfillment, which again was in a dire technical state, but eventually found that unsatisfying. We spoke at a very high level, so I didn't get a good sense of his technical capabilities, but he seemed thoughtful about how to improve technical infrastructure with limited resources without completely starting from scratch – identifying the biggest points of leverage and focusing on them.
+
+I asked him about dealing with poor performers. He mentioned a case of an SRE-style engineer who was upgrading a key database to add more storage. Josh sounded like he approached the problem pretty aggressively, and dove in and proposed a solution, which got the hackles of the engineer up. He realized in retrospect that he needed to be a bit more subtle in his approach. Overall, not a great story about Josh.
+
+Overall, he was very energetic, quick-thinking – his manner was almost a little manic. Some of that may be interview-related, but it seems like he'd be best in a pretty fast-moving team.
+
+I'm a little bit concerned about culture. I think he should definitely start as an IC, and if he moves into a management role, have a manager who can keep an eye on the cultural aspects, especially around performance management.
+
+
+>>>>>
+
+Josh seems like a great startup guy - helping to build up an organization from scratch and institute the basic processes needed for success, in a conscientious way. 
+Interview questions asked
+
+Example of terminating someone for performance reasons
+Example of introducing a process to improve the performance of your team
+Examples where team goals and company goals conflict?
+Rated for: Tech-Software Engineer-General, Level 6-6, for people manager
+On leadership (optional)
+
+
+Gets Things Done
+SOLID
+
+Works as a Team
+OUTSTANDING
+
+Coaches Team
+OUTSTANDING
+
+Empowers Team
+OUTSTANDING
+
+Shares Vision and Strategy
+OUTSTANDING
+
+Helps with Career Development
+OUTSTANDING
+I feel a little weird writing "outstanding" for these categories because I don't know how effective Josh's approaches actually were. But the career ladder Josh developed, the examples given from LittleBits and Shapeways, and the way he approached his performance improvement example demonstrated great concern for aligning vision, coaching the team and helping their development,  leveraging strengths and tailoring things on a person-by-person basis under adverse circumstances, were consistent with a lot of the "outstanding" verbiage here. 
+On googleyness (optional)
+
+
+Cares About the Team
+OUTSTANDING
+
+Thrives in Ambiguity
+SOLID
+Josh's Shapeways 3D printing anecdotes illustrated to me that he cared for the team and dealt well with the ambiguous situation created when it wasn't clear how well the company could achieve its lofty public goals.
+Interview notes
+
+Example of terminating someone for performance reasons
+
+Josh gave an example of a guy who came out of a Rails shop. He didn't really have the technical fundamentals required. There were basic concepts that he had a shaky grasp on (cookies, sessions). But he was a great culture fit. He really absorbed the mission of the company, people loved him and enjoyed working with him. Josh tried pairing him with senior engineers for mentoring (twice, 4-6 weeks each), then dug in closer himself. He found that the guy was a "depth first" kind of guy, would get stuck easily. Josh tried to give him tips, help him with time management. Tried a socratic approach, asked "what makes you feel like you are doing well?" or "what do you like about the way you see person X performing their job?" Offered classes & training. Josh really tried hard because of the fact that the person was such a good culture fit at the small startup. But the guy didn't latch on to the lifelines Josh was throwing out. They did a 1 month PIP which he failed. Coordination challenges with the actual firing meeting, new HR person and they didn't have the logistics nailed down properly.
+I asked about what if anything would have been different if the person *hadn't* been such a good social/culture fit. Josh said the reason the person's high culture fit was relevant was that it meant Josh had to really work hard o make sure the people around him understood the situation. It wasn't as clear to the other folks (other than those working directly with this person) that the person wasn't cutting it. So Josh had to convey "we're working on this" but without revealing too much information. Exacerbating the issue was that there wasn't enough of a well understood performance bar at the company. Josh went on at length about this, the challenges of a startup situation where a lot of HR process basics are nonexistent.
+
+Example of introducing a process to improve the performance of your team
+
+Josh created a career development ladder defining the responsibilities of different job roles and levels. It covered what were the core competencies of the groups, guidance for new managers, coaching techniques and suggestions. Attributes of performance at the given level in the role, eg. "clearly articulates ideas in a positive way." 
+Josh developed this by himself at first, shared it with the C-level folks at the company an dthen some of his friends from other companies to refine it. Then he shared it with the team inviting their input especially on the functional responsibilities & differences between the job roles, less so on the different levels.
+Rolled it out with a tech summit with the team, including listing his own responsibilities. Generally felt it was a successful introduction. In hindsight an area that needed more work was the product management/engineering division of labor. There were ownership questions and differences of opinion with one of the senior PMs. That PM wanted discrete groups organized around how the customer moved through the product, e.g. a "signup" team, a "shopping" team, a "checkout" team. Josh felt the team was too small for this to be the way things got divided, and that it wasn't well mapped to the company goals.
+
+Examples where team goals and company goals conflict?
+
+Josh gave the example of the LittleBits community team. (LittleBits is a startup that sells modular electronics kits & associated open source software). They had a concept of community "chapters" which they wanted to launch globally. The main company goal was sales however, and the community concept was a means to an end. The community team was pushing to get (eg) 10 people per chapter per country, while the exec team thought "you aren't measuring the things we care about." The community chapter rollout brought meager revenue. The community team didn't know how to connect their goals back to the company goals. Community building is tricky in general, Josh said, because it has an indirect connection to monetization.
+
+Josh also gave an example of Shapeways (3D printing marketplace and service). There he felt that there was an almost hidden overall goal - to let 3D printing technology survive long enough to get consumer costs down to a viable level. This was very different than the more idealistic public goal of bringing 3d printing to the masses. The big vision was easy to latch on to, and employees would get enamored with it but become disillusioned when they realized how far from the big goal they were. So this meant Josh had the challenge of managing people through that disillusionment. To do so he said he needed to understand the individual goals, what they felt like success looked like personally. Most people, he said, just want to feel like they are valued and valuable, so his goal was to identify what it would take to do that on a person-by-person level, so that if things aren't going well for the overall company mission, at least he can try to make things better for the individuals. He had to craft goals for the team that would allow them to celebrate wins but still be aligned with the goals of the company. It was a long slog though.
+
+>>>>>
+
+I had a very good interview with Bhavana. She has a broad industry experience in working in embedded systems and writing middle tier applications. She also has a great deal of experience leading large geographically distributed teams. My interviews were largely technically focused and she did a good job of answering questions. 
+Interview questions asked
+
+* What are the main aspects of building a platform that connects to multiple gateways at the backend. What are the principles/processes you would follow to build a gateway
+* What are the important aspects of reliability, how would we improve this ?
+* What is a good testing and release process for such a system ?
+Interview notes
+
+HIRE at T7, she can be rated at Exceeds expectations bordering on strongly exceeds at this level.
+
+Bhavna first spent the first few minutes talking to me about her experience working in the industry. One thing that struck me was her enthusiasm and her fearlessness to take on new challenges in new areas. She indicated that she likes to push herself and take new challenges when they arise and that she welcomes change and challenges. She has worked on both the middle tier and embedded systems.
+
+I asked her to design a vendor gateway system that will connect to several vendors and what are the main principles that we will follow for designing and building these systems. She walked me through all the important characteristics of the system. She identified reliability,  atomicity, the latency issues, the availability issues, how releases and testing would work, and how we can increase the speed of development and the challenges involved in integrating new vendors very quickly. It was truly an energizing discussion and impressive since she has not worked in this area but was able to ask the right questions and follow through with answers.  
+
+We dove a bit more into reliability. we talked about vendor reliability, atomicity, retries and how to do it and what its relationship to latency, transactional storage - how to make a storage system transactional. In some aspects of reliability she was a bit out of her depth but was however fine with answering questions on how to make transactional support work on big table and how spanner worked.
+
+The last part of the interview focused on how to improve the testing and reliability of the system. I asked her to design the test harness/test suites for the vendor integration platform. She walked me through the various steps of integration tests, vendor stubs. She came up with an idea of running a canary vendor binary in production and testing that by routing a small portion of traffic to it so that we have a realistic test environment. Etc.
+
+Overall it was a good solid interview. She will do we ll as a T7 TLM hire for Google.
+
+>>>>>
+
+overall the candidate seemed very energetic, not afraid to step out of her comfort zone, willing to listen and change her thoughts and willing to get into the details.  She has also dealt with the kinds of technical, cross site management issues we deal with at google.  Based on answers to very fuzzy questions, I get the sense she is not going to come up with the next big thing vision or be the uber TL that groks it all, but in terms of managing an eng team, getting into the details and execution, she seems definitely on the ball. I would be supportive of considering her for Eng Mgr role assuming the other interviews went well 
+Interview questions asked
+
+- what are the top N things to consider when managing eng projects involving multiple sites ?
+- How will you rampup on payments @ google if you were to join google ?
+- What are biggest differences between native development and web developments ?
+- Do a high level design of android pay integration with american express network ?
+Interview notes
+
+* Onsite: HIRE
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+Q:  What are the top N things to consider when managing eng projects involving multiple sites ?
+A: Face to face communications are crucial to build relationships
+ - visits to the various sites in person 
+ - also just hanging out and building rapport with the team members and even their family members outside of work sometimes provides context and rapport that is good for team work 
+ - Meeting etiquette over vc - e.g. acknowledge participants , make everyone's voice heard instead of the most vocal 
+ - establish ownership amongst remote sites - e.g. setup a handoff process for remote sites, do small projects completely on remote sites
+ - Document design decisions clearly 
+ - Dont do small projects completely on remote sites - its very inefficient 
+ - Have a full stack team on the remote site so they dont need to depend on the mothership for basic stuff ( e.g. qa, release mgmt, infrastructure, application, ...) 
+  - As the lead I am part Team Lead, part Therapist 
+  - prioritize and spread the joy when it comes to grunge work. No one site should feel the burden - maybe round robin across all teams 
+
+Q: How will you rampup on payments@google if you were to join google ?
+A: Lots of reading detailed design docs, etc - e.g. F1/spanner
+   - But reading design docs or docs just give you buzzwords/ lingo of the system - not really the detailed picture. To do this I need to insert myself into code reviews, design reviews
+   - Do research on my own 
+   - Need to build credibility with engineers to gain their trust 
+   - Grok top level workflows and pieces of payments 
+   - Jump in and read a piece of code when feasible 
+   - Learn other systems that touch the code I am looking at 
+Followup Q: But how do you keep up with so much going on though as a manager of say 50 engineers? 
+    - Spotlight and go deep in one or two problem areas and shallow learning in the rest. Need to pick areas of focus 
+
+Q: What are biggest differences between native and web software development ? 
+A: web - instant gratification - write JS, reload brower page to see it in action 
+- Native / embedded - takes much longer to see something working - e.g 6 month cycles if it involves embedded partners 
+- Issues with native go beyond bugs in software - e.g. could be hardware issues . In my previous job we had to even use oscilloscope to check power issues 
+- Testing patterns are different for hardware - requires oem testing , images need to be shipped in advance, etc, etc 
+
+Q.: Do a high level whiteboard design of android pay integration with american express network - ask questions to clarify this clearly fuzzy problem ? 
+A - She started by immediately getting up and going to the whiteboard. Good sign 
+    - Need to understand  data gathering , standard protocols, client libraries , what databases to store in 
+    - Need to define metrics on site availability
+    - How global is the deployment - helps with co-locating servers/ machines , production deployments
+    - Breakdown the problem into - Frontend/ UI , Txn Manager to handle the txns , Customer Data store , Vendor shim layer to talk to vendor (amex) 
+    - At this point, she decided to step back and regroup her thoughts 
+       - what are my requirements ? 
+          - scale - defined how ? - reach 
+          - reliability - defined how ? - things going down
+         - load /traffic 
+         - need to plan for growth (dont want to make the mistake of sizing a system based on initial traffic constraints - systems always grow ) 
+         - latency - realtime or batch invoice based billing ?
+         - bandwidth - defined how ? - rate of incoming txns 
+         - security - defined how ? 
+               - ability to keep payments data secure - e.g. access control 
+               - resiliency to hack attacks
+
+      - Customer UI 
+         1. I would define key scenarios 
+         2. Then the data flows 
+         3. Interaction with other components 
+         4. Try to do user empathetic designs - do them from user's pov (e.g. what would my grandma expect in this user flow, how will they mess it up , how will they think of this UI)
+             - Drive this out via focus groups , site visits with customers 
+      - Followup question - who drives above requirements ? - Typically product managers 
+
+      - Design core components + data model & txn manager (state machine) 
+      - Design reliability - logging for debugging, checkpointing,  versioning , audit logs ( since this is payments) including timestamping 
+
+      - Do a prototype of just the shim layers / interfaces (ui, txn mgr, vendor shim , db ) 
+      - Keep refininig prototypes with more edge cases and adding more meat to them 
+
+We ran out of time to discuss any deeper 
+
+* Leadership (People, program, project, technical)
+- From the above answers she has clearly worked across sites, lead lots of people and dealt with large scale projects.  Based on some of her answers, I suspect she is not hands on anymore ( understandeable though given the size of her teams ) 
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+- Didnt test, but she admitted she hasnt written code in a few years 
+
+* Analytical/Cognitive Ability:
+- Based on her description of the payments system , I can tell she can follow and group and analyze various big fuzzy problems and break it down into reasonable sized pieces to make progress on 
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+- Dealt with native, dealt with large projects, dealt with technical engineers who respect hands on managers - very relavant experience to what we do at google 
+
+* Communication Skills:
+- super easy and fun to work with I suspect based on my chats with her. Very friendly and outgoing personality. 
+
+* Google Culture Fit:
+- she jumped to the whiteboard as soon as I asked her my design question. Her comments around being hands on to be respected by engineers were spot on and fit with our google culture . I suspect she would fit right in. 
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+overall - candidate seems to fit an eng manager role at google quite well. Like I said, I dont think she is going to be able to drive the technical vision, but she can definitely execute on it once someone provides it (which is what a lot of eng managers have to do imho) 
+
+>>>>>>
+
+HIRE : Candidate was able to clearly demonstrate thought process of designing and asking the right questions while designing the system.
+Interview questions asked
+
+a) Thought process on how she should solve kth element in two sorted arrays.
+b) Design largest billing and payments platform and what are the principles.
+Interview notes
+
+* Onsite: HIRE
+
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+a) Thought process on how she should solve kth element in two sorted arrays.
+Wanted to see whether candidate can clearly demonstrate problem solving skill, So I explained the problem to her with an example.
+
+Quickly candidate was able to say, I can merge both arrays and find the solution. and when I asked for optimization, She was able to say yes,we do not need to merge all the elements only walk through the arrays to the point when we met K. She decided to write some pseudo code  
+
+while (loop <= k; loop++) {
+  if (a[i] <= b[j]) {
+    i++;
+  } else {
+   j++
+ }
+}
+
+though the code is roughly correct and she has been not coding for quite sometime, given the benefit of doubt asked her to further optimize the solution. 
+
+But she got stuck moving around with various thoughts, first wanted to build binary tree(assuming I am looking for log(k)), but then quickly realized building binary tree is not something interesting since the numbers are already sorted. 
+
+Then she decided to pick some number in one of the arrays, A[K] then compare with B[K], but not sure what she was doing , at this point I had to give her a strong hint
+
+What if she takes enough numbers to get K inside the comparison, but still did not understand the problem, So I had to at that point give her a comparision A[k/2] and B[k/2], then she started thinking, that she could now eliminate based on the comparison. At this point I stopped her and moved on to the design question.
+
+b) Design largest billing and payments platform and what are the principles.
+Goal was to understand whether candidate is asking right questions to distill down the real problem that I want to solve than simply start designing.
+
+Candidate clearly started asking questions: 
+
+Am I worried about the scale and performance? I answered no.
+Am I worried about correctness of the data, I kind of said yes but still candidate was asking? am I worried about the complexity of the billing. I answered "yes" but told her even more is the "complexity of never ending changes that we need to accommodate" .. specifically when legal, regulations and governments change their mind all the time.
+
+Now that candidate understood the problem, then I asked how would she solve this problem and to keep the engineering / system sane? and what would be her base principles.  Candidate, clearly wanted to a database where the data can be meaningful and relational, then I asked how do we deal with changing rules all the time, this may have triggred, candidate wanted to build some kind of rule engine.
+
+Rule engine: Where not only the database will contain but some kind of interpreted rules, when I asked how would you version control them, it is back to the same problem of writing code in different languge, but candidate sems to think this is simpler problem of storing those rules.
+
+When I further probed and asked what would be ideal solution, is there a model that we can drive this data driven? She was able to articulate some simple solutions like let us have brute-force data expansion. Which will not clearly scale but she definitly had good thoughts.
+ 
+  
+* Leadership (People, program, project, technical)
+
+Technically, She was able to understand the problem, and brainstorm and eliminate quickly some of the thoughts and narrow down on the solution that she understood and explain clearly.
+People: She was quickly adapt to my changes and reset herself to new direction and thoughts.
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+
+
+* Analytical/Cognitive Ability:
+Candidate was able to quickly take on a problem without any priori knowledge and able to start working and analyzing a solution.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+
+* Communication Skills:
+Was able to clearly communicate and ask when she was not following.
+
+>>>>>
+
+
+Hire.  She is the best engineering management candidate that I've interviewed.  I would slot her at Director.
+Interview questions asked
+
+Question: Briefly describe briefly your direct people management experience.   
+
+Question: How do you deal with a project which has fallen behind?  Specifically in October you realize that you can’t meet the January launch date.  What do you do?
+
+Question: If you joined a new team how would you approach SWE development practices (agile, waterfall, etc)?
+
+Question: Explain the difference between composition and derivation in OO programing?
+
+Question: How do you help engineers with career development?
+
+Question: How do improve team motivation when a project is tedious? 
+
+Question: How do you structure a large project? 
+
+Question: How do you manage low performers?
+Interview notes
+
+* Onsite: HIRE/NO HIRE
+* Phone screen move forward?: YES/NO
+
+[Please list the questions asked, the candidate's answers and your assessment of the candidate's answers.]
+
+Question: Briefly describe briefly your direct people management experience. 
+
+Answer: Qualcomm has a matrix approach where people tech lead one are and manage another.   She started as individual contributor.  She became a technical lead at Qualcomm (1999).   In 2004 she became a manager of 5 people.  In 2005 she started doing both - tech leading and managing.  At Qualcomm managers manage 5 people.  She tech lead an orthogonal area.  She became a director of 5 managers.  She does “skip level” meetings with her indirect reports.  She became a Sr Director with 7 directors and 120 in her reporting organization.  Plus she tech leads an area of 80 folks.   
+
+Question: How do you deal with a project which has fallen behind?  Specifically in October you realize that you can’t meet the January launch date.  What do you do?
+
+Answer:  First, evaluate the situation.  How much can you slip?  Where does this project fit?  Assume you can’t slip.  What is the critical functionality.  What can we deliver we deliver in the required timeframe.  Reducing the scope often works.  You can consider adding people.  This depends on how easily someone can jump in and help.  You can ask team to hunker down but you need to be careful.  Doing it too much will burn out the team.
+
+Question: If you joined a new team how would you approach SWE development practices (agile, waterfall, etc)?
+
+Answer:  I don’t use waterfall much any more.  I use agile more.  I’m a big fan of setting gentle guidelines.   I had a team with really long sprints.  I asked them to explain why the sprints were long and talked about the downside of the approach.  [the tone here was to work with the teams]  Working for Qualcomm is like working for startups.  I have to be open minded and learn.
+
+Question: Explain the difference between composition and derivation in OO programing?
+
+Answer:  Derivation uses inheritance.  Composition uses encapsulation.
+
+Question: How do you help engineers with career development?
+
+Answer: I am passionate about career development.  This is what keeps people engaged and at a company.  You can’t pull or push people.  You can walk along-side them.  You need to understand where they came from and where they want to go.  Help them.  I am a fan of mentoring.  As a mentor you challenge people.  This is different than my technical leadership which provides direction.  I use a lot of situational leadership for mentoring. 
+
+Question: How do you improve team motivation when a project is tedious? 
+
+Answer:  I am in that situation now.  One of my teams does deployments.  They don’t do the core product development.  Morale was low.  I worked to build morale by showing that I care about the area and by building a strong team structure.  I make it feel like a family but that isn’t enough.   You need to engage in their career development and make sure there is a growth path.   You can embed some interesting projects into the mix and cycle people through the more challenging work.  [I didn't capture all her comments in this area but she is very passionate about building good systems for release and test.  She likes the blocking and tackling associated with developing large scale projects]
+
+Question: How do you structure a large project? 
+
+Answer:  Break it down.  Figure out what you know now.  What are the requirements?  Think about hardware, software, tools.   Pick off low hanging fruit.  Make progress.  Build test frameworks in parallel.  Try to avoid designing too far ahead of what you know. 
+
+Question: How do you manage low performers?
+
+Answer: I have no tolerance for low performers.  It destroys the morale of the team.  I am firm but not a jerk.  Set clear goals, give them chances, document, manage out if necessary.  Sometimes it’s about skill.  Sometimes they can do better in another team - but rarely.  [I prompted if there are categories of low performers and techniques for the categories] There are people that want to do it but can’t.  This is heartbreaking.  I try to counsel them.  Sometimes they need to find a new role at another company.  I think if there is another role within our company and discuss this with them.  Some people don’t apply themselves.  They may be lazy.  I push them pretty hard.  Some people are sporadic.  This can be really difficult.  They can be clever enough to get out of the situation.   But they haven’t fundamentally changed.  I tell them they won’t get to keep repeating the cycle.
+
+
+
+* Leadership (People, program, project, technical)
+Excellent technical leadership.  She is energetic.  She has a nice mix of software engineering process rigor and enthusiasm.  
+
+
+* Coding Ability (if you ask coding questions in your interview, please include the actual code that the candidate wrote):
+NA
+
+* Analytical/Cognitive Ability:
+She had good insights.  I didn't explore technical skills but she is smart and a clear thinker.  She is quick.
+
+* Experience Relevant to Google (Role-related Knowledge and Technical Skills):
+Outstanding.  Sr Director managing Directors, plus concurrent tech lead role.  Her TL scope is design and sanity checking some CLs.  It doesn't map directly to our TL role.  
+
+* Communication Skills:
+Very good.
+
+* Google Culture Fit:
+A+.  She would be great to work with on projects.
+
+* OVERALL CONCLUSIONS (Note: If the candidate is not a fit for this opening, which other group/opening would you recommend?)
+Please hire her.
+
+>>>>
+
+
+
+
+
+
+
