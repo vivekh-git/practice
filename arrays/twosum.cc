@@ -12,11 +12,11 @@ public:
         if (nums_inp.empty()) assert(false);
 
         vector <int> result (2);
- 	vector <int> nums = nums_inp;
+ 		vector <int> nums = nums_inp;
 
         sort (nums.begin(), nums.end());
         
-	vector<int>::iterator it_start = nums.begin();
+		vector<int>::iterator it_start = nums.begin();
         vector<int>::iterator it_end = nums.end(); it_end--;
   
         int temp_sum = 0;
